@@ -4383,9 +4383,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    padding: 0.5rem 1rem;
-    background-color: #007bb6;
-    
+    padding: 0.5rem 1rem
 }
 
 .navbar > .container, .navbar > .container-fluid {
@@ -4399,7 +4397,6 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     align-items: center;
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
-    background-color:var(--blue);
     justify-content: space-between
 }
 

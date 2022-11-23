@@ -5,5 +5,7 @@ from django.views.generic import TemplateView
 class HomePageView(TemplateView):
     template_name = "home.html"
 
+class DashboardPageView(TemplateView):
+    template_name = "dashboard.html"
 class ProjectsPageView(TemplateView):
     template_name = "projects.html"

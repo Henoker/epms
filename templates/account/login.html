@@ -1,4 +1,6 @@
 {% load static %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html dir="ltr">
 
@@ -14,6 +16,7 @@
     <title>Matrix Template - The Ultimate Multipurpose admin template</title>
     <!-- Custom CSS -->
     <link href="{% static 'css/style.min.css' %}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -45,8 +48,20 @@
                     <div class="text-center p-t-10 p-b-10">
                         <span class="db"><img src="{% static 'images/auth-logo.png' %}" alt="logo" /></span>
                     </div>
+                    {% comment %} <form method="post">
+                        {% csrf_token %}
+                        <div class="form-row">
+                          <div class="form-group col-md-6 mb-0">
+                            {{ form.username|as_crispy_field }}
+                          </div>
+                          <div class="form-group col-md-6 mb-0">
+                            {{ form.password|as_crispy_field }}
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-info">Login</button>
+                      </form> {% endcomment %}
                     <!-- Form -->
-                    <form class="form-horizontal m-t-20" id="loginform" method="post">
+                     {% comment %} <form class="form-horizontal m-t-20" id="loginform" method="post">
                         {% csrf_token %}
                         <div class="row p-b-30">
                             <div class="col-12">
@@ -54,29 +69,42 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-success text-white" id="basic-addon1"><i class="ti-user"></i></span>
                                     </div>
-                                    <input type="text" name="username" class="form-control form-control-lg" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required="">
-                                </div>
+                                    {{ form.username|crispy }}
+                                    {% comment %} <input type="text" name="username" class="form-control form-control-lg" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required="required"> {% endcomment %}
+                                {% comment %} </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-warning text-white" id="basic-addon2"><i class="ti-pencil"></i></span>
                                     </div>
-                                    <input type="password" name="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required="">
-                                </div>
+                                    {{ form.password|crispy }}
+                                    {% comment %} <input type="password" name="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required="required"> {% endcomment %}
+                                {% comment %} </div>
                             </div>
-                        </div>
+                        </div> 
                         <div class="row border-top border-secondary">
                             <div class="col-12">
                                 <div class="form-group">
+                                    <div class="p-t-20 mb-3">
+                                        <button class="btn btn-success float-center" type="submit">Login</button>
+                                    </div>
+                                    <br/>
                                     <div class="p-t-20">
-                                        <button class="btn btn-info" id="to-recover" type="button"><i class="fa fa-lock m-r-5"></i> Lost password?</button>
-                                        <button class="btn btn-success float-right" type="submit">Login</button>
+                                    <button class="btn btn-info" id="to-recover" type="button"><i class="fa fa-lock m-r-5"></i> Lost password?</button>
                                     </div>
                                 </div>
+
                             </div>
+                        </div> 
+                    </form>  {% endcomment %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="p-t-20 mb-3">
+                            <button class="btn btn-success float-center" type="submit">Login</button>
                         </div>
-                    </form>
+                        </form> 
                 </div>
-                <div id="recoverform">
+                {% comment %} <div id="recoverform">
                     <div class="text-center">
                         <span class="text-white">Enter your e-mail address below and we will send you instructions how to recover a password.</span>
                     </div>
@@ -93,11 +121,11 @@
                             <!-- pwd -->
                             <div class="row m-t-20 p-t-20 border-top border-secondary">
                                 <div class="col-12">
-                                    <a class="btn btn-success" href="{% url 'login' %}" id="to-login" name="action">Back To Login</a>
+                                    <a class="btn btn-success" href="{% url 'account_login' %}" id="to-login" name="action">Back To Login</a>
                                     <button class="btn btn-info float-right" type="button" name="action">Recover</button>
                                 </div>
                             </div>
-                        </form>
+                        </form> {% endcomment %}
                     </div>
                 </div>
             </div>

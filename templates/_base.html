@@ -1,361 +1,166 @@
 {% load static %}
-{% block html %}
-<html>
-    {% block head %}
-<head>
-<meta charset="utf-8">
-<title>{% block title %}EPMS{% endblock title %}</title>
-<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-<link href="{% static 'css/animation.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/asColorPicker.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/fullcalendar.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/calendar.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/dataTables.bootstrap4.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/responsive.bootstrap4.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/fontawesome-all.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/jquery.gritter.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/jquery.minicolors.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/jquery.steps.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/magnific-popup.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/materialdesignicons.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/multicheck.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/perfect-scrollbar.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/quill.core.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/quill.snow.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/select2.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/steps.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/themify-icons.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/toastr.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/weather-icons.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/weather-icons.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/float-chart.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/style.min.css' %}" rel="stylesheet"/>
-<link href="{% static 'css/custom.css' %}" rel="stylesheet"/>
-<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
-<script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
-{% block extra_style %}{% endblock extra_style %}
-</head>
-{% endblock head %}
-{% block body %}
-<body>
 
-<!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <div class="preloader">
-        <div class="lds-ripple">
-            <div class="lds-pos"></div>
-            <div class="lds-pos"></div>
-        </div>
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Ethiostar Translation Managemnt system">
+    <meta name="author" content="Henock Beyene">
+    <title>EPMS</title>
+
+    <link rel="canonical" href="">
+
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+    {% block css %}
+    {% endblock %}
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+
+
+  </head>
+  <body>
+
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">EPMS</a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+  <div class="navbar-nav">
+    <div class="nav-item text-nowrap">
+      <a class="nav-link px-3" href="{% url 'account_login' %}">Log Out</a>
     </div>
-    <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
-    <!-- ============================================================== -->
-    <div id="main-wrapper">
-        <!-- ============================================================== -->
-        <!-- Topbar header - style you can find in pages.scss -->
-        <!-- ============================================================== -->
-        <header class="topbar" data-navbarbg="skin5">
-            <nav class="navbar fixed-top top-navbar navbar-expand-md navbar-dark bg-light">
-                <div class="navbar-header" data-logobg="skin5">
-                    <!-- This is for the sidebar toggle which is visible on mobile only -->
-                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
-                    <!-- ============================================================== -->
-                    <!-- Logo -->
-                    <!-- ============================================================== -->
-                    <a class="navbar-brand" href="{% url 'home' %}">
-                        <!-- Logo icon -->
-                        <!-- <b class="logo-icon p-l-10">
-                            <--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                            <!-- Dark Logo icon -->
-                            <!-- <img src="dashboard/images/logo-icon.png" alt="homepage" class="light-logo" /> -->
-                           
-                        <!-- </b> -->
-                        <!--End Logo icon -->
-                         <!-- Logo text -->
-                        <span class="logo-text">
-                             <!-- dark Logo text -->
-                             <img src="{% static 'images/logo-text.png' %}" alt="homepage" class="light-logo" />
-                            
-                        </span>
-                        <!-- Logo icon -->
-                        <!-- <b class="logo-icon"> -->
-                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                            <!-- Dark Logo icon -->
-                            <!-- <img src="dashboard/images/logo-text.png" alt="homepage" class="light-logo" /> -->
-                            
-                        <!-- </b> -->
-                        <!--End Logo icon -->
-                    </a>
-                    <!-- ============================================================== -->
-                    <!-- End Logo -->
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- Toggle which is visible on mobile only -->
-                    <!-- ============================================================== -->
-                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="ti-more"></i></a>
-                </div>
-                <!-- ============================================================== -->
-                <!-- End Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-                    <!-- ============================================================== -->
-                    <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav float-left mr-auto">
-                        <li class="nav-item d-none d-md-block"><a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar"><i class="mdi mdi-menu font-24"></i></a></li>
-                        <!-- ============================================================== -->
-                        <!-- create new -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                             <span class="d-none d-md-block">Create New <i class="fa fa-angle-down"></i></span>
-                             <span class="d-block d-md-none"><i class="fa fa-plus"></i></span>   
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </li>
-                      
-                        <!-- ============================================================== -->
-                        <!-- Search -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item search-box"> <a class="nav-link waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
-                            <form class="app-search position-absolute">
-                                <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i class="ti-close"></i></a>
-                            </form>
-                        </li>
-                    </ul>
-                    <!-- ============================================================== -->
-                    <!-- Right side toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav float-right">
-                        <!-- ============================================================== -->
-                        <!-- Comment -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-bell font-24"></i>
-                            </a>
-                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- End Comment -->
-                        <!-- ============================================================== -->
-                        <!-- ============================================================== -->
-                        <!-- Messages -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="font-24 mdi mdi-comment-processing"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown" aria-labelledby="2">
-                                <ul class="list-style-none">
-                                    <li>
-                                        <div class="">
-                                             <!-- Message -->
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-success btn-circle"><i class="ti-calendar"></i></span>
-                                                    <div class="m-l-10">
-                                                        <h5 class="m-b-0">Event today</h5> 
-                                                        <span class="mail-desc">Just a reminder that event</span> 
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-info btn-circle"><i class="ti-settings"></i></span>
-                                                    <div class="m-l-10">
-                                                        <h5 class="m-b-0">Settings</h5> 
-                                                        <span class="mail-desc">You can customize this template</span> 
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-primary btn-circle"><i class="ti-user"></i></span>
-                                                    <div class="m-l-10">
-                                                        <h5 class="m-b-0">Pavan kumar</h5> 
-                                                        <span class="mail-desc">Just see the my admin!</span> 
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="javascript:void(0)" class="link border-top">
-                                                <div class="d-flex no-block align-items-center p-10">
-                                                    <span class="btn btn-danger btn-circle"><i class="fa fa-link"></i></span>
-                                                    <div class="m-l-10">
-                                                        <h5 class="m-b-0">Luanch Admin</h5> 
-                                                        <span class="mail-desc">Just see the my new admin!</span> 
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- End Messages -->
-                        <!-- ============================================================== -->
+  </div>
+</header>
 
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/users/1.jpg' %}" alt="user" class="rounded-circle" width="31"></a>
-                            <div class="dropdown-menu dropdown-menu-right user-dd animated">
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i> My Balance</a>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i> Inbox</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings m-r-5 m-l-5"></i> Account Setting</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>                               
-                                <div class="dropdown-divider"></div>
-                                <div class="p-l-30 p-10"><a href="javascript:void(0)" class="btn btn-sm btn-success btn-rounded">View Profile</a></div>
-                            </div>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- User profile and search -->
-                        <!-- ============================================================== -->
-                    </ul>
-                </div>
-            </nav>
-        </header>
-        <!-- ============================================================== -->
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <aside class="left-sidebar" data-sidebarbg="skin5">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar">
-                <!-- Sidebar navigation-->
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav" class="p-t-30">
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'dashboard' %}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu"><span data-feather="home"></span>Dashboard</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'projects' %}" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">Projects</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Clients</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-border-inside"></i><span class="hide-menu">Invoicing</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-blur-linear"></i><span class="hide-menu">Vendors</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Forms </span></a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item"><a href="form-basic.html" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Form Basic </span></a></li>
-                                <li class="sidebar-item"><a href="form-wizard.html" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Form Wizard </span></a></li>
-                            </ul>
-                        </li>
-                        {% comment %} <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="pages-buttons.html" aria-expanded="false"><i class="mdi mdi-relative-scale"></i><span class="hide-menu">Buttons</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-face"></i><span class="hide-menu">Icons </span></a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item"><a href="icon-material.html" class="sidebar-link"><i class="mdi mdi-emoticon"></i><span class="hide-menu"> Material Icons </span></a></li>
-                                <li class="sidebar-item"><a href="icon-fontawesome.html" class="sidebar-link"><i class="mdi mdi-emoticon-cool"></i><span class="hide-menu"> Font Awesome Icons </span></a></li>
-                            </ul>
-                        </li> {% endcomment %}
-                        {% comment %} <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="pages-elements.html" aria-expanded="false"><i class="mdi mdi-pencil"></i><span class="hide-menu">Elements</span></a></li> {% endcomment %}
-                        {% comment %} <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-move-resize-variant"></i><span class="hide-menu">Addons </span></a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item"><a href="index2.html" class="sidebar-link"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu"> Dashboard-2 </span></a></li>
-                                <li class="sidebar-item"><a href="pages-gallery.html" class="sidebar-link"><i class="mdi mdi-multiplication-box"></i><span class="hide-menu"> Gallery </span></a></li>
-                                <li class="sidebar-item"><a href="pages-calendar.html" class="sidebar-link"><i class="mdi mdi-calendar-check"></i><span class="hide-menu"> Calendar </span></a></li>
-                                <li class="sidebar-item"><a href="pages-invoice.html" class="sidebar-link"><i class="mdi mdi-bulletin-board"></i><span class="hide-menu"> Invoice </span></a></li>
-                                <li class="sidebar-item"><a href="pages-chat.html" class="sidebar-link"><i class="mdi mdi-message-outline"></i><span class="hide-menu"> Chat Option </span></a></li>
-                            </ul>
-                        </li> {% endcomment %}
-                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-key"></i><span class="hide-menu">Authentication </span></a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item"><a href="{% url 'account_login' %}" class="sidebar-link"><i class="mdi mdi-all-inclusive"></i><span class="hide-menu"> Login </span></a></li>
-                                <li class="sidebar-item"><a href="{% url 'account_signup' %}" class="sidebar-link"><i class="mdi mdi-all-inclusive"></i><span class="hide-menu"> Register </span></a></li>
-                            </ul>
-                        </li>
-                        {% comment %} <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-alert"></i><span class="hide-menu">Errors </span></a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item"><a href="error-403.html" class="sidebar-link"><i class="mdi mdi-alert-octagon"></i><span class="hide-menu"> Error 403 </span></a></li>
-                                <li class="sidebar-item"><a href="error-404.html" class="sidebar-link"><i class="mdi mdi-alert-octagon"></i><span class="hide-menu"> Error 404 </span></a></li>
-                                <li class="sidebar-item"><a href="error-405.html" class="sidebar-link"><i class="mdi mdi-alert-octagon"></i><span class="hide-menu"> Error 405 </span></a></li>
-                                <li class="sidebar-item"><a href="error-500.html" class="sidebar-link"><i class="mdi mdi-alert-octagon"></i><span class="hide-menu"> Error 500 </span></a></li>
-                            </ul>
-                        </li> {% endcomment %}
-                    </ul>
-                </nav>
-                <!-- End Sidebar navigation -->
-            </div>
-            <!-- End Sidebar scroll-->
-        </aside>
-<div class="container">
-{% block content %}
-{% endblock content %}
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}">
+              <span data-feather="home"></span>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'projects' %}">
+              <span data-feather="file"></span>
+              Projects
+            </a>
+          <li class="nav-item">
+            {% comment %} <a class="nav-link" href="{% url 'invoices' %}"> {% endcomment %}
+                <a class="nav-link" href="#">
+              <span data-feather="file"></span>
+              Invoices
+            </a>
+          </li>
+          <li class="nav-item">
+            {% comment %} <a class="nav-link" href="{% url 'products' %}"> {% endcomment %}
+                <a class="nav-link" href="#">
+              <span data-feather="shopping-cart"></span>
+              Jobs
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'clients' %}">
+              <span data-feather="users"></span>
+              Clients
+            </a>
+          </li>
+           <li class="nav-item">
+            {% comment %} <a class="nav-link" href="{% url 'vendors' %}"> {% endcomment %}
+            <a class="nav-link" href="#">
+              <span data-feather="command"></span>
+              Vendors
+            </a>
+          </li>
+
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Settings</span>
+          <a class="link-secondary" href="#" aria-label="Add a new report">
+            <span data-feather="plus-circle"></span>
+          </a>
+        </h6>
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            {% comment %} <a class="nav-link" href="{% url 'company-settings' %}"> {% endcomment %}
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Company
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'account_login' %}">
+              <span data-feather="file-text"></span>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+
+    <!-- Add the messages here .... -->
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+      {% for message in messages %}
+      <div class="alert {{ message.tags }} mb-4" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+
+      {% block main %}
+      {% endblock %}
+
+    </main>
+
+
+
+
+
+  </div>
 </div>
-{% block script %}
-        <script src="{% static 'js/jquery.min.js' %}"></script>
-        <script src="{% static 'js/popper.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
-        <script src="{% static 'js/perfect-scrollbar.jquery.min.js' %}"></script>
-        <script src="{% static 'js/sparkline.js' %}"></script>
-        <script src="{% static 'js/waves.js' %}"></script>
-        <script src="{% static 'js/sidebarmenu.js' %}"></script>
-        <script src="{% static 'js/custom.min.js' %}"></script>
 
-        <script src="{% static 'js/excanvas.js' %}"></script>
-        <script src="{% static 'js/jquery.flot.js' %}"></script>
-        <script src="{% static 'js/jquery.flot.pie.js' %}"></script>
-        <script src="{% static 'js/jquery.flot.time.js' %}"></script>
-        <script src="{% static 'js/jquery.flot.time.js' %}"></script>
-        <script src="{% static 'js/jquery.flot.stack.js' %}"></script>
-        <script src="{% static 'js/jquery.flot.crosshair.js' %}"></script>
-        <script src="{% static 'js/jquery.flot.tooltip.min.js' %}"></script>
-        <script src="{% static 'js/moment.min.js' %}"></script>
-        <script src="{% static 'js/chart-page-init.js' %}"></script>
-        <script src="{% static 'js/app-style-switcher.js' %}"></script>
-        <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
-        <script src="{% static 'js/datatable-checkbox-init.js' %}"></script>
-        <script src="{% static 'js/datatables.min.js' %}"></script>
-        <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-        <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
-        <script src="{% static 'js/dataTables.responsive.min.js' %}"></script>
-        <script src="{% static 'js/responsive.bootstrap4.min.js' %}"></script>
-        <script src="{% static 'js/jquery.charts-sparkline.js' %}"></script>
-        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-        <script src="{% static 'js/jquery-asColor.min.js' %}"></script>
-        <script src="{% static 'js/jquery-asGradient.js' %}"></script>
-        <script src="{% static 'js/jquery-asColorPicker.min.js' %}"></script>
-        <script src="{% static 'js/jquery.minicolors.min.js' %}"></script>
-        <script src="{% static 'js/jquery.multicheck.js' %}"></script>
-        <script src="{% static 'js/jquery.validate.min.js' %}"></script>
-        <script src="{% static 'js/toastr.min.js' %}"></script>
-        <script src="{% static 'js/select2.full.min.js' %}"></script>
-        <script src="{% static 'js/select2.min.js' %}"></script>
-        <script src="{% static 'js/jquery.inputmask.bundle.min.js' %}"></script>
-        <script src="{% static 'js/quill.min.js' %}"></script>
-        <script src="{% static 'js/mask.init.js' %}"></script>
-        <script src="{% static 'js/meg.init.js' %}"></script>
-        <script src="{% static 'js/cal-init.js' %}"></script>
-        <script src="{% static 'constant/strings.js' %}"></script>
-        <script src="{% static 'constant/validator.js' %}"></script>
+      <!-- JS starts here  -->
+      <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
-        <script>
-            $(document).ready(function () {
-                $('#example').DataTable();
-            });
-        </script>
-        <script>
-            $(document).ready(function () {
-                $('#zero_config').DataTable();
-            });
-        </script>
-        {% block extra_script %}{% endblock extra_script %}
+      <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+      <script src="{% static 'js/dashboard.js' %}"></script>
 
-    
-        {% endblock script %}
-</body>
-{% endblock body %}
+      {% block scripts %}
+      {% endblock %}
+
+
+  </body>
 </html>
-{% endblock html %}

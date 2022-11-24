@@ -1,50 +1,66 @@
-{% extends "_base.html" %}
+{% extends '_base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% block title %}Update Client{% endblock title %}
-
-{% block content %}
 
 
-{% comment %} <section class="content">
-        <div class="container-fluid">
+{% block css %}
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+{% endblock %}
 
-            <div class="row">
-                <div class="col-md-12">
-                    <!-- general form elements -->
-                    <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Update Client Info</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <!-- form start -->
-                    {% comment %} Displaying the Django Form using forms.py EditStudentForm {% endcomment %}
-                    {% comment %} {% url 'update-client' as action_path %}
-                    {% include 'form_template.html' with messages=messages form={form} action_path=action_path button_text="Update" %}
 
-                    </div>
-                    <!-- /.card -->
 
-                </div>
-            </div>
 
-        </div><!-- /.container-fluid -->
-      </section> {% endcomment %}
-<div class="card">
-    <form class="form-horizontal " action="#" method="post" enctype="multipart/form-data">
+{% block main %}
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Update Clients</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+        <button href="#updateClientModal" type="button" class="btn btn-primary" data-bs-toggle="modal">Update Client</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
+<form class="" action="#" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+  <div class="mb-3 col-9">
+   {{ form|crispy }}
+  </div>
+  <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+<!-- MODALS MODALS -->
+  <!-- Modals Start Here -->
+
+  <div class="modal modal-sheet py-5" tabindex="-1" id="updateClientModal">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-6 shadow">
+
+      <form class="" action="#" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="card-body">
-            <h4 class="card-title">Update Client Info</h4>
-            <div class="form-group form-control col-sm-9">
-                {{ form|crispy }}
-            </div>
-           
-        <div class="border-top">
-            <div class="card-body">
-                <button type="button" class="btn btn-primary">Submit</button>
-            </div>
-        </div>
-    </form>
+
+
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title">Add new client</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body py-0">
+
+
+        {{ form|crispy }}
+
+
+      </div>
+      <div class="modal-footer flex-column border-top-0">
+        <button type="submit" class="btn btn-lg btn-primary w-100 mx-0 mb-2">Save changes</button>
+      </div>
+
+      </form>
+    </div>
+  </div>
 </div>
 
-{% endblock content %}
+
+{% endblock %}

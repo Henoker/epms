@@ -83,22 +83,22 @@ def clients(request):
     clients = Client.objects.all()
     context['clients'] = clients
 
-    # if request.method == 'GET':
-    #     form = ClientForm()
-    #     context['form'] = form
-    #     return render(request, 'invoice/clients.html', context)
+    if request.method == 'GET':
+        form = ClientForm()
+        context['form'] = form
+        return render(request, 'projects/clients.html', context)
 
-    # if request.method == 'POST':
-    #     form = ClientForm(request.POST, request.FILES)
+    if request.method == 'POST':
+        form = ClientForm(request.POST, request.FILES)
 
-    #     if form.is_valid():
-    #         form.save()
+        if form.is_valid():
+            form.save()
 
-    #         messages.success(request, 'New Client Added')
-    #         return redirect('clients')
-    #     else:
-    #         messages.error(request, 'Problem processing your request')
-    #         return redirect('clients')
+            messages.success(request, 'New Client Added')
+            return redirect('clients')
+        else:
+            messages.error(request, 'Problem processing your request')
+            return redirect('clients')
 
 
     return render(request, 'projects/clients.html', context)
@@ -683,15 +683,15 @@ def projects(request):
 #         return redirect('invoices')
 
 #     return redirect('invoices')
-# @login_required
-# def deleteClient(request, slug):
-#     try:
-#         Client.objects.get(slug=slug).delete()
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
+@login_required
+def deleteClient(request, slug):
+    try:
+        Client.objects.get(slug=slug).delete()
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('clients')
 
-#     return redirect('clients')
+    return redirect('clients')
 
 # @login_required
 # def deleteVendor(request, slug):

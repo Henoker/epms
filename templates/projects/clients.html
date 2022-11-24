@@ -32,7 +32,7 @@
           <th scope="col">Email Address</th>
           <th scope="col">Phone Number</th>
           <th scope="col">Address Line</th>
-          <th scope="col">Province</th>
+          <th scope="col">Country</th>
           <th scope="col">Delete</th>
           <th scope="col">View</th>
         </tr>
@@ -45,7 +45,7 @@
         <td>{{client.emailAddress}}</td>
         <td>{{client.phoneNumber}}</td>
         <td>{{client.addressLine1}}</td>
-        <td>{{client.province}}</td>
+        <td>{{client.country}}</td>
         <td>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{client.slug}}">
                         DELETE
@@ -66,7 +66,7 @@
                               <p>Are you sure you want to delete this client?</p>
                             </div>
                             <div class="modal-footer">
-                              <form action="#" method="POST">
+                              <form action="{% url 'delete-client' client.slug %}" method="POST">
                                 {% csrf_token %}
                                 <input type="submit" class="btn btn-primary" value="Delete">
                               </form>
@@ -103,36 +103,7 @@
 
 
 
-<!-- MODALS MODALS -->
-  <!-- Modals Start Here -->
-  <div class="modal modal-sheet py-5" tabindex="-1" id="addClientModal">
-    <div class="modal-dialog">
-     <div class="modal-content rounded-6 shadow">
 
-      <form class="" action="#" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-
-
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title">Add new client</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <div class="modal-body py-0">
-
-
-        {{ form|crispy }}
-
-
-      </div>
-      <div class="modal-footer flex-column border-top-0">
-        <button type="submit" class="btn btn-lg btn-primary w-100 mx-0 mb-2">Save changes</button>
-      </div>
-
-      </form>
-    </div>
-  </div>
-</div>
 
 
 {% endblock %}

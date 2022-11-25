@@ -109,25 +109,36 @@ def projects(request):
     projects = Project.objects.all()
     context['projects'] = projects
 
-    # if request.method == 'GET':
-    #     form = ClientForm()
-    #     context['form'] = form
-    #     return render(request, 'projects/projects.html', context)
+    if request.method == 'GET':
+        form = ProjectForm()
+        context['form'] = form
+        return render(request, 'projects/projects.html', context)
+    return render(request, 'projects/projects.html', context)
 
+@login_required
+def addProject(request):
+    form = ProjectForm(request.POST, request.FILES)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'New Project Added')
+        return redirect('projects')
+    context = {
+        "form": form
+     }
+    
+    return render(request, 'projects/addProject.html', context)
+   
     # if request.method == 'POST':
-    #     form = ClientForm(request.POST, request.FILES)
+    #     form = ProjectForm(request.POST, request.FILES)
 
     #     if form.is_valid():
     #         form.save()
 
-    #         messages.success(request, 'New Client Added')
-    #         return redirect('clients')
+    #         messages.success(request, 'New Project Added')
+    #         return redirect('projects')
     #     else:
     #         messages.error(request, 'Problem processing your request')
-            # return redirect('clients')
-
-
-    return render(request, 'projects/projects.html', context)
+    #         return redirect('projects')
 # @login_required
 # def vendors(request):
 #     context = {}
@@ -714,6 +725,16 @@ def deleteClient(request, slug):
 #     return redirect('products')
 
 @login_required
+def deleteProject(request, slug):
+    try:
+        Project.objects.get(slug=slug).delete()
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('projects')
+
+    return redirect('projects')
+
+@login_required
 def updateClient(request, slug):
     context = {}
     client = Client.objects.get(slug=slug)
@@ -729,8 +750,22 @@ def updateClient(request, slug):
         return render(request, 'projects/updateClient.html', context)
         
     return render(request, 'projects/updateClient.html', context)
-   
-
+    
+def updateProject(request, slug):
+    context = {}
+    project = Project.objects.get(slug=slug)
+    context['project'] = project
+    form = ProjectForm(request.POST or None, instance=project)
+    context['form'] = form
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Project updated')
+        return redirect('projects')
+    else:
+        messages.error(request, 'Problem processing your request')
+    return render(request, 'projects/updateProject.html', context)
+        
+    
 # @login_required
 # def updateProduct(request, slug):
 #     context = {}

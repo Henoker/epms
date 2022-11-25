@@ -15,7 +15,8 @@
     <h1 class="h2">Projects</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
-        <button href="#addClientModal" type="button" class="btn btn-primary" data-bs-toggle="modal">Add New Project</button>
+        {% comment %} <button href="#addProjectModal" type="button" class="btn btn-primary" data-bs-toggle="modal">Add New Project</button> {% endcomment %}
+        <a href="{% url 'add-project' %}"><button type="button" class="btn btn-primary" > Add New Project </button></a>
       </div>
     </div>
   </div>
@@ -23,7 +24,7 @@
   <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
 
   {% if projects|length > 0 %}
-  <div class="table-responsive">
+  <div class="table-responsive"> 
     <table class="table table-sm">
       <thead>
         <tr>
@@ -60,41 +61,41 @@
             <td><span class="badge text-bg-success">Approved</span></td>
         {% endif %}
         
-        {% comment %} <td>
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{client.slug}}">
-                        DELETE
-          </button>
-           <!-- Modal - Delete Student -->
-                      <div class="modal" id="delete{{client.slug}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title">
-                                client: {{ client.clientName }} 
-                              </h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true"></span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              <p>Are you sure you want to delete this client?</p>
-                            </div>
-                            <div class="modal-footer">
-                              <form action="#" method="POST">
-                                {% csrf_token %}
-                                <input type="submit" class="btn btn-primary" value="Delete">
-                              </form>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <td>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{project.slug}}">
+                          DELETE
+            </button>
+             <!-- Modal - Delete Student -->
+                        <div class="modal" id="delete{{project.slug}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">
+                                  project: {{ project.projectName }} 
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true"></span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <p>Are you sure you want to delete this project?</p>
+                              </div>
+                              <div class="modal-footer">
+                                <form action="{% url 'delete-project' project.slug %}" method="POST">
+                                  {% csrf_token %}
+                                  <input type="submit" class="btn btn-primary" value="Delete">
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-
-        </td>
-        <td>
-          <a href="{% url 'update-client' client.slug %}"><button class="btn btn-primary" > EDIT </button></a>
-        </td>
-      </tr> {% endcomment %}
+  
+          </td>
+          <td>
+            <a href="{% url 'update-project' project.slug %}"><button class="btn btn-primary" > EDIT </button></a>
+          </td>
+      </tr> 
         {% endfor %}
 
       </tbody>
@@ -125,36 +126,30 @@
 
 
 
-{% comment %} <!-- MODALS MODALS -->
+ <!-- MODALS MODALS -->
   <!-- Modals Start Here -->
-  <div class="modal modal-sheet py-5" tabindex="-1" id="addClientModal">
+<div class="modal modal-sheet py-5" tabindex="-1" id="addProjectModal">
     <div class="modal-dialog">
-     <div class="modal-content rounded-6 shadow">
-
-      <form class="" action="#" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-
-
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title">Add new client</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <div class="modal-body py-0">
+        <div class="modal-content rounded-6 shadow">
+          <form class="" action="#" method="post" enctype="multipart/form-data">
+                       {% csrf_token %}
 
 
-        {{ form|crispy }}
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title">Add new Project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-
-      </div>
-      <div class="modal-footer flex-column border-top-0">
-        <button type="submit" class="btn btn-lg btn-primary w-100 mx-0 mb-2">Save changes</button>
-      </div>
-
-      </form>
-    </div> {% endcomment %}
-    {% comment %} </div>
-    </div> {% endcomment %}
+             <div class="modal-body py-0">
+                {{ form|crispy }}
+             </div>
+             <div class="modal-footer flex-column border-top-0">
+                <button type="submit" class="btn btn-lg btn-primary w-100 mx-0 mb-2">Save changes</button>
+             </div>
+           </form>
+        </div>
+    </div>
+</div> 
 
 
 {% endblock %}

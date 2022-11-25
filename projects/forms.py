@@ -2,6 +2,7 @@ from django import forms
 # from accounts.models import CustomUser
 # from django.forms import widgets
 from .models import *
+from django.contrib.admin import widgets
 # import json
 
 #Form Layout from Crispy Forms
@@ -26,17 +27,29 @@ class ClientForm(forms.ModelForm):
         # fields = ['clientName', 'clientLogo', 'addressLine1', 'country', 'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber']
         fields = ['clientName',  'addressLine1', 'country', 'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber']
        
-            
+class ProjectForm(forms.ModelForm):
+    # Validators
+    projectName = forms.CharField(
+        label="Project Name", min_length=6, max_length=20,
+        required=True,
+        widget=forms.TextInput(attrs={'placeholder': 'Project Name'})
+    )
+    description = forms.CharField(
+        label="Description", min_length=6, max_length=20,
+        required=True,
+        widget=forms.Textarea(attrs={'placeholder': 'description', 'rows':1})
+    )
+    startDate = forms.DateTimeField(
+        input_formats=['%d/%m/%Y %H:%M']
+    )
+    class Meta:
+        model = Project
+        fields = [
+            'projectName', 'description', 'startDate', 'deadlineDate', 'source_languages', 'target_languages',
+            'quantity', 'rate', 'currency', 'status', 'budgetedamount', 'client'
+            ]           
 
-        # def __init__(self, *args, **kwargs):
-        #     super(ClientForm, self).__init__(*args, **kwargs)
-        #     self.fields['client'].widget.attrs.update({'class' : 'form-control'})
-        #     self.fields['addressLine1'].widget.attrs.update({'class' : 'form-control'})
-        #     self.fields['country'].widget.attrs.update({'class' : 'select2 form-control'})
-        #     self.fields['postalCode'].widget.attrs.update({'class' : 'form-control'})
-        #     self.fields['phoneNumber'].widget.attrs.update({'class' : 'form-control'})
-        #     self.fields['emailAddress'].widget.attrs.update({'class' : 'form-control'})
-        #     self.fields['taxNumber'].widget.attrs.update({'class' : 'form-control'})
+   
 # class VendorForm(forms.ModelForm):
 #     class Meta:
 #         model = Vendor

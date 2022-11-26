@@ -17,6 +17,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
 
@@ -159,6 +160,11 @@
       <script src="{% static 'js/dashboard.js' %}"></script>
 
       {% block scripts %}
+      <script>
+        $(document).ready(function(){
+            $('.datepicker').datepicker();
+        });
+        </script>
       {% endblock %}
 
 

@@ -66,14 +66,14 @@ class Project(models.Model):
     ]
     projectName = models.CharField(null=True, blank=True, max_length=200)
     description = models.TextField(null=True, blank=True)
-    startDate = models.DateTimeField(blank=True, null=True)
-    deadlineDate = models.DateTimeField(blank=True, null=True) 
+    startDate = models.DateField(blank=True, null=True)
+    deadlineDate = models.DateField(blank=True, null=True) 
     source_languages = models.TextField(null=True, blank=True)
     target_languages = models.TextField(null=True, blank=True)
     quantity = models.PositiveIntegerField()
     rate = models.DecimalField(max_digits=6, decimal_places=2)
     currency = models.CharField(choices=CURRENCY, default='R', max_length=100)
-    project_manager = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="project", default = None)
+    project_manager = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="project", default = CustomUser)
     status = models.CharField(choices=STATUS, default='In Preparation', max_length=100)
     budgetedamount = models.PositiveIntegerField()
 

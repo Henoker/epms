@@ -21,17 +21,17 @@
 <form class="" action="#" method="post" enctype="multipart/form-data">
     {% csrf_token %}
   <div class="mb-3 col-9">
-   {% comment %} {{ form|crispy }} {% endcomment %}
+   {{ form|crispy }}
   
-    <div class="row">
+    {% comment %} <div class="row">
       <div class="col-9">{{ form.projectName| as_crispy_field}}</div>
     </div>
     <div class="row">
         <div class="col-9">{{ form.description| as_crispy_field}}</div>
     </div>
     <div class="row">
-        <div class="col-6">{{ form.startDate| as_crispy_field}}</div>
-        <div class="col-6">{{ form.deadlineDate| as_crispy_field}}</div>
+        <div class="col-6" type="date">{{ form.startDate| as_crispy_field}}</div>
+        <div class="col-6" type="date">{{ form.deadlineDate| as_crispy_field}}</div>
     </div>
     <div class="row">
         <div class="col-9">{{ form.source_languages| as_crispy_field}}</div>
@@ -54,10 +54,10 @@
     </div>
     <div class="row">
         <div class="col-9">{{ form.client| as_crispy_field}}</div>
-    </div>
+    </div> {% endcomment %}
     
     <div class="col-12">
-      <button type="submit" class="btn btn-primary">Sign in</button>
+      <button type="submit" class="btn btn-primary">Create Project</button>
     </div>
 </form>
   
@@ -67,11 +67,3 @@
 
 {% endblock %}
 
-{% block scripts %}
-    $(function () {
-      $("#id_date").datetimepicker({
-        format: 'd/m/Y H:i',
-      });
-    });
-
-{% endblock %}

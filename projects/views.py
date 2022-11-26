@@ -6,7 +6,7 @@ from django.contrib import messages
 from .forms import *
 from .models import *
 # from .functions import *
-
+from accounts.models import CustomUser
 # from django.contrib.auth.models import User, auth
 # from random import randint
 # from uuid import uuid4
@@ -117,15 +117,20 @@ def projects(request):
 
 @login_required
 def addProject(request):
-    form = ProjectForm(request.POST, request.FILES)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'New Project Added')
-        return redirect('projects')
-    context = {
-        "form": form
-     }
-    
+    context = {}
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        context['form'] = form
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'New Project Added')
+            return redirect('projects')
+        else:
+            messages.error(request, 'Problem processing your request')
+            return render(request, 'projects/addProject.html', context)
+
+
     return render(request, 'projects/addProject.html', context)
    
     # if request.method == 'POST':

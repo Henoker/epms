@@ -1,8 +1,10 @@
 from django import forms
+from django.forms import ModelForm, Textarea
+
 # from accounts.models import CustomUser
-# from django.forms import widgets
+
 from .models import *
-from django.contrib.admin import widgets
+
 # import json
 
 #Form Layout from Crispy Forms
@@ -27,27 +29,49 @@ class ClientForm(forms.ModelForm):
         # fields = ['clientName', 'clientLogo', 'addressLine1', 'country', 'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber']
         fields = ['clientName',  'addressLine1', 'country', 'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber']
        
-class ProjectForm(forms.ModelForm):
+class ProjectForm(ModelForm):
     # Validators
-    projectName = forms.CharField(
-        label="Project Name", min_length=6, max_length=20,
-        required=True,
-        widget=forms.TextInput(attrs={'placeholder': 'Project Name'})
-    )
-    description = forms.CharField(
-        label="Description", min_length=6, max_length=20,
-        required=True,
-        widget=forms.Textarea(attrs={'placeholder': 'description', 'rows':1})
-    )
-    startDate = forms.DateTimeField(
-        input_formats=['%d/%m/%Y %H:%M']
-    )
+    # projectName = forms.CharField(
+    #     label="Project Name", min_length=6, max_length=20,
+    #     required=True,
+    #     widget=forms.TextInput(attrs={'placeholder': 'Project Name'})
+    # )
+    # description = forms.CharField(
+    #     label="Description", min_length=6, max_length=200,
+    #     required=True,
+    #     widget=forms.Textarea(attrs={'placeholder': 'description', 'rows':1})
+    # )
+    # startDate = forms.DateField(
+    #     label="Start Date",
+    #     required=True,
+    # )
+    # source_languages = forms.CharField(
+    #     label="Source Language", min_length=3, max_length=200,
+    #     required=True,
+    #     widget=forms.Textarea(attrs={'placeholder': 'Source Language/s', 'rows':1})
+    # )  
+
+    # target_languages = forms.CharField(
+    #     label="Target Language", min_length=3, max_length=200,
+    #     required=True,
+    #     widget=forms.Textarea(attrs={'placeholder': 'Target Language/s', 'rows':1})
+    # ) 
+    
     class Meta:
         model = Project
         fields = [
             'projectName', 'description', 'startDate', 'deadlineDate', 'source_languages', 'target_languages',
-            'quantity', 'rate', 'currency', 'status', 'budgetedamount', 'client'
-            ]           
+            'quantity', 'rate', 'currency', 'status', 'budgetedamount', 'project_manager', 'client'
+            ] 
+        widgets = {
+            'startDate': DateInput(), 
+            'deadlineDate': DateInput(),
+            'description': Textarea(attrs={"class": "form-control", 'style': 'max-width: 900px;',
+                'placeholder': 'Describe the item'}),
+            'source_language': Textarea(attrs={'rows':1}),
+        }
+
+         
 
    
 # class VendorForm(forms.ModelForm):

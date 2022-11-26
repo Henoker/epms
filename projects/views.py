@@ -117,33 +117,32 @@ def projects(request):
 
 @login_required
 def addProject(request):
-    context = {}
     if request.method == 'POST':
         form = ProjectForm(request.POST)
-        context['form'] = form
-
+        context = {'form': form}
         if form.is_valid():
             form.save()
-            messages.success(request, 'New Project Added')
+            created = True
+            form = ProjectForm()
+            context = {
+                'created': created,
+                'form': form,
+            }
+            messages.success(request, 'New Client Added')
+            # return render(request, 'projects/addProject.html', context)
             return redirect('projects')
         else:
             messages.error(request, 'Problem processing your request')
             return render(request, 'projects/addProject.html', context)
-
-
-    return render(request, 'projects/addProject.html', context)
+    else:
+        form = ProjectForm()
+        context = {
+            'form': form,
+        }
+        return render(request,'projects/addProject.html', context)
+    
    
-    # if request.method == 'POST':
-    #     form = ProjectForm(request.POST, request.FILES)
 
-    #     if form.is_valid():
-    #         form.save()
-
-    #         messages.success(request, 'New Project Added')
-    #         return redirect('projects')
-    #     else:
-    #         messages.error(request, 'Problem processing your request')
-    #         return redirect('projects')
 # @login_required
 # def vendors(request):
 #     context = {}

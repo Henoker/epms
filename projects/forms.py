@@ -30,32 +30,6 @@ class ClientForm(forms.ModelForm):
         fields = ['clientName',  'addressLine1', 'country', 'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber']
        
 class ProjectForm(ModelForm):
-    # Validators
-    # projectName = forms.CharField(
-    #     label="Project Name", min_length=6, max_length=20,
-    #     required=True,
-    #     widget=forms.TextInput(attrs={'placeholder': 'Project Name'})
-    # )
-    # description = forms.CharField(
-    #     label="Description", min_length=6, max_length=200,
-    #     required=True,
-    #     widget=forms.Textarea(attrs={'placeholder': 'description', 'rows':1})
-    # )
-    # startDate = forms.DateField(
-    #     label="Start Date",
-    #     required=True,
-    # source_languages = forms.CharField(
-    #     label="Source Language", min_length=3, max_length=200,
-    #     required=True,
-    #     widget=forms.Textarea(attrs={'placeholder': 'Source Language/s', 'rows':1})
-    # )  
-
-    # target_languages = forms.CharField(
-    #     label="Target Language", min_length=3, max_length=200,
-    #     required=True,
-    #     widget=forms.Textarea(attrs={'placeholder': 'Target Language/s', 'rows':1})
-    # ) 
-    
     class Meta:
         model = Project
         fields = [
@@ -86,10 +60,10 @@ class ProjectForm(ModelForm):
          
 
    
-# class VendorForm(forms.ModelForm):
-#     class Meta:
-#         model = Vendor
-#         fields = ['vendorName', 'addressLine1', 'country', 'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber', 'mother_language']
+class VendorForm(forms.ModelForm):
+    class Meta:
+        model = Vendor
+        fields = ['vendorName', 'addressLine1', 'country', 'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber', 'mother_language']
 
 # class ProductForm(forms.ModelForm):
 #     class Meta:

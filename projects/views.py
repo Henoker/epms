@@ -143,31 +143,31 @@ def addProject(request):
     
    
 
-# @login_required
-# def vendors(request):
-#     context = {}
-#     vendors = Vendor.objects.all()
-#     context['vendors'] = vendors
+@login_required
+def vendors(request):
+    context = {}
+    vendors = Vendor.objects.all()
+    context['vendors'] = vendors
 
-#     if request.method == 'GET':
-#         form = VendorForm()
-#         context['form'] = form
-#         return render(request, 'invoice/vendors.html', context)
+    if request.method == 'GET':
+        form = VendorForm()
+        context['form'] = form
+        return render(request, 'projects/vendors.html', context)
 
-#     if request.method == 'POST':
-#         form = VendorForm(request.POST, request.FILES)
+    if request.method == 'POST':
+        form = VendorForm(request.POST, request.FILES)
 
-#         if form.is_valid():
-#             form.save()
+        if form.is_valid():
+            form.save()
 
-#             messages.success(request, 'New Vendor Added')
-#             return redirect('vendors')
-#         else:
-#             messages.error(request, 'Problem processing your request')
-#             return redirect('vendors')
+            messages.success(request, 'New Vendor Added')
+            return redirect('vendors')
+        else:
+            messages.error(request, 'Problem processing your request')
+            return redirect('vendors')
 
 
-#     return render(request, 'invoice/vendors.html', context)
+    return render(request, 'projects/vendors.html', context)
 
 
 # @login_required
@@ -708,15 +708,15 @@ def deleteClient(request, slug):
 
     return redirect('clients')
 
-# @login_required
-# def deleteVendor(request, slug):
-#     try:
-#         Vendor.objects.get(slug=slug).delete()
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
+@login_required
+def deleteVendor(request, slug):
+    try:
+        Vendor.objects.get(slug=slug).delete()
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('vendors')
 
-#     return redirect('vendors')
+    return redirect('vendors')
 
 # @login_required
 # def deleteProduct(request, slug):
@@ -787,22 +787,22 @@ def updateProject(request, slug):
 
 #     return render(request, 'invoice/updateProduct.html', context)
     
-# @login_required
-# def updateVendor(request, slug):
-#     context = {}
-#     vendor = Vendor.objects.get(slug=slug)
-#     context['vendor'] = vendor
-#     form = VendorForm(request.POST or None, instance=vendor)
-#     context['form'] = form
-#     if form.is_valid():
-#         form.save()
-#         messages.success(request, 'Vendor updated')
-#         return redirect('vendors')
-#     else:
-#         messages.error(request, 'Problem processing your request')
-#         return render(request, 'invoice/updateVendor.html', context)
+@login_required
+def updateVendor(request, slug):
+    context = {}
+    vendor = Vendor.objects.get(slug=slug)
+    context['vendor'] = vendor
+    form = VendorForm(request.POST or None, instance=vendor)
+    context['form'] = form
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Vendor updated')
+        return redirect('vendors')
+    else:
+        messages.error(request, 'Problem processing your request')
+        return render(request, 'projects/updateVendor.html', context)
 
-#     return render(request, 'invoice/updateVendor.html', context)   
+      
      
 
 

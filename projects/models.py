@@ -3,7 +3,7 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 from uuid import uuid4
 from .country_names import COUNTRY_CHOICES
-# from .languages import LANGUAGE_CHOICES
+from .languages import LANGUAGE_CHOICES
 from accounts.models import CustomUser
 
 
@@ -91,10 +91,7 @@ class Project(models.Model):
     def __str__(self):
         return '{} {}'.format(self.projectName, self.uniqueId)
 
-    # def get_absolute_url(self):
-#         return reverse('PurchaseOrder-detail', kwargs={'slug': self.slug})
-
-
+  
     def save(self, *args, **kwargs):      
         if self.date_created is None:
             self.date_created = timezone.localtime(timezone.now())
@@ -107,4 +104,43 @@ class Project(models.Model):
 
         super(Project, self).save(*args, **kwargs)
     
+class Vendor(models.Model):
+
+    #Basic Fields.
+    vendorName = models.CharField(null=True, blank=True, max_length=200)
+    addressLine1 = models.CharField(null=True, blank=True, max_length=200)
+    country = models.CharField(blank=True, choices=COUNTRY_CHOICES, max_length=100)
+    postalCode = models.CharField(null=True, blank=True, max_length=10)
+    phoneNumber = models.CharField(null=True, blank=True, max_length=100)
+    emailAddress = models.CharField(null=True, blank=True, max_length=100)
+    taxNumber = models.CharField(null=True, blank=True, max_length=100)
+    mother_language = models.CharField(blank=True, choices=LANGUAGE_CHOICES, max_length=300)
+
+
+    #Utility fields
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+
+    def __str__(self):
+        return '{} {} {}'.format(self.vendorName, self.country, self.uniqueId)
+
+
+    def get_absolute_url(self):
+        return reverse('vendor-detail', kwargs={'slug': self.slug})
+
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+            self.slug = slugify('{} {} {}'.format(self.vendorName, self.country, self.uniqueId))
+
+        self.slug = slugify('{} {} {}'.format(self.vendorName, self.country, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+
+        super(Vendor, self).save(*args, **kwargs)
 

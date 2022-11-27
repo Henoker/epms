@@ -44,7 +44,6 @@ class ProjectForm(ModelForm):
     # startDate = forms.DateField(
     #     label="Start Date",
     #     required=True,
-    # )
     # source_languages = forms.CharField(
     #     label="Source Language", min_length=3, max_length=200,
     #     required=True,
@@ -64,11 +63,24 @@ class ProjectForm(ModelForm):
             'quantity', 'rate', 'currency', 'status', 'budgetedamount', 'project_manager', 'client'
             ] 
         widgets = {
-            'startDate': DateInput(), 
-            'deadlineDate': DateInput(),
-            'description': Textarea(attrs={"class": "form-control", 'style': 'max-width: 900px;',
-                'placeholder': 'Describe the item'}),
-            'source_language': Textarea(attrs={'rows':1}),
+            'description': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
+                'placeholder': 'Describe the project'}),
+            'startDate': DateInput(attrs={'label': 'Start Date'}),
+            'deadlineDate': DateInput(attrs={"class": "form-group col-6"}),
+        }
+
+        labels = {
+            'projectName': 'Project Name',
+            'startDate': 'Start Date',
+            'deadlineDate' : 'Deadline Date',
+            'budgetedamount': 'Project Budget',
+            'source_languages': 'Source language(s)',
+            'target_languages': 'Target language(s)',
+            'project_manager': 'Project Manager',
+
+
+
+
         }
 
          

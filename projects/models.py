@@ -244,3 +244,130 @@ class Vendor(models.Model):
 
         super(Vendor, self).save(*args, **kwargs)
 
+
+class PurchaseOrder(models.Model):
+    TERMS = [
+    ('30 days', '30 days'),
+    ('45 days', '45 days'),
+    ('60 days', '60 days'),
+    ('Contract', 'Contract')
+    ]
+
+    STATUS = [
+    ('CURRENT', 'CURRENT'),
+    ('EMAIL_SENT', 'EMAIL_SENT'),
+    ('OVERDUE', 'OVERDUE'),
+    ('PAID', 'PAID'),
+    ]
+
+    title = models.CharField(null=True, blank=True, max_length=100)
+    number = models.CharField(null=True, blank=True, max_length=100)
+    dueDate = models.DateField(null=True, blank=True)
+    paymentTerms = models.CharField(choices=TERMS, default='14 days', max_length=100)
+    status = models.CharField(choices=STATUS, default='CURRENT', max_length=100)
+    notes = models.TextField(null=True, blank=True)
+
+    #RELATED fields
+    vendor = models.ForeignKey(Vendor, blank=True, null=True, on_delete=models.SET_NULL)
+
+    #Utility fields
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+
+    def __str__(self):
+        return '{} {}'.format(self.number, self.uniqueId)
+
+
+    def get_absolute_url(self):
+        return reverse('invoice-detail', kwargs={'slug': self.slug})
+
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+            self.slug = slugify('{} {}'.format(self.number, self.uniqueId))
+
+        self.slug = slugify('{} {}'.format(self.number, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+
+        super(PurchaseOrder, self).save(*args, **kwargs)
+
+
+class Job(models.Model):
+    JOBTYPE = [
+    ('TRANSLATION', 'TRANSLATION'),
+    ('REVISION', 'REVISION'),
+    ('EDITING', 'EDITING'),
+    ('TRANSCREATION', 'TRANSCREATION'),
+    ('COPY WRITING', 'COPY WRITING'),
+    ('PROOFREADING', 'PROOFREADING'),
+    ('DTP', 'DTP'),
+    ('SUBTITLING', 'SUBTITLING'),
+    ('INTREPRETATION', 'INTREPRETATION'),
+    ('VOICEOVER', 'VOICEOVER'),
+    ]
+
+    RATINGS = [
+        ('C', 'DOES NOT MEET EXPECTATIONS'),
+        ('MEETS EXPECTATION', 'MEETS EXPECTATION'),
+        ('EXCEEDED EXPECTATIONS', 'EXCEEDED EXPECTATIONS'),
+    ]
+
+    CURRENCY = [
+    ('ETB', 'BIRR'),
+    ('$', 'USD'),
+    ]
+
+    title = models.CharField(null=True, blank=True, max_length=100)
+    description = models.TextField(null=True, blank=True)
+    source_language = models.CharField(blank=True, choices=LANGUAGE_CHOICES, max_length=300)
+    target_language = models.CharField(blank=True, choices=LANGUAGE_CHOICES, max_length=300)
+    job_type = models.CharField(choices=JOBTYPE, default='TRANSLATION', max_length=100)
+    quantity = models.FloatField(null=True, blank=True)
+    rate = models.FloatField(null=True, blank=True)
+    currency = models.CharField(choices=CURRENCY, default='R', max_length=100)
+    project_manager = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="assigned_by")
+    startDate = models.DateField(blank=True, null=True)
+    deadlineDate = models.DateField(blank=True, null=True)
+    rating = models.CharField(choices=RATINGS, default='DOES NOT MEET EXPECTATIONS', max_length=100)
+
+
+    #Related Fields
+    purchaseOrder = models.ForeignKey(PurchaseOrder, blank=True, null=True, on_delete=models.CASCADE)
+
+    #Utility fields
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+
+    def __str__(self):
+        return '{} {}'.format(self.title, self.uniqueId)
+
+
+    def get_absolute_url(self):
+        return reverse('job-detail', kwargs={'slug': self.slug})
+
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+            self.slug = slugify('{} {}'.format(self.title, self.uniqueId))
+
+        self.slug = slugify('{} {}'.format(self.title, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+
+        super(Job, self).save(*args, **kwargs)
+
+
+    def total_price(self):
+        return self.quantity * self.rate
+        print(Job.objects.all()[0].total_price)

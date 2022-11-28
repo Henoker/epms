@@ -7,6 +7,7 @@ from .languages import LANGUAGE_CHOICES
 from accounts.models import CustomUser
 
 
+
 class Client(models.Model):
 
     #Basic Fields.
@@ -48,10 +49,10 @@ class Client(models.Model):
         super(Client, self).save(*args, **kwargs)
 
 class Project(models.Model):
-    CURRENCY = [
-        ('ETB', 'BIRR'),
-        ('$', 'USD'),
-    ]
+    # CURRENCY = [
+    #     ('ETB', 'BIRR'),
+    #     ('$', 'USD'),
+    # ]
     STATUS = [
         ('In Preparation', 'In Preparation'),
         # ('Requested', 'Requested'),
@@ -66,13 +67,6 @@ class Project(models.Model):
     ]
     projectName = models.CharField(null=True, blank=True, max_length=200)
     description = models.TextField(null=True, blank=True)
-    startDate = models.DateField(blank=True, null=True)
-    deadlineDate = models.DateField(blank=True, null=True) 
-    source_languages = models.CharField(null=True, blank=True, max_length=300)
-    target_languages = models.CharField(null=True, blank=True, max_length=300)
-    quantity = models.PositiveIntegerField()
-    rate = models.DecimalField(max_digits=6, decimal_places=2)
-    currency = models.CharField(choices=CURRENCY, default='R', max_length=100)
     project_manager = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="project", default = CustomUser)
     status = models.CharField(choices=STATUS, default='In Preparation', max_length=100)
     budgetedamount = models.PositiveIntegerField()
@@ -103,7 +97,113 @@ class Project(models.Model):
         self.last_updated = timezone.localtime(timezone.now())
 
         super(Project, self).save(*args, **kwargs)
+
+
+class Invoice(models.Model):
+    TERMS = [
+    ('30 days', '30 days'),
+    ('45 days', '45 days'),
+    ('60 days', '60 days'),
+    ('Contract', 'Contract')
+    ]
+
+    STATUS = [
+    ('CURRENT', 'CURRENT'),
+    ('EMAIL_SENT', 'EMAIL_SENT'),
+    ('OVERDUE', 'OVERDUE'),
+    ('PAID', 'PAID'),
+    ]
+
+    title = models.CharField(null=True, blank=True, max_length=100)
+    number = models.CharField(null=True, blank=True, max_length=100)
+    dueDate = models.DateField(null=True, blank=True)
+    paymentTerms = models.CharField(choices=TERMS, default='14 days', max_length=100)
+    status = models.CharField(choices=STATUS, default='CURRENT', max_length=100)
+    notes = models.TextField(null=True, blank=True)
+
+    #RELATED fields
+    client = models.ForeignKey(Client, blank=True, null=True, on_delete=models.SET_NULL)
+
+    #Utility fields
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+
+    def __str__(self):
+        return '{} {}'.format(self.number, self.uniqueId)
+
+
+    def get_absolute_url(self):
+        return reverse('invoice-detail', kwargs={'slug': self.slug})
+
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+            self.slug = slugify('{} {}'.format(self.number, self.uniqueId))
+
+        self.slug = slugify('{} {}'.format(self.number, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+
+        super(Invoice, self).save(*args, **kwargs)
+
+class Order(models.Model):
+    CURRENCY = [
+        ('ETB', 'BIRR'),
+        ('$', 'USD'),
+    ]
+    title = models.CharField(null=True, blank=True, max_length=100)
+    OrderDate = models.DateField(null=True, blank=True)
+    clientDeadline = models.DateField(null=True, blank=True)
+    source_languages = models.CharField(null=True, blank=True, max_length=300)
+    target_languages = models.CharField(null=True, blank=True, max_length=300)
+    description = models.TextField(null=True, blank=True)
+    quantity = models.FloatField(null=True, blank=True)
+    price = models.FloatField(null=True, blank=True)
+    currency = models.CharField(choices=CURRENCY, default='ETB', max_length=100)
+
+    # #Related Fields
+    invoice = models.ForeignKey(Invoice, blank=True, null=True, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, blank=True, null=True, on_delete=models.CASCADE )
+    client = models.ForeignKey(Client, blank=True, null=True, on_delete=models.SET_NULL)
     
+
+    #Utility fields
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+
+    def __str__(self):
+        return '{} {}'.format(self.title, self.uniqueId)
+
+
+    # def get_absolute_url(self):
+    #     return reverse('product-detail', kwargs={'slug': self.slug})
+
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+            self.slug = slugify('{} {}'.format(self.title, self.uniqueId))
+
+        self.slug = slugify('{} {}'.format(self.title, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+
+        super(Order, self).save(*args, **kwargs)
+
+
+    def total_price(self):
+        return self.quantity * self.price
+        print(Order.objects.all()[0].total_price)
+
 class Vendor(models.Model):
 
     #Basic Fields.
@@ -128,8 +228,8 @@ class Vendor(models.Model):
         return '{} {} {}'.format(self.vendorName, self.country, self.uniqueId)
 
 
-    def get_absolute_url(self):
-        return reverse('vendor-detail', kwargs={'slug': self.slug})
+    # def get_absolute_url(self):
+    #     return reverse('vendor-detail', kwargs={'slug': self.slug})
 
 
     def save(self, *args, **kwargs):

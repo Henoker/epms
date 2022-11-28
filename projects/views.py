@@ -58,22 +58,22 @@ from accounts.models import CustomUser
 
 
 
-# @login_required
-# def invoices(request):
-#     context = {}
-#     invoices = Invoice.objects.all()
-#     context['invoices'] = invoices
+@login_required
+def invoices(request):
+    context = {}
+    invoices = Invoice.objects.all()
+    context['invoices'] = invoices
 
-#     return render(request, 'invoice/invoices.html', context)
+    return render(request, 'invoice/invoices.html', context)
 
 
-# @login_required
-# def products(request):
-#     context = {}
-#     products = Product.objects.all()
-#     context['products'] = products
+@login_required
+def orders(request):
+    context = {}
+    orders = Order.objects.all()
+    context['orders'] = orders
 
-#     return render(request, 'invoice/products.html', context)
+    return render(request, 'invoice/orders.html', context)
 
 
 
@@ -128,7 +128,7 @@ def addProject(request):
                 'created': created,
                 'form': form,
             }
-            messages.success(request, 'New Client Added')
+            messages.success(request, 'New Project Added')
             # return render(request, 'projects/addProject.html', context)
             return redirect('projects')
         else:
@@ -178,76 +178,76 @@ def vendors(request):
 
 # ###--------------------------- Create Invoice Views Start here --------------------------------------------- ###
 
-# @login_required
-# def createInvoice(request):
-#     #create a blank invoice ....
-#     number = 'INV-'+str(uuid4()).split('-')[1]
-#     newInvoice = Invoice.objects.create(number=number)
-#     newInvoice.save()
+@login_required
+def createInvoice(request):
+    #create a blank invoice ....
+    number = 'INV-'+str(uuid4()).split('-')[1]
+    newInvoice = Invoice.objects.create(number=number)
+    newInvoice.save()
 
-#     inv = Invoice.objects.get(number=number)
-#     return redirect('create-build-invoice', slug=inv.slug)
-
-
+    inv = Invoice.objects.get(number=number)
+    return redirect('create-build-invoice', slug=inv.slug)
 
 
-# def createBuildInvoice(request, slug):
-#     #fetch that invoice
-#     try:
-#         invoice = Invoice.objects.get(slug=slug)
-#         pass
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
-
-#     #fetch all the products - related to this invoice
-#     products = Product.objects.filter(invoice=invoice)
 
 
-#     context = {}
-#     context['invoice'] = invoice
-#     context['products'] = products
+def createBuildInvoice(request, slug):
+    #fetch that invoice
+    try:
+        invoice = Invoice.objects.get(slug=slug)
+        pass
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('invoices')
 
-#     if request.method == 'GET':
-#         prod_form  = ProductForm()
-#         inv_form = InvoiceForm(instance=invoice)
-#         client_form = ClientSelectForm(initial_client=invoice.client)
-#         context['prod_form'] = prod_form
-#         context['inv_form'] = inv_form
-#         context['client_form'] = client_form
-#         return render(request, 'invoice/create-invoice.html', context)
-
-#     if request.method == 'POST':
-#         prod_form  = ProductForm(request.POST)
-#         inv_form = InvoiceForm(request.POST, instance=invoice)
-#         client_form = ClientSelectForm(request.POST, initial_client=invoice.client, instance=invoice)
-
-#         if prod_form.is_valid():
-#             obj = prod_form.save(commit=False)
-#             obj.invoice = invoice
-#             obj.save()
-
-#             messages.success(request, "Invoice product added succesfully")
-#             return redirect('create-build-invoice', slug=slug)
-#         elif inv_form.is_valid and 'paymentTerms' in request.POST:
-#             inv_form.save()
-
-#             messages.success(request, "Invoice updated succesfully")
-#             return redirect('create-build-invoice', slug=slug)
-#         elif client_form.is_valid() and 'client' in request.POST:
-
-#             client_form.save()
-#             messages.success(request, "Client added to invoice succesfully")
-#             return redirect('create-build-invoice', slug=slug)
-#         else:
-#             context['prod_form'] = prod_form
-#             context['inv_form'] = inv_form
-#             context['client_form'] = client_form
-#             messages.error(request,"Problem processing your request")
-#             return render(request, 'invoice/create-invoice.html', context)
+    #fetch all the products - related to this invoice
+    orders = Order.objects.filter(invoice=invoice)
 
 
-#     return render(request, 'invoice/create-invoice.html', context)
+    context = {}
+    context['invoice'] = invoice
+    context['orders'] = orders
+
+    if request.method == 'GET':
+        order_form  = OrderForm()
+        inv_form = InvoiceForm(instance=invoice)
+        client_form = ClientSelectForm(initial_client=invoice.client)
+        context['order_form'] = order_form
+        context['inv_form'] = inv_form
+        context['client_form'] = client_form
+        return render(request, 'invoice/create-invoice.html', context)
+
+    if request.method == 'POST':
+        order_form  = OrderForm(request.POST)
+        inv_form = InvoiceForm(request.POST, instance=invoice)
+        client_form = ClientSelectForm(request.POST, initial_client=invoice.client, instance=invoice)
+
+        if order_form.is_valid():
+            obj = order_form.save(commit=False)
+            obj.invoice = invoice
+            obj.save()
+
+            messages.success(request, "Invoice and Order added succesfully")
+            return redirect('create-build-invoice', slug=slug)
+        elif inv_form.is_valid and 'paymentTerms' in request.POST:
+            inv_form.save()
+
+            messages.success(request, "Invoice updated succesfully")
+            return redirect('create-build-invoice', slug=slug)
+        elif client_form.is_valid() and 'client' in request.POST:
+
+            client_form.save()
+            messages.success(request, "Client added to invoice succesfully")
+            return redirect('create-build-invoice', slug=slug)
+        else:
+            context['order_form'] = order_form
+            context['inv_form'] = inv_form
+            context['client_form'] = client_form
+            messages.error(request,"Problem processing your request")
+            return render(request, 'invoice/create-invoice.html', context)
+
+
+    return render(request, 'invoice/create-invoice.html', context)
 
 
 # def viewPDFInvoice(request, slug):
@@ -689,15 +689,15 @@ def vendors(request):
 # #     messages.success(request, "Email sent to the client succesfully")
 # #     return redirect('create-build-invoice', slug=slug)
 
-# @login_required
-# def deleteInvoice(request, slug):
-#     try:
-#         Invoice.objects.get(slug=slug).delete()
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
+@login_required
+def deleteInvoice(request, slug):
+    try:
+        Invoice.objects.get(slug=slug).delete()
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('invoices')
 
-#     return redirect('invoices')
+    return redirect('invoices')
 @login_required
 def deleteClient(request, slug):
     try:
@@ -718,15 +718,15 @@ def deleteVendor(request, slug):
 
     return redirect('vendors')
 
-# @login_required
-# def deleteProduct(request, slug):
-#     try:
-#         Product.objects.get(slug=slug).delete()
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
+@login_required
+def deleteOrder(request, slug):
+    try:
+        Order.objects.get(slug=slug).delete()
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('orders')
 
-#     return redirect('products')
+    return redirect('orders')
 
 @login_required
 def deleteProject(request, slug):
@@ -770,22 +770,22 @@ def updateProject(request, slug):
     return render(request, 'projects/updateProject.html', context)
         
     
-# @login_required
-# def updateProduct(request, slug):
-#     context = {}
-#     product = Product.objects.get(slug=slug)
-#     context['product'] = product
-#     form = ProductForm(request.POST or None, instance=product)
-#     context['form'] = form
-#     if form.is_valid():
-#         form.save()
-#         messages.success(request, 'Job updated')
-#         return redirect('products')
-#     else:
-#         messages.error(request, 'Problem processing your request')
-#         return render(request, 'invoice/updateProduct.html', context)
+@login_required
+def updateOrder(request, slug):
+    context = {}
+    order = Order.objects.get(slug=slug)
+    context['order'] = order
+    form = OrderForm(request.POST or None, instance=order)
+    context['form'] = form
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Order updated')
+        return redirect('orders')
+    else:
+        messages.error(request, 'Problem processing your request')
+        return render(request, 'invoice/updateOrder.html', context)
 
-#     return render(request, 'invoice/updateProduct.html', context)
+    return render(request, 'invoice/updateProduct.html', context)
     
 @login_required
 def updateVendor(request, slug):

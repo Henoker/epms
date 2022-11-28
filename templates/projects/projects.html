@@ -29,11 +29,8 @@
       <thead>
         <tr>
           <th scope="col">Project Name</th>
-          <th scope="col">Start Date</th>
-          <th scope="col">Deadline Date</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Rate</th>
           <th scope="col">Project Manager</th>
+          <th scope="col">Project Budget</th>
           <th scope="col">Status</th>
         </tr>
       </thead>
@@ -42,11 +39,8 @@
         {% for project in projects %}
       <tr>
         <td>{{project.projectName}}</td>
-        <td>{{project.startDate}}</td>
-        <td>{{project.deadlineDate}}</td>
-        <td>{{project.quantity}}</td>
-        <td>{{project.rate}}</td>
         <td>{{project.project_manager}}</td>
+        <td>{{project.budgetedamount}}</td>
         {% if project.status == "In Preparation" %}
         <td><span class="badge text-bg-primary">In Preparation</span></td>
         {% elif project.status == "In Progress" %}
@@ -116,7 +110,7 @@
     </div>
     <div class="col-lg-8">
       <h3>Add First Project</h3>
-      <img class=img-fluid  src="{% static 'assets/img/empty.svg' %}" alt="Ethiostar">
+      <img class=img-fluid  src="{% static 'images/empty.svg' %}" alt="Ethiostar">
     </div>
     <div class="col-lg-3">
 

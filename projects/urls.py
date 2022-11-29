@@ -8,6 +8,8 @@ urlpatterns = [
     path('vendors', views.vendors, name='vendors'),
     path('invoices',views.invoices, name='invoices'),
     path('orders', views.orders, name='orders'),
+    path('purchaseOrders',views.purchaseOrders, name='purchase-orders'),
+    path('jobs', views.jobs, name='jobs'),
 
     # Invoice create paths
     path('invoices/create',views.createInvoice, name='create-invoice'),
@@ -26,5 +28,14 @@ urlpatterns = [
     # Path for Orders
     path('updateOrder/<slug:slug>',views.updateOrder, name='update-order'),
     path('orders/delete/<slug:slug>',views.deleteOrder, name='delete-order'),
+
+    # Po create paths
+    path('purchaseOrders/create',views.createPo, name='create-po'),
+    path('purchaseOrders/create-build/<slug:slug>',views.createBuildPo, name='create-build-po'),
+    path('purchaseOrders/delete/<slug:slug>',views.deletePo, name='delete-po'),
+
+     # Path for Orders
+    path('updateJob/<slug:slug>',views.updateJob, name='update-job'),
+    path('jobs/delete/<slug:slug>',views.deleteJob, name='delete-job'),
 
 ]

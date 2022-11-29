@@ -312,12 +312,16 @@ class Job(models.Model):
     ('VOICEOVER', 'VOICEOVER'),
     ]
 
-    RATINGS = [
-        ('C', 'DOES NOT MEET EXPECTATIONS'),
-        ('MEETS EXPECTATION', 'MEETS EXPECTATION'),
-        ('EXCEEDED EXPECTATIONS', 'EXCEEDED EXPECTATIONS'),
+    STATUS = [
+        ('In Preparation', 'In Preparation'),
+        ('Requested', 'Requested'),
+        ('Assigned-waiting', 'Assigned-waiting'),
+        ('In Progress', 'In Progress'),
+        ('Overdue', 'Overdue'),
+        ('Delivered', 'Delivered'),
+        ('Complained', 'Complained'),
+        ('Approved', 'Approved'),
     ]
-
     CURRENCY = [
     ('ETB', 'BIRR'),
     ('$', 'USD'),
@@ -330,15 +334,18 @@ class Job(models.Model):
     job_type = models.CharField(choices=JOBTYPE, default='TRANSLATION', max_length=100)
     quantity = models.FloatField(null=True, blank=True)
     rate = models.FloatField(null=True, blank=True)
-    currency = models.CharField(choices=CURRENCY, default='R', max_length=100)
+    currency = models.CharField(choices=CURRENCY, default='ETB', max_length=100)
     project_manager = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="assigned_by")
     startDate = models.DateField(blank=True, null=True)
     deadlineDate = models.DateField(blank=True, null=True)
-    rating = models.CharField(choices=RATINGS, default='DOES NOT MEET EXPECTATIONS', max_length=100)
+    status = models.CharField(choices=STATUS, default='In Preparation', max_length=100)
+    evaluated = models.BooleanField(default=False)
 
 
     #Related Fields
     purchaseOrder = models.ForeignKey(PurchaseOrder, blank=True, null=True, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, blank=True, null=True, on_delete=models.CASCADE, related_name="Main_Project")
+    assigned_to = models.ForeignKey(Vendor, blank=True, null=True, on_delete=models.CASCADE, related_name="Job_owner")
 
     #Utility fields
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -371,3 +378,20 @@ class Job(models.Model):
     def total_price(self):
         return self.quantity * self.rate
         print(Job.objects.all()[0].total_price)
+
+
+class Rating(models.Model):
+    RATE_CHOICES = [
+        (1, 'Below Expectation greater than 0.02'),
+        (2, 'Meet Expectaion 0.02'),
+        (3, 'Exceed Expectaions less than 0.02'),
+    ]
+    
+    reviewer = models.ForeignKey(CustomUser, related_name="evaluator", on_delete=models.CASCADE, null=True, blank=True)
+    reviewee = models.ForeignKey(Vendor, null=True, blank=True, related_name="evaluated_vendor", on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    text = models.TextField(max_length=200, blank=True)
+    rate = models.PositiveSmallIntegerField(choices=RATE_CHOICES)
+
+    def __str__(self):
+        return self.reviewer.username

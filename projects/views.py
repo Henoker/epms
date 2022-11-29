@@ -75,7 +75,13 @@ def orders(request):
 
     return render(request, 'invoice/orders.html', context)
 
+@login_required
+def jobs(request):
+    context = {}
+    jobs = Job.objects.all()
+    context['jobs'] = jobs
 
+    return render(request, 'invoice/jobs.html', context)
 
 @login_required
 def clients(request):
@@ -169,6 +175,13 @@ def vendors(request):
 
     return render(request, 'projects/vendors.html', context)
 
+@login_required
+def purchaseOrders(request):
+    context = {}
+    purchase_orders = PurchaseOrder.objects.all()
+    context['purchase_orders'] = purchase_orders
+
+    return render(request, 'invoice/purchase-orders.html', context)
 
 # @login_required
 # def logout(request):
@@ -187,9 +200,6 @@ def createInvoice(request):
 
     inv = Invoice.objects.get(number=number)
     return redirect('create-build-invoice', slug=inv.slug)
-
-
-
 
 def createBuildInvoice(request, slug):
     #fetch that invoice
@@ -227,7 +237,7 @@ def createBuildInvoice(request, slug):
             obj.invoice = invoice
             obj.save()
 
-            messages.success(request, "Invoice and Order added succesfully")
+            messages.success(request, "Invoice product added succesfully")
             return redirect('create-build-invoice', slug=slug)
         elif inv_form.is_valid and 'paymentTerms' in request.POST:
             inv_form.save()
@@ -248,6 +258,76 @@ def createBuildInvoice(request, slug):
 
 
     return render(request, 'invoice/create-invoice.html', context)
+
+# --------- Create Purchase ORDER Below------------------
+@login_required
+def createPo(request):
+    #create a blank Po ....
+    number = 'PO-'+str(uuid4()).split('-')[1]
+    newPo = PurchaseOrder.objects.create(number=number)
+    newPo.save()
+
+    po = PurchaseOrder.objects.get(number=number)
+    return redirect('create-build-po', slug=po.slug)
+
+
+def createBuildPo(request, slug):
+    #fetch that po
+    try:
+        purchaseOrder = PurchaseOrder.objects.get(slug=slug)
+        pass
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('purchase-orders')
+
+    #fetch all the products - related to this invoice
+    jobs = Job.objects.filter(purchaseOrder=purchaseOrder)
+
+
+    context = {}
+    context['purchaseOrder'] = purchaseOrder
+    context['jobs'] = jobs
+
+    if request.method == 'GET':
+        job_form  = JobForm()
+        po_form = PurchaseOrderForm(instance=purchaseOrder)
+        Vendor_form = VendorSelectForm(initial_vendor=purchaseOrder.vendor)
+        context['job_form'] = job_form
+        context['po_form'] = po_form
+        context['Vendor_form'] = Vendor_form
+        return render(request, 'invoice/create-po.html', context)
+
+    if request.method == 'POST':
+        job_form  = JobForm(request.POST)
+        po_form = PurchaseOrderForm(request.POST, instance=purchaseOrder)
+        Vendor_form = VendorSelectForm(request.POST, initial_vendor=purchaseOrder.vendor, instance=purchaseOrder)
+
+        if job_form.is_valid():
+            obj = job_form.save(commit=False)
+            obj.po = purchaseOrder
+            obj.save()
+
+            messages.success(request, "PO and Job added succesfully")
+            return redirect('create-build-po', slug=slug)
+        elif po_form.is_valid and 'paymentTerms' in request.POST:
+            po_form.save()
+
+            messages.success(request, "PO updated succesfully")
+            return redirect('create-build-po', slug=slug)
+        elif Vendor_form.is_valid() and 'vendor' in request.POST:
+
+            Vendor_form.save()
+            messages.success(request, "Client added to invoice succesfully")
+            return redirect('create-build-po', slug=slug)
+        else:
+            context['job_form'] = job_form
+            context['po_form'] = po_form
+            context['Vendor_form'] = Vendor_form
+            messages.error(request,"Problem processing your request")
+            return render(request, 'invoice/create-po.html', context)
+
+
+    return render(request, 'invoice/create-po.html', context)
 
 
 # def viewPDFInvoice(request, slug):
@@ -698,6 +778,7 @@ def deleteInvoice(request, slug):
         return redirect('invoices')
 
     return redirect('invoices')
+
 @login_required
 def deleteClient(request, slug):
     try:
@@ -727,6 +808,17 @@ def deleteOrder(request, slug):
         return redirect('orders')
 
     return redirect('orders')
+
+
+@login_required
+def deleteJob(request, slug):
+    try:
+        Job.objects.get(slug=slug).delete()
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('jobs')
+
+    return redirect('jobs')
 
 @login_required
 def deleteProject(request, slug):
@@ -786,7 +878,23 @@ def updateOrder(request, slug):
         return render(request, 'invoice/updateOrder.html', context)
 
     return render(request, 'invoice/updateProduct.html', context)
-    
+
+
+@login_required
+def updateJob(request, slug):
+    context = {}
+    job = Job.objects.get(slug=slug)
+    context['job'] = job
+    form = JobForm(request.POST or None, instance=job)
+    context['form'] = form
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Job updated')
+        return redirect('jobs')
+    else:
+        messages.error(request, 'Problem processing your request')
+        return render(request, 'invoice/updateJob.html', context)
+
 @login_required
 def updateVendor(request, slug):
     context = {}
@@ -802,7 +910,15 @@ def updateVendor(request, slug):
         messages.error(request, 'Problem processing your request')
         return render(request, 'projects/updateVendor.html', context)
 
-      
+@login_required
+def deletePo(request, slug):
+    try:
+        PurchaseOrder.objects.get(slug=slug).delete()
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('purchase-orders')
+
+    return redirect('purchase-orders')    
      
 
 

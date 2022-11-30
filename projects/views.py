@@ -923,14 +923,14 @@ def deletePo(request, slug):
 
 
 
-# def companySettings(request):
-#     company = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
-#     context = {'company': company}
-#     return render(request, 'invoice/company-settings.html', context)
+def companySettings(request):
+    company = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
+    context = {'company': company}
+    return render(request, 'invoice/company-settings.html', context)
 
 
 
 
 
 
-# # Create your views here.
+

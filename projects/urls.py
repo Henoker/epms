@@ -38,4 +38,7 @@ urlpatterns = [
     path('updateJob/<slug:slug>',views.updateJob, name='update-job'),
     path('jobs/delete/<slug:slug>',views.deleteJob, name='delete-job'),
 
+    #Company Settings Page
+    path('company/settings',views.companySettings, name='company-settings'),
+
 ]

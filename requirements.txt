@@ -7,3 +7,6 @@ django-allauth==0.50.0
 django-crispy-forms==1.14.0
 crispy-bootstrap5==0.6
 environs[django]==9.5.0
+wkhtmltopdf==0.2
+pdfkit==1.0.0
+Pillow==9.3.0

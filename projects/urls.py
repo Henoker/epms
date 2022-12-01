@@ -41,4 +41,9 @@ urlpatterns = [
     #Company Settings Page
     path('company/settings',views.companySettings, name='company-settings'),
 
+    #PDF and EMAIL Paths
+    path('invoices/view-pdf/<slug:slug>',views.viewPDFInvoice, name='view-pdf-invoice'),
+    path('invoices/view-document/<slug:slug>',views.viewDocumentInvoice, name='view-document-invoice'),
+    # path('invoices/email-document/<slug:slug>',views.emailDocumentInvoice, name='email-document-invoice'),
+
 ]

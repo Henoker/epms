@@ -13,10 +13,13 @@ from uuid import uuid4
 
 from django.http import HttpResponse
 
+from django.template.loader import render_to_string
+import os
 
 from django.template.loader import get_template
-
-from xhtml2pdf import pisa
+import weasyprint
+from weasyprint import HTML, CSS
+import tempfile
 
 
 # #Anonymous required
@@ -320,29 +323,28 @@ def viewDocumentInvoice(request, slug):
     
   
 
-    template_path = 'invoice/pdf-template.html'
+    
     context = {}
     context['invoice'] = invoice
     context['orders'] = orders
     context['p_settings'] = p_settings
     context['invoiceTotal'] = "{:.2f}".format(invoiceTotal)
 
-   
-    filename = '{}.pdf'.format(invoice.uniqueId)
-    response = HttpResponse(content_type='application/pdf')
+    html_string = render_to_string(
+        'invoice/pdf-template.html',context)
+    html = HTML(string=html_string)
+    result = html.write_pdf()
 
-    response['Content-Disposition'] = 'inline; filename = {}'.format(filename)
+    # http response
+    response = HttpResponse(content_type='application/pdf;')
+    response['Content-Disposition'] = 'inline; filename=problem_list.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read())
 
-    template = get_template(template_path)
-
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-       html, dest=response)
-    # if error then show some funy view
-    if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
     
 # def viewDocumentInvoice(request, slug):

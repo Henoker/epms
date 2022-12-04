@@ -1,215 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-{% load static %}
-
-<head>
-  <title>Invoice Ethiostar</title>
-<style>
-  .clearfix:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-a {
-  text-decoration: underline;
-}
-
-body {
-  position: relative;
-  margin: 0 auto; 
-  color: #001028;
-  background: #FFFFFF; 
-  font-family: Arial, sans-serif; 
-  font-size: 14px; 
-  font-family: Arial;
-}
-
-header {
-  padding: 10px 0;
-  margin-bottom: 30px;
-}
-
-#logo {
-  margin-top: 0px;
-  margin-left: 0px;
-  background-image: url(https://i0.wp.com/ethiostarlocalization.com/wp-content/uploads/2021/10/cropped-LOGO-Original-HD-2.png?w=1000&ssl=1);
+<html>
+  <body>
+    <h1>My Shop</h1>
+    <p> Invoice no. {{ order.id }}<br><span class="secondary">{{invoice.number}}</span></p>
+    <h3>Bill to</h3>
+    <p>
+      {{ invoice.client.clientName}}<br>
+      {{invoice.client.emailAddress}}<br>
+      {{ invoice.client.addressLine1 }}<br>
+      Postal code: {{invoice.client.postalCode}}, {{invoice.client.country}}
+      </p>
+    <h3>Items</h3>
+     <table>
+      <thead>
+        <tr>
+          <td>Date</td>
+          <td>Description</td>
+          <td>Quantity</td>
+          <td>Price</td>
+        </tr>
+      </thead>
+      <tbody>
+      {% for order in orders %}
+      <tr class="row{% cycle "1" "2" %}">
+        <td>{{order.OrderDate}}</td>
+        <td class="num">{{order.description}}</td>
+        <td class="num">{{order.quantity}}</td>
+        <td class="num">{{order.currency}} {{order.price}}</td>
+      </tr>
+      {% endfor %}
+      <tr class="total">
+        <td colspan="3">Total</td>
+        <td class="num">{{invoiceCurrency}} {{invoiceTotal}}</td>
+  </tr>
+  </tbody>
+  </table>
  
-  text-align: left;
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-#logo img {
-  zoom: 60%;
-  background; red;
-}
-
-h1 {
-  
-  color: #5D6975;
-  font-size: 2.4em;
-  line-height: 1.4em;
-  font-weight: normal;
-  text-align: center;
-  margin: 0 0 20px 0;
-}
-
-#project {
-  float: left;
-}
-
-#project span {
-  color: #5D6975;
-  text-align: right;
-  width: 52px;
-  margin-right: 10px;
-  display: inline-block;
-  font-size: 14px;
-}
-
-#company {
-  float: right;
-  text-align: right;
-}
-
-#project div,
-#company div {
-  white-space: nowrap;        
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-  margin-bottom: 20px;
-}
-
-
-
-table th,
-table td {
-  text-align: center;
-}
-
-table th {
-  color: #5D6975;
-  border-bottom: 1px solid #C1CED9;
-  line-height: 25px;
-  white-space: nowrap;        
-  font-weight: normal;
-}
-
-table .service,
-table .desc {
-  text-align: left;
-}
-
-table td {
- padding-top:5px;
- padding-bottom:5px;
-  
-}
-
-table tr {
-  border-bottom: 1px solid #C1CED9;
-}
-
-table td.service,
-table td.desc {
-  vertical-align: top;
-}
-
-table td.unit,
-table td.qty,
-table td.total {
-  font-size: 1.2em;
-  text-align: right;
-}
-
-table td.grand {
-  border-top: 1px solid #5D6975;;
-}
-
-#notices .notice {
-  color: #5D6975;
-  font-size: 1.2em;
-}
-
-footer {
-  color: #5D6975;
-  width: 100%;
-  height: 30px;
-  position: absolute;
-  bottom: 0;
-  border-top: 1px solid #C1CED9;
-  padding: 8px 0;
-  text-align: center;
-}
-
-
-  </style>
-</head>
-
-<body>
-  <header class="clearfix">
-    <div id="logo" style="display:flex; justify-content:center; align-items:center;">
-      <img class="logo" src="https://i0.wp.com/ethiostarlocalization.com/wp-content/uploads/2021/10/cropped-LOGO-Original-HD-2.png?w=1000&ssl=1" width="237", height="187">
-      <h1 class="brand-name">Ethiostar Translation & Localization PLC</h1>
-    </div>
-    <h2>INVOICE</h2>
-    <hr>
-    <div id="company" class="clearfix">
-      <div>{{p_settings.clientName}}</div>
-      <div>{{p_settings.addressLine1}}</div>
-      <div>{{p_settings.country}}</div>
-      <div>P.O. Box: {{p_settings.postalCode}}</div>
-      <div>{{p_settings.emailAddress}}</div>
-      <div>{{p_settings.phoneNumber}}</div>
-
-    </div>
-    <div id="project">
-      <div><span>CLIENT:</span> {{invoice.client.clientName}}</div>
-      <div><span>EMAIL:</span> <a href="mailto:{{user_email}}">{{invoice.client.emailAddress}} </a></div>
-      <div><span>DATE:</span> {{invoice.date_created|date}}</div>
-      <div><span>INVOICE ID:</span> {{invoice.number}}</div>
-      <div><span>Due Date:</span> {{invoice.dueDate}}</div>
-    </div>
-    <br>
-    <br>
-  </header>
-    <div class="table-container" style="overflow-x:auto">
-      <table class="table" style="width:100%">
-          <thead>
-              <tr>
-                  <th scope="col">Date</th>
-                  <th scope="col">Description</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Rate</th>
-                  
-              </tr>
-          </thead>
-          <tbody>
-              {% for order in orders %}
-              <tr>
-                  <td> {{order.OrderDate}}</td>
-                  <td>{{order.description}}</td>
-                  <td>{{order.quantity}}</td>
-                  <td>{{order.price}}</td>
-                  
-              </tr>
-              {% endfor %}
-              <tr>
-                  <td scope="row"></td>
-                  <td style="text-align:right">TOTAL:</td>
-                  <td>{{invoiceCurrency}} {{invoiceTotal}}</td>
-                  
-              </tr>
-          </tbody>
-      </table>
-
-    </div>
-    <p style="text-align:right; font-size:12px;">*All values are in INR<p>
-</body>
-
-</html>
+  {% comment %} <span class="{% if order.paid %}paid{% else %}pending{% endif %}">
+  {% if order.paid %}Paid{% else %}Pending payment{% endif %}
+  </span> {% endcomment %}
+ </body>
+ </html>

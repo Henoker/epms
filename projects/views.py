@@ -448,7 +448,54 @@ def viewDocumentPO(request, slug):
 
     return render(request, 'invoice/po-view.html', context)
 
+def viewPDFPO(request, slug):
+    #fetch that PO
+    try:
+        purchaseOrder = PurchaseOrder.objects.get(slug=slug)
+        pass
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('purchase-orders')
 
+    #fetch all the products - related to this invoice
+    jobs = Job.objects.filter(purchaseOrder=purchaseOrder)
+
+    #Get Client Settings
+    p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
+
+    #Calculate the Invoice Total
+    poCurrency = ''
+    poTotal = 0.0
+    if len(jobs) > 0:
+        for x in jobs:
+            y = float(x.quantity) * float(x.rate)
+            poTotal += y
+            poCurrency = x.currency
+
+    context = {}
+    context['purchaseOrder'] = purchaseOrder
+    context['jobs'] = jobs
+    context['p_settings'] = p_settings
+    context['poTotal'] = "{:.2f}".format(poTotal)
+    context['poCurrency'] = poCurrency
+
+    html_string = render_to_string(
+        'invoice/po-pdf.html',context)
+    html = HTML(string=html_string)
+    result = html.write_pdf()
+
+    # http response
+    response = HttpResponse(content_type='application/pdf;')
+    response['Content-Disposition'] = 'inline; filename=problem_list.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read())
+
+    return response
+    
 
 @login_required
 def deleteInvoice(request, slug):

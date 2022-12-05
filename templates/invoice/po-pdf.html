@@ -12,7 +12,7 @@
     <!-- Custom Style -->
     <link rel="stylesheet" href="style.css">
 
-    <title>Invoice..!</title>
+    <title>PO..!</title>
     <style>
     :root {
     --body-bg: rgb(204, 204, 204);
@@ -26,24 +26,14 @@
 
 /* Font Include */
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap');
+@page {
+    margin: 3cm;
+}
 
 body {
-    background-color: var(--body-bg);
+    background-color: var(--white);
 }
 
-.page {
-    background: var(--white);
-    display: block;
-    margin: 0 auto;
-    position: relative;
-    box-shadow: var(--pageShadow);
-}
-
-.page[size="A4"] {
-    width: 21cm;
-    height: 29.7cm;
-    overflow: hidden;
-}
 
 .bb {
     border-bottom: 3px solid var(--darkWhite);
@@ -105,6 +95,12 @@ body {
 /* User Store Section */
 .store-user {
     padding-bottom: 25px;
+    display: flex;
+    margin: 2em 0 4em;
+}
+
+.store-user #from{
+    flex: 1;
 }
 
 .store-user p {
@@ -127,7 +123,7 @@ body {
 
 /* Product Section */
 thead {
-    color: var(--white);
+    color: var(--black);
     background: var(--themeColor);
 }
 
@@ -212,10 +208,10 @@ footer p {
                 </div>
                 <div class="top-left">
                     <div class="graphic-path">
-                        <p>Invoice</p>
+                        <p>Purchase Order</p>
                     </div>
                     <div class="position-relative">
-                        <p>Invoice No. <span>{{invoice.number}}</span></p>
+                        <p>PO No. <span>{{purchaseOrder.number}}</span></p>
                     </div>
                 </div>
             </section>
@@ -223,27 +219,27 @@ footer p {
             <section class="store-user mt-5">
                 <div class="col-12">
                     <div class="row bb pb-3">
-                        <div class="col-6">
-                            <p>Vendor,</p>
+                        <div class="col-6" id="from">
+                            <p>Client,</p>
                             <h3>{{p_settings.clientName}}</h3>
                             <p class="address"> {{p_settings.addressLine1}}, {{p_settings.country}}, <br>P.O. Box: {{p_settings.postalCode}}, <br> {{p_settings.emailAddress}}, </p>
                             <div class="txn mt-2">{{p_settings.phoneNumber}}</div>
                         </div>
                         <div class="col-6">
-                            <p>Client,</p>
-                            <h3>{{invoice.client.clientName}}</h3>
+                            <p>Vendor,</p>
+                            <h3>{{purchaseOrder.vendor.vendorName}}</h3>
 
 
-                            <p class="address"> {{invoice.client.addressLine1}}, {{invoice.client.country}}, <br>Postal code: {{invoice.client.postalCode}}, <br> {{invoice.client.emailAddress}}  </p>
-                            <div class="txn mt-2">{{invoice.client.phoneNumber}}</div>
+                            <p class="address"> {{purchaseOrder.vendor.addressLine1}}, {{purchaseOrder.vendor.country}}, <br>Postal code: {{invoice.client.postalCode}}, <br> {{invoice.client.emailAddress}}  </p>
+                            <div class="txn mt-2">{{purchaseOrder.vendor.phoneNumber}}</div>
                         </div>
                     </div>
                     <div class="row extra-info pt-3">
                         <div class="col-7">
-                            <p>Created: <span>{{invoice.date_created|date}}</span></p>
+                            <p>Created: <span>{{purchaseOrder.date_created|date}}</span></p>
                         </div>
                         <div class="col-5">
-                            <p>Due Date: <span>{{invoice.dueDate}}</span></p>
+                            <p>Due Date: <span>{{purchaseOrder.dueDate}}</span></p>
                         </div>
                     </div>
                 </div>
@@ -256,24 +252,24 @@ footer p {
                             <td>Date</td>
                             <td>Description</td>
                             <td>Quantity</td>
-                            <td>Price</td>
+                            <td>Rate</td>
                             <td>SUBTOTAL</td>
                         </tr>
                     </thead>
-                    {% for order in orders %}
+                    {% for job in jobs %}
                     <tbody>
                         <tr>
-                            <td>{{order.OrderDate}}</td>
+                            <td>{{job.startDate}}</td>
                             <td>
                                 <div class="media">
                                     <div class="media-body">
-                                        <p class="mt-0 title">{{order.description}}</p>  
+                                        <p class="mt-0 title">{{job.description}}</p>  
                                     </div>
                                 </div>
                             </td>
-                            <td>{{order.quantity}}</td>
-                            <td>{{order.currency}} {{order.price}}</td>
-                            <td>{{order.total_price|floatformat:"0"}}</td>
+                            <td>{{job.quantity}}</td>
+                            <td>{{job.currency}} {{job.rate}}</td>
+                            <td>{{job.total_price|floatformat:"0"}}</td>
                         </tr>
                        
                     </tbody>
@@ -292,7 +288,7 @@ footer p {
                             <tfoot>
                                 <tr>
                                     <td>Total:</td>
-                                    <td>{{invoiceCurrency}} {{invoiceTotal}}</td>
+                                    <td>{{poCurrency}} {{poTotal}}</td>
                                 </tr>
                             </tfoot>
                         </table>

@@ -224,13 +224,13 @@ footer p {
                 <div class="col-12">
                     <div class="row bb pb-3">
                         <div class="col-6">
-                            <p>Vendor,</p>
+                            <p>Client,</p>
                             <h3>{{p_settings.clientName}}</h3>
                             <p class="address"> {{p_settings.addressLine1}}, {{p_settings.country}}, <br>P.O. Box: {{p_settings.postalCode}}, <br> {{p_settings.emailAddress}}, </p>
                             <div class="txn mt-2">{{p_settings.phoneNumber}}</div>
                         </div>
                         <div class="col-6">
-                            <p>Client,</p>
+                            <p>Vendor,</p>
                             <h3>{{purchaseOrder.vendor.vendorName}}</h3>
 
 
@@ -257,6 +257,7 @@ footer p {
                             <td>Description</td>
                             <td>Quantity</td>
                             <td>Rate</td>
+                            <td>SUBTOTAL</td>
                         </tr>
                     </thead>
                     {% for job in jobs %}
@@ -272,6 +273,7 @@ footer p {
                             </td>
                             <td>{{job.quantity}}</td>
                             <td>{{job.currency}} {{job.rate}}</td>
+                            <td>{{job.total_price|floatformat:"0"}}</td>
                         </tr>
                        
                     </tbody>

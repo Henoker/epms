@@ -288,8 +288,6 @@ def viewPDFInvoice(request, slug):
             invoiceTotal += y
             invoiceCurrency = x.currency
 
-
-
     context = {}
     context['invoice'] = invoice
     context['orders'] = orders
@@ -319,10 +317,6 @@ def viewDocumentInvoice(request, slug):
         for x in orders:
             y = float(x.quantity) * float(x.price)
             invoiceTotal += y
-   
-    
-  
-
     
     context = {}
     context['invoice'] = invoice
@@ -347,74 +341,7 @@ def viewDocumentInvoice(request, slug):
 
     return response
     
-# def viewDocumentInvoice(request, slug):
-#     #fetch that invoice
-#     try:
-#         invoice = Invoice.objects.get(slug=slug)
-#         pass
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
 
-#     #fetch all the products - related to this invoice
-#     orders = Order.objects.filter(invoice=invoice)
-
-#     #Get Client Settings
-#     p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
-
-#     #Calculate the Invoice Total
-#     invoiceTotal = 0.0
-#     if len(orders) > 0:
-#         for x in orders:
-#             y = float(x.quantity) * float(x.price)
-#             invoiceTotal += y
-
-
-
-#     context = {}
-#     context['invoice'] = invoice
-#     context['products'] = orders
-#     context['p_settings'] = p_settings
-#     context['invoiceTotal'] = "{:.2f}".format(invoiceTotal)
-
-#     #The name of your PDF file
-#     filename = '{}.pdf'.format(invoice.uniqueId)
-
-#     #HTML FIle to be converted to PDF - inside your Django directory
-#     template = get_template('invoice/pdf-template.html')
-
-
-#     #Render the HTML
-#     html = template.render(context)
-
-#     #Options - Very Important [Don't forget this]
-#     options = {
-#           'encoding': 'UTF-8',
-#           'javascript-delay':'10', #Optional
-#           'enable-local-file-access': None, #To be able to access CSS
-#           'page-size': 'A4',
-#           'custom-header' : [
-#               ('Accept-Encoding', 'gzip')
-#           ],
-#       }
-#       #Javascript delay is optional
-
-#     #Remember that location to wkhtmltopdf
-#     config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
-
-#     #IF you have CSS to add to template
-#     css1 = os.path.join(settings.CSS_LOCATION, 'css', 'bootstrap.min.css')
-#     css2 = os.path.join(settings.CSS_LOCATION,  'css', 'dashboard.css')
-
-#     #Create the file
-#     file_content = pdfkit.from_string(html, False, configuration=config, options=options)
-
-#     #Create the HTTP Response
-#     response = HttpResponse(file_content, content_type='application/pdf')
-#     response['Content-Disposition'] = 'inline; filename = {}'.format(filename)
-
-#     #Return
-#     return response
 
 # ###--------------------------- Create Purchase Order Views Start here --------------------------------------------- ###
 
@@ -463,7 +390,7 @@ def createBuildPo(request, slug):
 
         if job_form.is_valid():
             obj = job_form.save(commit=False)
-            obj.po = purchaseOrder
+            obj.purchaseOrder = purchaseOrder
             obj.save()
 
             messages.success(request, "PO and Job added succesfully")
@@ -488,190 +415,39 @@ def createBuildPo(request, slug):
 
     return render(request, 'invoice/create-po.html', context)
 
+def viewDocumentPO(request, slug):
+    #fetch that invoice
+    try:
+        purchaseOrder = PurchaseOrder.objects.get(slug=slug)
+        pass
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('purchase-orders')
 
-# def viewPDFInvoice(request, slug):
-#     #fetch that invoice
-#     try:
-#         invoice = Invoice.objects.get(slug=slug)
-#         pass
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
+    #fetch all the products - related to this invoice
+    jobs = Job.objects.filter(purchaseOrder=purchaseOrder)
 
-#     #fetch all the products - related to this invoice
-#     products = Product.objects.filter(invoice=invoice)
+    #Get Client Settings
+    p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
 
-#     #Get Client Settings
-#     p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
+    #Calculate the Invoice Total
+    poCurrency = ''
+    poTotal = 0.0
+    if len(jobs) > 0:
+        for x in jobs:
+            y = float(x.quantity) * float(x.rate)
+            poTotal += y
+            poCurrency = x.currency
 
-#     #Calculate the Invoice Total
-#     invoiceCurrency = ''
-#     invoiceTotal = 0.0
-#     if len(products) > 0:
-#         for x in products:
-#             y = float(x.quantity) * float(x.price)
-#             invoiceTotal += y
-#             invoiceCurrency = x.currency
+    context = {}
+    context['purchaseOrder'] = purchaseOrder
+    context['jobs'] = jobs
+    context['p_settings'] = p_settings
+    context['poTotal'] = "{:.2f}".format(poTotal)
+    context['poCurrency'] = poCurrency
 
+    return render(request, 'invoice/po-view.html', context)
 
-
-#     context = {}
-#     context['invoice'] = invoice
-#     context['products'] = products
-#     context['p_settings'] = p_settings
-#     context['invoiceTotal'] = "{:.2f}".format(invoiceTotal)
-#     context['invoiceCurrency'] = invoiceCurrency
-
-#     return render(request, 'invoice/invoice-view-backup.html', context)
-
-
-
-# def viewDocumentInvoice(request, slug):
-#     #fetch that invoice
-#     try:
-#         invoice = Invoice.objects.get(slug=slug)
-#         pass
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
-
-#     #fetch all the products - related to this invoice
-#     products = Product.objects.filter(invoice=invoice)
-
-#     #Get Client Settings
-#     p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
-
-#     #Calculate the Invoice Total
-#     invoiceTotal = 0.0
-#     if len(products) > 0:
-#         for x in products:
-#             y = float(x.quantity) * float(x.price)
-#             invoiceTotal += y
-
-
-
-#     context = {}
-#     context['invoice'] = invoice
-#     context['products'] = products
-#     context['p_settings'] = p_settings
-#     context['invoiceTotal'] = "{:.2f}".format(invoiceTotal)
-
-#     #The name of your PDF file
-#     filename = '{}.pdf'.format(invoice.uniqueId)
-
-#     #HTML FIle to be converted to PDF - inside your Django directory
-#     template = get_template('invoice/pdf-template.html')
-
-
-#     #Render the HTML
-#     html = template.render(context)
-
-#     #Options - Very Important [Don't forget this]
-#     options = {
-#           'encoding': 'UTF-8',
-#           'javascript-delay':'10', #Optional
-#           'enable-local-file-access': None, #To be able to access CSS
-#           'page-size': 'A4',
-#           'custom-header' : [
-#               ('Accept-Encoding', 'gzip')
-#           ],
-#       }
-#       #Javascript delay is optional
-
-#     #Remember that location to wkhtmltopdf
-#     config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
-
-#     #IF you have CSS to add to template
-#     css1 = os.path.join(settings.CSS_LOCATION, 'assets', 'css', 'bootstrap.min.css')
-#     css2 = os.path.join(settings.CSS_LOCATION, 'assets', 'css', 'dashboard.css')
-
-#     #Create the file
-#     file_content = pdfkit.from_string(html, False, configuration=config, options=options)
-
-#     #Create the HTTP Response
-#     response = HttpResponse(file_content, content_type='application/pdf')
-#     response['Content-Disposition'] = 'inline; filename = {}'.format(filename)
-
-#     #Return
-#     return response
-
-
-# def emailDocumentInvoice(request, slug):
-#     #fetch that invoice
-#     try:
-#         invoice = Invoice.objects.get(slug=slug)
-#         pass
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
-
-#     #fetch all the products - related to this invoice
-#     products = Product.objects.filter(invoice=invoice)
-
-#     #Get Client Settings
-#     p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
-
-#     #Calculate the Invoice Total
-#     invoiceTotal = 0.0
-#     if len(products) > 0:
-#         for x in products:
-#             y = float(x.quantity) * float(x.price)
-#             invoiceTotal += y
-
-
-
-#     context = {}
-#     context['invoice'] = invoice
-#     context['products'] = products
-#     context['p_settings'] = p_settings
-#     context['invoiceTotal'] = "{:.2f}".format(invoiceTotal)
-
-#     #The name of your PDF file
-#     filename = '{}.pdf'.format(invoice.uniqueId)
-
-#     #HTML FIle to be converted to PDF - inside your Django directory
-#     template = get_template('invoice/pdf-template.html')
-
-
-#     #Render the HTML
-#     html = template.render(context)
-
-#     #Options - Very Important [Don't forget this]
-#     options = {
-#           'encoding': 'UTF-8',
-#           'javascript-delay':'1000', #Optional
-#           'enable-local-file-access': None, #To be able to access CSS
-#           'page-size': 'A4',
-#           'custom-header' : [
-#               ('Accept-Encoding', 'gzip')
-#           ],
-#       }
-#       #Javascript delay is optional
-
-#     #Remember that location to wkhtmltopdf
-#     config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
-
-#     #Saving the File
-#     filepath = os.path.join(settings.MEDIA_ROOT, 'client_invoices')
-#     os.makedirs(filepath, exist_ok=True)
-#     pdf_save_path = filepath+filename
-#     #Save the PDF
-#     pdfkit.from_string(html, pdf_save_path, configuration=config, options=options)
-
-
-#     #send the emails to client
-#     to_email = invoice.client.emailAddress
-#     from_client = p_settings.clientName
-#     emailInvoiceClient(to_email, from_client, pdf_save_path)
-
-#     invoice.status = 'EMAIL_SENT'
-#     invoice.save()
-
-#     #Email was send, redirect back to view - invoice
-#     messages.success(request, "Email sent to the client succesfully")
-#     return redirect('create-build-invoice', slug=slug)
-
-#     # Create Purchase Order view here
 
 
 @login_required

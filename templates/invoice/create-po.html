@@ -64,7 +64,7 @@
                     <td>{{job.quantity}}</td>
                     <td>{{job.currency}} {{job.rate}}</td>
                     <td>{{job.total_price|floatformat:"0"}}</td>
-                    <td>{{job.po.number}}</td>
+                    <td>{{job.purchaseOrder.number}}</td>
                 </tr>
                   {% endfor %}
 
@@ -91,7 +91,7 @@
 
           </div>
           <div class="col-lg-6">
-            <h5 class="card-title"> STEP 2: Select Client to Add and Click Add Client </h5>
+            <h5 class="card-title"> STEP 2: Select vendor to Add and Click Add Vendor </h5>
             <br>
             <h5 class="card-title"> Current Vendor: <span class="badge bg-success">{{purchaseOrder.vendor.vendorName}}</span> </h5>
             <br>
@@ -112,7 +112,7 @@
               <div class="col-lg-4">
 
 
-                <a href="#"><button class="btn btn-info text-white"> VIEW VENDOR PO </button></a>
+                <a href="{% url 'view-document-po' purchaseOrder.slug %}"><button class="btn btn-info text-white"> VIEW VENDOR PO </button></a>
               </div>
               <div class="col-lg-4">
                 <a href="#"><button class="btn btn-success text-white"> VIEW PDF PO </button></a>
@@ -148,7 +148,7 @@
 
 
         <div class="modal-header border-bottom-0">
-          <h5 class="modal-title">Add Order to Invoice</h5>
+          <h5 class="modal-title">Add Job to PO</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 

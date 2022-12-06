@@ -256,7 +256,7 @@ class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
         fields = [
-            'reviewer', 'reviewee', 'text', 'rate', 
+            'reviewer', 'reviewee', 'job','text', 'rate', 
         ]
 
         widgets = {
@@ -267,6 +267,7 @@ class RatingForm(forms.ModelForm):
         labels = {
             'reviewer': 'Approved by',
             'reviewee' : 'Reviewed Vendor Name',
+            'job': 'Rated Job',
             'text': 'Comment',
             'rate': 'Rate',
             

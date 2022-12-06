@@ -389,6 +389,7 @@ class Rating(models.Model):
     
     reviewer = models.ForeignKey(CustomUser, related_name="evaluator", on_delete=models.CASCADE, null=True, blank=True)
     reviewee = models.ForeignKey(Vendor, null=True, blank=True, related_name="evaluated_vendor", on_delete=models.CASCADE)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, null=True, blank=True, related_name='jobrate')
     date = models.DateTimeField(auto_now_add=True)
     text = models.TextField(max_length=200, blank=True)
     rate = models.PositiveSmallIntegerField(choices=RATE_CHOICES)

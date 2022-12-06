@@ -648,7 +648,16 @@ def deletePo(request, slug):
 
     return redirect('purchase-orders')    
      
+def rating(request):
+    context = {}
+    ratings = Rating.objects.all()
+    context['ratings'] = ratings
 
+    if request.method == 'GET':
+        form = RatingForm()
+        context['form'] = form
+        return render(request, 'projects/rating.html', context)
+    return render(request, 'projects/rating.html', context)
 
 
 def companySettings(request):

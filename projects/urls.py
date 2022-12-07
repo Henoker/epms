@@ -49,4 +49,7 @@ urlpatterns = [
     path('invoices/view-po/<slug:slug>',views.viewDocumentPO, name='view-document-po'),
     path('invoices/view-POpdf/<slug:slug>',views.viewPDFPO, name='view-pdf-po'),
 
+
+    path('addRating',views.addRating, name='add-rating'),
+
 ]

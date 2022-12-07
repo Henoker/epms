@@ -16,47 +16,45 @@
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
         {% comment %} <button href="#addProjectModal" type="button" class="btn btn-primary" data-bs-toggle="modal">Add New Project</button> {% endcomment %}
-        <a href="{% url 'add-project' %}"><button type="button" class="btn btn-primary" > Rate Job </button></a>
+        <a href="{% url 'add-rating' %}"><button type="button" class="btn btn-primary" > Rate Job </button></a>
       </div>
     </div>
   </div>
 
   <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
 
-  {% if projects|length > 0 %}
+  {% if ratings|length > 0 %}
   <div class="table-responsive"> 
     <table class="table table-sm">
       <thead>
         <tr>
-          <th scope="col">Project Name</th>
-          <th scope="col">Project Manager</th>
-          <th scope="col">Project Budget</th>
-          <th scope="col">Status</th>
+          <th scope="col">Date</th>
+          <th scope="col">Vendor Name</th>
+          <th scope="col">Approved By</th>
+          <th scope="col">Job</th>
+          <th scope="col">Rating</th>
         </tr>
       </thead>
       <tbody>
 
-        {% for project in projects %}
+        {% for rating in ratings %}
       <tr>
-        <td>{{project.projectName}}</td>
-        <td>{{project.project_manager}}</td>
-        <td>{{project.budgetedamount}}</td>
-        {% if project.status == "In Preparation" %}
-        <td><span class="badge text-bg-primary">In Preparation</span></td>
-        {% elif project.status == "In Progress" %}
-            <td><span class="badge text-bg-secondary">In Progress</span></td>
-        {% elif project.status == "Overdue" %}
-            <td><span class="badge text-bg-warning">Overdue</span></td>
-        {% elif project.status == "Delivered" %}
-            <td><span class="badge text-bg-dark">Delivered</span></td>
-        {% elif project.status == "Complained" %}
-            <td><span class="badge text-bg-danger">Complained</span></td>
-        {% elif project.status == "Approved" %}
-            <td><span class="badge text-bg-success">Approved</span></td>
+        <td>{{rating.date}}</td>
+        <td>{{rating.reviewee.vendorName}}</td>
+        <td>{{rating.reviewer}}</td>
+        <td>{{rating.job.title}}</td>
+        {% if rating.rate == 1 %}
+        <td><span class="badge text-bg-danger">1</span></td>
+        {% elif rating.rate == 2 %}
+            <td><span class="badge text-bg-warning">2</span></td>
+        {% elif rating.rate == 3 %}
+            <td><span class="badge text-bg-success">3</span></td>
         {% endif %}
         
-        <td>
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{project.slug}}">
+        
+        
+        {% comment %} <td>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{rating.slug}}">
                           DELETE
             </button>
              <!-- Modal - Delete Student -->
@@ -75,7 +73,7 @@
                                 <p>Are you sure you want to delete this project?</p>
                               </div>
                               <div class="modal-footer">
-                                <form action="{% url 'delete-project' project.slug %}" method="POST">
+                                <form action="#" method="POST">
                                   {% csrf_token %}
                                   <input type="submit" class="btn btn-primary" value="Delete">
                                 </form>
@@ -87,21 +85,14 @@
   
           </td>
           <td>
-            <a href="{% url 'update-project' project.slug %}"><button class="btn btn-primary" > EDIT </button></a>
-          </td>
+            <a href="#"><button class="btn btn-primary" > EDIT </button></a>
+          </td> {% endcomment %}
       </tr> 
         {% endfor %}
 
       </tbody>
     </table>
-{% comment %} <span class="badge text-bg-primary">Primary</span>
-<span class="badge text-bg-secondary">Secondary</span>
-<span class="badge text-bg-success">Success</span>
-<span class="badge text-bg-danger">Danger</span>
-<span class="badge text-bg-warning">Warning</span>
-<span class="badge text-bg-info">Info</span>
-<span class="badge text-bg-light">Light</span>
-<span class="badge text-bg-dark">Dark</span> {% endcomment %}
+
   </div>
   {% else %}
   <div class="row">

@@ -659,6 +659,30 @@ def rating(request):
         return render(request, 'projects/rating.html', context)
     return render(request, 'projects/rating.html', context)
 
+@login_required
+def addRating(request):
+    if request.method == 'POST':
+        form = RatingForm(request.POST)
+        context = {'form': form}
+        if form.is_valid():
+            form.save()
+            created = True
+            form = RatingForm()
+            context = {
+                'created': created,
+                'form': form,
+            }
+            messages.success(request, 'New Rating Added')
+            return redirect('rating')
+        else:
+            messages.error(request, 'Problem processing your request')
+            return render(request, 'projects/addRating.html', context)
+    else:
+        form = RatingForm()
+        context = {
+            'form': form,
+        }
+        return render(request,'projects/addRating.html', context)
 
 def companySettings(request):
     company = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')

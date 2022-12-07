@@ -395,7 +395,7 @@ class Rating(models.Model):
     rate = models.PositiveSmallIntegerField(choices=RATE_CHOICES)
 
     def __str__(self):
-        return self.reviewer.username
+        return '{} {}'.format(self.reviewer, self.job)
 
 
 class Settings(models.Model):

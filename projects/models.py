@@ -5,6 +5,7 @@ from uuid import uuid4
 from .country_names import COUNTRY_CHOICES
 from .languages import LANGUAGE_CHOICES
 from accounts.models import CustomUser
+from django.db.models import Avg
 
 
 
@@ -231,7 +232,7 @@ class Vendor(models.Model):
     # def get_absolute_url(self):
     #     return reverse('vendor-detail', kwargs={'slug': self.slug})
 
-
+    
     def save(self, *args, **kwargs):
         if self.date_created is None:
             self.date_created = timezone.localtime(timezone.now())
@@ -377,7 +378,7 @@ class Job(models.Model):
 
     def total_price(self):
         return self.quantity * self.rate
-        print(Job.objects.all()[0].total_price)
+       
 
 
 class Rating(models.Model):
@@ -396,6 +397,8 @@ class Rating(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.reviewer, self.job)
+    
+    
 
 
 class Settings(models.Model):

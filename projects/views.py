@@ -10,7 +10,7 @@ from accounts.models import CustomUser
 # from django.contrib.auth.models import User, auth
 from random import randint
 from uuid import uuid4
-
+from django.db.models import Avg
 from django.http import HttpResponse
 
 from django.template.loader import render_to_string
@@ -156,8 +156,11 @@ def addProject(request):
 @login_required
 def vendors(request):
     context = {}
-    vendors = Vendor.objects.all()
+    vendors = Vendor.objects.all().annotate(
+    averagerating=Avg("evaluated_vendor__rate")
+)
     context['vendors'] = vendors
+    
 
     if request.method == 'GET':
         form = VendorForm()
@@ -650,7 +653,7 @@ def deletePo(request, slug):
      
 def rating(request):
     context = {}
-    ratings = Rating.objects.all()
+    ratings = Rating.objects.all()    
     context['ratings'] = ratings
 
     if request.method == 'GET':

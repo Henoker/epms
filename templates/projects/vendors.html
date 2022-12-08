@@ -29,6 +29,8 @@
       <thead>
         <tr>
           <th scope="col">Vendor Name</th>
+          <th scope="col">Mother Tongue</th>
+          <th scope="col"> Average Rating</th>
           <th scope="col">Email Address</th>
           <th scope="col">Phone Number</th>
           <th scope="col">Address Line</th>
@@ -38,10 +40,12 @@
         </tr>
       </thead>
       <tbody>
-
+        
       {% for vendor in vendors %}
       <tr>
         <td>{{vendor.vendorName}}</td>
+        <td>{{vendor.mother_language}}</td>
+        <td>{{vendor.averagerating | stringformat:".2f"}}</td>
         <td>{{vendor.emailAddress}}</td>
         <td>{{vendor.phoneNumber}}</td>
         <td>{{vendor.addressLine1}}</td>

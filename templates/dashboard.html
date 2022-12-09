@@ -1,13 +1,189 @@
-{% extends "_base.html" %}
-{% block title %}Home{% endblock title %}
-{% block content %}
-<h1>This is our home page.</h1>
-{% if user.is_authenticated %}
-<p>Hi {{ user.email}}</p>
-<p><a href="{% url 'account_logout' %}">Log Out</a></p>
-{% else %}
-<p>You are not logged in</p>
-<a href="{% url 'account_login' %}">Log In</a>
-<a href="{% url 'account_signup' %}">Sign Up</a>
-{% endif %}
-{% endblock content %}
+{% extends '_base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block main %}
+
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group me-2">
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row">
+            <div class="col col-lg-3">
+                <div class="card mb-5">
+                    <h5 class="card-header text-white" style="background-color: #00AA9E;">Invoices</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">Total: {{invoices}}</h5>
+                        <h5 class="card-title">Paid Invoices: {{paidInvoices}}</h5>
+                        {% comment %} <a href="{% url 'invoices' %}" class="btn btn-primary btn-lg">View Invoices</a> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-3">
+                <div class="card mb-5">
+                    <h5 class="card-header text-white" style="background-color: #0275d8;">PO's</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">Total: {{purchase_orders}}</h5>
+                        <h5 class="card-title">Paid PO's: {{paidPos}}</h5>
+                        {% comment %} <a href="{% url 'invoices' %}" class="btn btn-primary btn-lg">View PO's</a> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-3">
+                <div class="card mb-5">
+                    <h5 class="card-header text-white" style="background-color: #d9534f;">Jobs</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">Total: {{jobs}}</h5>
+                        <h5 class="card-title">Completed: {{completedJobs}}</h5>
+                        {% comment %} <a href="{% url 'invoices' %}" class="btn btn-primary btn-lg">View Orders</a> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-3">
+                <div class="card mb-5">
+                    <h5 class="card-header" style="background-color: #f0ad4e;">Projects</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">Total: {{projects}}</h5>
+                        <h5 class="card-title">Completed: {{completedProjects}}</h5>
+                        {% comment %} <a href="{% url 'invoices' %}" class="btn btn-primary btn-lg">View Orders</a> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+            {% comment %} <div class="col col-lg-3">
+                <div class="card mb-5">
+                    <h5 class="card-header text-white" style="background-color: #d9534f;">Clients</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">Total: {{clients}}</h5>
+                        <a href="{% url 'clients' %}" class="btn btn-primary btn-lg">View Clients</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-3">
+                  <div class="card mb-5">
+                    <h5 class="card-header text-white" style="background-color: #f0ad4e;">Vendors</h5>
+                  <div class="card-body">
+                    <h5 class="card-title">Total: {{vendors}}</h5>
+                    <a href="{% url 'vendors' %}" class="btn btn-primary btn-lg">View Vendors</a>
+                  </div>
+            </div> {% endcomment %}
+        </div>
+          
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="row">
+        <div class="col col-lg-4">
+            <div class="p-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5 class="card-title">Projets revenue and Cost </h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Project Income : {{total_project_value}}</li>
+                        <li class="list-group-item">Project Budget: {{total_budgeted_cost}}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5 class="card-title">Projects Due Today</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for order in order_due_today %}
+                        <li class="list-group-item">{{order.project.projectName}}</li>
+                       {% endfor %}
+                    </ul>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5 class="card-title">Invoice Due Today</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for invoice in invoice_due_today %}
+                        <li class="list-group-item">{{invoice.client.clientName}}</li>
+                       {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5 class="card-title">Pending Projects</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{pendingProjects}}</li>
+                    </ul>
+                </div>
+              
+            </div>  
+        </div>
+
+        <div class=" col col-lg-4">
+            <div class="p-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5 class="card-title">Projects last 7 days</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for project in last_seven_days_projects %}
+                        <li class="list-group-item">{{project.projectName}}</li>
+                       {% endfor %}
+                    </ul>
+                </div>
+                
+            </div>  
+            <div class="p-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5 class="card-title">Rated Jobs</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Total: {{rated_jobs}}</li>
+                        <li class="list-group-item">Grade A Jobs: {{green_rated}}</li>
+                        <li class="list-group-item">Grade B Jobs: {{yellow_rated}}</li>
+                        <li class="list-group-item">Grade C Jobs: {{red_rated}}</li>
+                       
+                    </ul>
+                </div>
+            </div>  
+        </div>
+        <div class=" col col-lg-4">
+            <div class="card" style="width: 18rem;">
+                <img class=img-fluid  src="{% static 'images/empty.svg' %}" alt="Ethiostar">
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">An item</li>
+                  <li class="list-group-item">A second item</li>
+                  <li class="list-group-item">A third item</li>
+                </ul>
+                <div class="card-body">
+                  <a href="#" class="card-link">Card link</a>
+                  <a href="#" class="card-link">Another link</a>
+                </div>
+              </div>
+        </div>
+
+    </div>
+   </div>
+</div>
+  </div>
+
+
+
+
+{% endblock %}

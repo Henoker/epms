@@ -10,7 +10,7 @@ from accounts.models import CustomUser
 # from django.contrib.auth.models import User, auth
 from random import randint
 from uuid import uuid4
-from django.db.models import Avg
+from django.db.models import Avg, Sum, F
 from django.http import HttpResponse
 
 from django.template.loader import render_to_string
@@ -20,6 +20,7 @@ from django.template.loader import get_template
 import weasyprint
 from weasyprint import HTML, CSS
 import tempfile
+from datetime import timedelta, datetime
 
 
 # #Anonymous required
@@ -44,20 +45,56 @@ import tempfile
 
 
 
-# @login_required
-# def dashboard(request):
-#     clients = Client.objects.all().count()
-#     vendors = Vendor.objects.all().count()
-#     invoices = Invoice.objects.all().count()
-#     paidInvoices = Invoice.objects.filter(status='PAID').count()
+@login_required
+def dashboard(request):
+    clients = Client.objects.all().count()
+    vendors = Vendor.objects.all().count()
+    invoices = Invoice.objects.all().count()
+    purchase_orders = PurchaseOrder.objects.all().count()
+    jobs = Job.objects.all().count()
+    projects = Project.objects.all().count()
+    paidInvoices = Invoice.objects.filter(status='PAID').count()
+    paidPos = PurchaseOrder.objects.filter(status='PAID').count()
+    completedProjects = Project.objects.filter(status='Approved').count()
+    pendingProjects = projects-completedProjects
+    completedJobs = Job.objects.filter(status='Approved').count()
+    total_order = Order.objects.aggregate(total_value=Sum(F('price') * F('quantity')))
+    total_project_value = total_order['total_value']
+    total_budget = Project.objects.aggregate(total_cost=Sum(F('budgetedamount')))
+    total_budgeted_cost = total_budget['total_cost']
+    last_seven_days_projects = Project.objects.filter(date_created__gte=datetime.now()-timedelta(days=7))
+    order_due_today = Order.objects.filter(clientDeadline=datetime.now()+timedelta(days=0))
+    invoice_due_today = Invoice.objects.filter(dueDate=datetime.now()+timedelta(days=0))
+    rated_jobs = Rating.objects.all().count()
+    green_rated = Rating.objects.filter(rate='3').count()
+    yellow_rated = Rating.objects.filter(rate='2').count()
+    red_rated = Rating.objects.filter(rate='1').count()
 
 
-#     context = {}
-#     context['clients'] = clients
-#     context['vendors'] = vendors
-#     context['invoices'] = invoices
-#     context['paidInvoices'] = paidInvoices
-#     return render(request, 'invoice/dashboard.html', context)
+    context = {}
+    context['clients'] = clients
+    context['vendors'] = vendors
+    context['invoices'] = invoices
+    context['purchase_orders'] = purchase_orders
+    context['jobs'] = jobs
+    context['projects'] = projects
+    context['paidInvoices'] = paidInvoices
+    context['paidPos'] = paidPos
+    context['completedProjects'] = completedProjects
+    context['completedJobs'] = completedJobs
+    context['total_project_value'] = total_project_value 
+    context['total_budgeted_cost'] = total_budgeted_cost
+    context['pendingProjects'] = pendingProjects
+    context['last_seven_days_projects'] = last_seven_days_projects
+    context['rated_jobs'] = rated_jobs
+    context['green_rated'] = green_rated
+    context['yellow_rated'] = yellow_rated
+    context['red_rated'] =  red_rated
+    context['order_due_today'] = order_due_today
+    context['invoice_due_today'] = invoice_due_today
+
+
+    return render(request, 'dashboard.html', context)
 
 
 

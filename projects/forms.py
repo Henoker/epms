@@ -12,15 +12,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
 
-
-
-
 class DateInput(forms.DateInput):
     input_type = 'date'
-
-
-
-
 
 
 class ClientForm(forms.ModelForm):
@@ -45,40 +38,7 @@ class ProjectForm(ModelForm):
             'projectName': 'Project Name',
             'budgetedamount': 'Project Budget',
             'project_manager': 'Project Manager',
-
-
-
-
         }
-
-# class ProjectForm(ModelForm):
-#     class Meta:
-#         model = Project
-#         fields = [
-#             'projectName', 'description', 'startDate', 'deadlineDate', 'source_languages', 'target_languages',
-#             'quantity', 'rate', 'currency', 'status', 'budgetedamount', 'project_manager', 'client'
-#             ] 
-#         widgets = {
-#             'description': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
-#                 'placeholder': 'Describe the project'}),
-#             'startDate': DateInput(attrs={'label': 'Start Date'}),
-#             'deadlineDate': DateInput(attrs={"class": "form-group col-6"}),
-#         }
-
-#         labels = {
-#             'projectName': 'Project Name',
-#             'startDate': 'Start Date',
-#             'deadlineDate' : 'Deadline Date',
-#             'budgetedamount': 'Project Budget',
-#             'source_languages': 'Source language(s)',
-#             'target_languages': 'Target language(s)',
-#             'project_manager': 'Project Manager',
-
-
-
-
-#         }  
-
    
 class VendorForm(forms.ModelForm):
     class Meta:

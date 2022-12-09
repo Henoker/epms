@@ -122,7 +122,7 @@ class InvoiceForm(forms.ModelForm):
                 css_class='form-row'),
             'notes',
 
-            Submit('submit', ' EDIT INVOICE '))
+            Submit('submit', ' SAVE '))
 
     class Meta:
         model = Invoice
@@ -181,7 +181,7 @@ class PurchaseOrderForm(forms.ModelForm):
                 css_class='form-row'),
             'notes',
 
-            Submit('submit', ' EDIT INVOICE '))
+            Submit('submit', ' SAVE '))
 
     class Meta:
         model = PurchaseOrder

@@ -166,6 +166,7 @@ def projects(request):
 def addProject(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
+        client_form = ClientSelectForm(request.POST)
         context = {'form': form}
         if form.is_valid():
             form.save()
@@ -174,6 +175,7 @@ def addProject(request):
             context = {
                 'created': created,
                 'form': form,
+                'client_form': client_form
             }
             messages.success(request, 'New Project Added')
             # return render(request, 'projects/addProject.html', context)

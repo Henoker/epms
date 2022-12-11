@@ -10,7 +10,7 @@ from accounts.models import CustomUser
 # from django.contrib.auth.models import User, auth
 from random import randint
 from uuid import uuid4
-from django.db.models import Avg, Sum, F
+from django.db.models import Avg, Sum, F, Count
 from django.http import HttpResponse
 
 from django.template.loader import render_to_string
@@ -47,6 +47,7 @@ from datetime import timedelta, datetime
 
 @login_required
 def dashboard(request):
+    all_orders = Order.objects.all()
     clients = Client.objects.all().count()
     vendors = Vendor.objects.all().count()
     invoices = Invoice.objects.all().count()
@@ -69,6 +70,8 @@ def dashboard(request):
     green_rated = Rating.objects.filter(rate='3').count()
     yellow_rated = Rating.objects.filter(rate='2').count()
     red_rated = Rating.objects.filter(rate='1').count()
+    category_list = Rating.objects.values('rate').annotate(category_count=Count('rate'))
+    
 
 
     context = {}
@@ -92,6 +95,8 @@ def dashboard(request):
     context['red_rated'] =  red_rated
     context['order_due_today'] = order_due_today
     context['invoice_due_today'] = invoice_due_today
+    context['all_orders'] = all_orders
+    context['category_list'] = category_list
 
 
     return render(request, 'dashboard.html', context)

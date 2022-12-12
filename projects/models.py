@@ -5,7 +5,7 @@ from uuid import uuid4
 from .country_names import COUNTRY_CHOICES
 from .languages import LANGUAGE_CHOICES
 from accounts.models import CustomUser
-from django.db.models import Avg
+
 
 
 
@@ -33,8 +33,8 @@ class Client(models.Model):
         return '{} {} {}'.format(self.clientName, self.country, self.uniqueId)
 
 
-    # def get_absolute_url(self):
-    #     return reverse('client-detail', kwargs={'slug': self.slug})
+    def get_absolute_url(self):
+        return reverse('client-detail', kwargs={'slug': self.slug})
 
 
     def save(self, *args, **kwargs):
@@ -184,8 +184,8 @@ class Order(models.Model):
         return '{} {}'.format(self.title, self.uniqueId)
 
 
-    # def get_absolute_url(self):
-    #     return reverse('product-detail', kwargs={'slug': self.slug})
+    def get_absolute_url(self):
+        return reverse('product-detail', kwargs={'slug': self.slug})
 
 
     def save(self, *args, **kwargs):
@@ -229,8 +229,8 @@ class Vendor(models.Model):
         return '{} {} {}'.format(self.vendorName, self.country, self.uniqueId)
 
 
-    # def get_absolute_url(self):
-    #     return reverse('vendor-detail', kwargs={'slug': self.slug})
+    def get_absolute_url(self):
+        return reverse('vendor-detail', kwargs={'slug': self.slug})
 
     
     def save(self, *args, **kwargs):

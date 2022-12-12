@@ -47,7 +47,7 @@ from datetime import timedelta, datetime
 
 @login_required
 def dashboard(request):
-    all_orders = Order.objects.all()
+    all_orders = Order.objects.order_by('-OrderDate')[:10]
     clients = Client.objects.all().count()
     vendors = Vendor.objects.all().count()
     invoices = Invoice.objects.all().count()
@@ -71,6 +71,11 @@ def dashboard(request):
     yellow_rated = Rating.objects.filter(rate='2').count()
     red_rated = Rating.objects.filter(rate='1').count()
     category_list = Rating.objects.values('rate').annotate(category_count=Count('rate'))
+    pending_proj_percentage = (completedProjects / projects) * 100
+    paidInv_percentages = (paidInvoices / invoices) * 100
+    paidPos_percentages = (paidPos / purchase_orders) * 100
+    pending_jobs_percentage = (completedJobs / jobs) * 100
+    rated_jobs_percentage = (rated_jobs / jobs) * 100
     
 
 
@@ -97,6 +102,11 @@ def dashboard(request):
     context['invoice_due_today'] = invoice_due_today
     context['all_orders'] = all_orders
     context['category_list'] = category_list
+    context['pending_proj_percentage'] = pending_proj_percentage
+    context['paidInv_percentages'] = paidInv_percentages
+    context['paidPos_percentages'] = paidPos_percentages
+    context['pending_jobs_percentage'] = pending_jobs_percentage
+    context['rated_jobs_percentage'] =  rated_jobs_percentage
 
 
     return render(request, 'dashboard.html', context)
@@ -116,7 +126,7 @@ def invoices(request):
 @login_required
 def orders(request):
     context = {}
-    orders = Order.objects.all()
+    orders = Order.objects.all().order_by('-date_created')
     context['orders'] = orders
 
     return render(request, 'invoice/orders.html', context)
@@ -124,7 +134,7 @@ def orders(request):
 @login_required
 def jobs(request):
     context = {}
-    jobs = Job.objects.all()
+    jobs = Job.objects.all().order_by('-date_created')
     context['jobs'] = jobs
 
     return render(request, 'invoice/jobs.html', context)
@@ -132,7 +142,7 @@ def jobs(request):
 @login_required
 def clients(request):
     context = {}
-    clients = Client.objects.all()
+    clients = Client.objects.all().order_by('-date_created')
     context['clients'] = clients
 
     if request.method == 'GET':
@@ -158,7 +168,7 @@ def clients(request):
 @login_required
 def projects(request):
     context = {}
-    projects = Project.objects.all()
+    projects = Project.objects.all().order_by('-date_created')
     context['projects'] = projects
 
     if request.method == 'GET':
@@ -171,7 +181,6 @@ def projects(request):
 def addProject(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
-        client_form = ClientSelectForm(request.POST)
         context = {'form': form}
         if form.is_valid():
             form.save()
@@ -180,7 +189,6 @@ def addProject(request):
             context = {
                 'created': created,
                 'form': form,
-                'client_form': client_form
             }
             messages.success(request, 'New Project Added')
             # return render(request, 'projects/addProject.html', context)
@@ -202,7 +210,7 @@ def vendors(request):
     context = {}
     vendors = Vendor.objects.all().annotate(
     averagerating=Avg("evaluated_vendor__rate")
-)
+).order_by('-date_created')
     context['vendors'] = vendors
     
 
@@ -229,7 +237,7 @@ def vendors(request):
 @login_required
 def purchaseOrders(request):
     context = {}
-    purchase_orders = PurchaseOrder.objects.all()
+    purchase_orders = PurchaseOrder.objects.all().order_by('-date_created')
     context['purchase_orders'] = purchase_orders
 
     return render(request, 'invoice/purchase-orders.html', context)

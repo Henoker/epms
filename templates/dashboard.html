@@ -15,38 +15,6 @@
       </div>
     </div>
   </div>
-
-
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="row">
-            
-           
-           
-            
-            {% comment %} <div class="col col-lg-3">
-                <div class="card mb-5">
-                    <h5 class="card-header text-white" style="background-color: #d9534f;">Clients</h5>
-                    <div class="card-body">
-                        <h5 class="card-title">Total: {{clients}}</h5>
-                        <a href="{% url 'clients' %}" class="btn btn-primary btn-lg">View Clients</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col col-lg-3">
-                  <div class="card mb-5">
-                    <h5 class="card-header text-white" style="background-color: #f0ad4e;">Vendors</h5>
-                  <div class="card-body">
-                    <h5 class="card-title">Total: {{vendors}}</h5>
-                    <a href="{% url 'vendors' %}" class="btn btn-primary btn-lg">View Vendors</a>
-                  </div>
-            </div> {% endcomment %}
-        </div>
-          
-        </div>
-      </div>
-      
         <div class="container-fluid">
 
             <!-- Content Row -->
@@ -117,7 +85,7 @@
                 <!-- Pending Requests Card Example -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-warning shadow h-100">
-                        <h5 class="card-header" style="background-color: #f0ad4e;">Projects</h5>
+                        <h5 class="card-header text-white" style="background-color: #f0ad4e;">Projects</h5>
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
@@ -158,9 +126,12 @@
                                         data: {
                                             labels: [{% for order in all_orders %} '{{order.project.projectName}}', {% endfor %}],
                                             datasets: [{
-                                                label: 'Project Revenue for Last 30 days',
+                                                label: 'Project Revenue for Last 10 projects',
                                                 data: [{% for order in all_orders %} {{order.total_price|floatformat:"0"}}, {% endfor %}],
                                                 backgroundColor: [
+                                                    'rgba(0,230,118,1.0)',
+                                                    'rgba(238,255,65,1.0)',
+                                                    'rgba(213,0,0,1.0)',
                                                     'rgba(255, 129, 112, 1)',
                                                     'rgba(74, 182, 235, 1)',
                                                     'rgba(255, 206, 86, 1)',
@@ -175,6 +146,9 @@
                                                     'rgba(235, 121, 54, 1)'
                                                 ],
                                                 borderColor: [
+                                                    'rgba(0,230,118,1.0)',
+                                                    'rgba(238,255,65,1.0)',
+                                                    'rgba(213,0,0,1.0)',
                                                     'rgba(255, 129, 112, 1)',
                                                     'rgba(74, 182, 235, 1)',
                                                     'rgba(255, 206, 86, 1)',
@@ -220,69 +194,106 @@
                             <div class="chart-pie pt-4 pb-2">
                                 <canvas id="myPieChart"></canvas>
                                 <script>
-                                    var ctx = document.getElementById('myPieChart').getContext('2d');
-                                    var myChart1 = new Chart(ctx, {
-                                        type: 'pie',
-                                        data: {
-                                            labels: [{% for rate in category_list %} '{{rate.rate}}', {% endfor %}],
-                                            datasets: [{
-                                                label: 'Rate',
-                                                data: [{% for rate in category_list %} {{rate.category_count }}, {% endfor %}],
-                                                backgroundColor: [
-                                                    'rgba(92, 184, 92, 1)',
-                                                    'rgba(240, 173, 78, 1)',
-                                                    'rgba(217, 83, 79, 1)',
-                                                    'rgba(25, 192, 112, 1)',
-                                                    'rgba(153, 92, 255, 1)',
-                                                    'rgba(255, 129, 64, 1)',
-                                                    'rgba(255, 97, 122, 1)',
-                                                    'rgba(44, 121, 134, 1)',
-                                                    'rgba(251, 205, 83, 1)',
-                                                    'rgba(73, 165, 193, 1)',
-                                                    'rgba(123, 102, 245, 1)',
-                                                    'rgba(235, 121, 54, 1)'
-                                                ],
-                                                borderColor: [
-                                                    'rgba(92, 184, 92, 1)',
-                                                    'rgba(240, 173, 78, 1)',
-                                                    'rgba(217, 83, 79, 1)',
-                                                    'rgba(25, 192, 112, 1)',
-                                                    'rgba(153, 92, 255, 1)',
-                                                    'rgba(255, 129, 64, 1)',
-                                                    'rgba(255, 97, 122, 1)',
-                                                    'rgba(44, 121, 134, 1)',
-                                                    'rgba(251, 205, 83, 1)',
-                                                    'rgba(73, 165, 193, 1)',
-                                                    'rgba(123, 102, 245, 1)',
-                                                    'rgba(235, 121, 54, 1)'
-                                                ],
-                                                borderWidth: 1
-                                            }]
-                                        },
-                                        options: {
-                                            scales: {
-                                                yAxes: [{
-                                                    ticks: {
-                                                        beginAtZero: true
-                                                    }
-                                                }]
-                                            }
-                                        }
-                                    });
+
+                               
+
+                                //polar area chart
+
+                                var birdsCanvas = document.getElementById("myPieChart");
+
+                                Chart.defaults.font.family = "Lato";
+                                Chart.defaults.font.size = 16;
+                                Chart.defaults.color = "black";
+
+                                var birdsData = {
+                                labels: ["Grade A","Grade B","Grade C"],
+                                datasets: [{
+                                    data: [{{green_rated}}, {{yellow_rated}}, {{red_rated}}],
+                                    backgroundColor: [
+                                        'rgba(0,230,118,1.0)',
+                                        'rgba(238,255,65,1.0)',
+                                        'rgba(213,0,0,1.0)',
+                                    
+                                    ]
+                                }]
+                                };
+
+                                var chartOptions = {
+                                plugins: {
+                                    title: {
+                                    display: false,
+                                    align: "start",
+                                    text: "Vendors Rating Level"
+                                    },
+                                    legend: {
+                                    align: "start"
+                                    }
+                                }
+                                };
+
+                                var polarAreaChart = new Chart(birdsCanvas, {
+                                type: 'polarArea',
+                                data: birdsData,
+                                options: chartOptions
+                                });
+                                    ///var ctx = document.getElementById('myPieChart').getContext('2d') 
+                                    ///var myChart1 = new Chart(ctx, {
+                                        ///type: 'pie',
+                                        ///data: {
+                                            ///labels: [{% for rate in category_list %} '{{rate.rate}}', {% endfor %}],
+                                            ///datasets: [{
+                                                ///label: 'Rate',
+                                                ///d///ata: [{% for rate in category_list %} {{rate.category_count }}, {% endfor %}],
+                                                ///backgroundColor: [
+                                                    ///'rgba(0,230,118,1.0)',
+                                                    ///'rgba(238,255,65,1.0)',
+                                                    ///'rgba(213,0,0,1.0)',
+                                                    ///'rgba(25, 192, 112, 1)',
+                                                    ///'rgba(153, 92, 255, 1)',
+                                                    ///'rgba(255, 129, 64, 1)',
+                                                    ///'rgba(255, 97, 122, 1)',
+                                                    ///'rgba(44, 121, 134, 1)',
+                                                    ///'rgba(251, 205, 83, 1)',
+                                                    ///'rgba(73, 165, 193, 1)',
+                                                    ///'rgba(123, 102, 245, 1)',
+                                                    ///'rgba(235, 121, 54, 1)'
+                                                ///],
+                                                ///borderColor: [
+                                                    ///'rgba(0,230,118,1.0)',
+                                                    ///'rgba(238,255,65,1.0)',
+                                                    ///'rgba(213,0,0,1.0)',
+                                                    ///'rgba(25, 192, 112, 1)',
+                                                    ///'rgba(153, 92, 255, 1)',
+                                                    ///'rgba(255, 129, 64, 1)',
+                                                    ///'rgba(255, 97, 122, 1)',
+                                                    ///'rgba(44, 121, 134, 1)',
+                                                    ///'rgba(251, 205, 83, 1)',
+                                                    ///'rgba(73, 165, 193, 1)',
+                                                    ///'rgba(123, 102, 245, 1)',
+                                                    ///'rgba(235, 121, 54, 1)'
+                                                ///],
+                                                ///borderWidth: 1
+                                            ///}]
+                                        ///},
+                                        ///options: {
+                                            ///scales: {
+                                               /// yAxes: [{
+                                                    ///ticks: {
+                                                        ///callback: function(value, index, ticks) {
+                                                            ///return '' ;
+                                                        ///stepSize: 1;
+                                                        ///}
+                                                        
+                                                    ///}
+                                               /// }]
+                                            ///} 
+                                       /// }
+                                        
+                                    ///}); 
                                 </script> 
 
                             </div>
-                            <div class="mt-4 text-center small">
-                                <span class="mr-2">
-                                    <i class="fas fa-circle text-primary"></i> Direct
-                                </span>
-                                <span class="mr-2">
-                                    <i class="fas fa-circle text-success"></i> Social
-                                </span>
-                                <span class="mr-2">
-                                    <i class="fas fa-circle text-info"></i> Referral
-                                </span>
-                            </div>
+                          
                         </div>
                     </div>
                 </div>
@@ -297,44 +308,44 @@
                     <!-- Project Card Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Projects Stats</h6>
                         </div>
                         <div class="card-body">
-                            <h4 class="small font-weight-bold">Server Migration <span
-                                    class="float-right">65%</span></h4>
+                            <h4 class="small font-weight-bold">Completed Projects <span
+                                    class="float-right">{{pending_proj_percentage|floatformat:"0"}}%</span></h4>
                             <div class="progress mb-4">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width:{{pending_proj_percentage}}%"
+                                    aria-valuenow="{{pending_proj_percentage}}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <h4 class="small font-weight-bold">Sales Tracking <span
-                                    class="float-right">40%</span></h4>
+                            <h4 class="small font-weight-bold">Paid Invoices <span
+                                    class="float-right">{{paidInv_percentages|floatformat:"0"}}%</span></h4>
                             <div class="progress mb-4">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: {{paidInv_percentages}}%"
+                                    aria-valuenow="{{paidInv_percentages}}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <h4 class="small font-weight-bold">Customer Database <span
-                                    class="float-right">60%</span></h4>
+                            <h4 class="small font-weight-bold">Paid Po's <span
+                                    class="float-right">{{paidPos_percentages|floatformat:"0"}}%</span></h4>
                             <div class="progress mb-4">
-                                <div class="progress-bar" role="progressbar" style="width: 60%"
-                                    aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar" role="progressbar" style="width: {{paidPos_percentages}}%"
+                                    aria-valuenow="{{paidPos_percentages}}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <h4 class="small font-weight-bold">Payout Details <span
-                                    class="float-right">80%</span></h4>
+                            <h4 class="small font-weight-bold">Completed Jobs <span
+                                    class="float-right">{{pending_jobs_percentage|floatformat:"0"}}%</span></h4>
                             <div class="progress mb-4">
-                                <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                    aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-info" role="progressbar" style="width: {{pending_jobs_percentage}}%"
+                                    aria-valuenow="{{pending_jobs_percentage}}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <h4 class="small font-weight-bold">Account Setup <span
-                                    class="float-right">Complete!</span></h4>
+                            <h4 class="small font-weight-bold">Jobs Evaluated <span
+                                    class="float-right">{{rated_jobs_percentage|floatformat:"0"}}%</span></h4>
                             <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{rated_jobs_percentage}}%"
+                                    aria-valuenow="{{rated_jobs_percentage}}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Color System -->
-                    <div class="row">
+                    {% comment %} <div class="row">
                         <div class="col-lg-6 mb-4">
                             <div class="card bg-primary text-white shadow">
                                 <div class="card-body">
@@ -399,7 +410,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> {% endcomment %}
 
                 </div>
 
@@ -408,33 +419,74 @@
                     <!-- Illustrations -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Recent Projects</h6>
                         </div>
-                        <div class="card-body">
-                            <div class="text-center">
-                                <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                    src="img/undraw_posting_photo.svg" alt="...">
-                            </div>
-                            <p>Add some quality, svg illustrations to your project courtesy of <a
-                                    target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                constantly updated collection of beautiful svg images that you can use
-                                completely free and without attribution!</p>
-                            <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                unDraw &rarr;</a>
+                        <div class=" col col-lg-2">
+                            <div class="p-3">
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Projects last 7 days</h5>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        {% for project in last_seven_days_projects %}
+                                        <li class="list-group-item">{{project.projectName}}</li>
+                                       {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>  
                         </div>
+                        {% if order_due_today|length > 0 %}
+                        <div class=" col col-lg-2">
+                            <div class="p-3">
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Projects Due Today</h5>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        {% for order in order_due_today %}
+                                        <li class="list-group-item">{{order.project.projectName}}</li>
+                                       {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>  
+                        </div>
+                        {% endif %}
+                        {% if invoice_due_today|length > 0 %}
+                        <div class=" col col-lg-2">
+                            <div class="p-3">
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Invoice Due Today</h5>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        {% for invoice in invoice_due_today %}
+                                        <li class="list-group-item">{{invoice.client.clientName}}</li>
+                                       {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>  
+                        </div>
+                        {% endif %}
+
                     </div>
 
                     <!-- Approach -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Income and Cost Analysis</h6>
                         </div>
                         <div class="card-body">
-                            <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                CSS bloat and poor page performance. Custom CSS classes are used to create
-                                custom components and custom utility classes.</p>
-                            <p class="mb-0">Before working with this theme, you should become familiar with the
-                                Bootstrap framework, especially the utility classes.</p>
+                            <div class="p-3">
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Projets revenue and Cost </h5>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">Project Income : {{total_project_value}}</li>
+                                        <li class="list-group-item">Project Budget: {{total_budgeted_cost}}</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -444,90 +496,10 @@
         </div>
         <!-- /.container-fluid -->
 
-    </div>
-    <!-- End of Main Content -->
+   
+   
 
-    <div class="col-lg-12">
-        <div class="row">
-        <div class="col col-lg-4">
-            <div class="p-3">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-header">
-                        <h5 class="card-title">Projects Due Today</h5>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        {% for order in order_due_today %}
-                        <li class="list-group-item">{{order.project.projectName}}</li>
-                       {% endfor %}
-                    </ul>
-                </div>
-                <div class="card" style="width: 18rem;">
-                    <div class="card-header">
-                        <h5 class="card-title">Invoice Due Today</h5>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        {% for invoice in invoice_due_today %}
-                        <li class="list-group-item">{{invoice.client.clientName}}</li>
-                       {% endfor %}
-                    </ul>
-                </div>
-                <div class="p-3">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-header">
-                            <h5 class="card-title">Projets revenue and Cost </h5>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Project Income : {{total_project_value}}</li>
-                            <li class="list-group-item">Project Budget: {{total_budgeted_cost}}</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="card" style="width: 18rem;">
-                    <div class="card-header">
-                        <h5 class="card-title">Pending Projects</h5>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{pendingProjects}}</li>
-                    </ul>
-                </div>
-              
-            </div>  
-        </div>
 
-        <div class=" col col-lg-4">
-            <div class="p-3">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-header">
-                        <h5 class="card-title">Projects last 7 days</h5>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        {% for project in last_seven_days_projects %}
-                        <li class="list-group-item">{{project.projectName}}</li>
-                       {% endfor %}
-                    </ul>
-                </div>
-                
-            </div>  
-            <div class="p-3">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-header">
-                        <h5 class="card-title">Rated Jobs</h5>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Total: {{rated_jobs}}</li>
-                        <li class="list-group-item">Grade A Jobs: {{green_rated}}</li>
-                        <li class="list-group-item">Grade B Jobs: {{yellow_rated}}</li>
-                        <li class="list-group-item">Grade C Jobs: {{red_rated}}</li>
-                       
-                    </ul>
-                </div>
-            </div>  
-        </div>
-
-    </div>
-   </div>
-</div>
-  </div>
 
 
 

@@ -13,17 +13,17 @@
 
 {% block main %}
 
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <div class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Rate Job</h1>
   </div>
 
   <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
-<form class="" action="#" method="post" enctype="multipart/form-data">
+<form class="col-10 mx-auto justify-content-center mb-4" style="background-color: #fff;" action="#" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-  <div class="mb-3 col-9">
+  <div class="mx-auto col-sm-6 col-8  pt-3 mb-3 row justify-content-center">
    {{ form|crispy }}
   </div>    
-    <div class="col-12">
+    <div class="mx-auto col-sm-3 col-5 pb-3 pt-1 mb-6 row justify-content-center">
       <button type="submit" class="btn btn-primary">Rate</button>
     </div>
 </form>

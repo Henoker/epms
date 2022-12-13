@@ -629,7 +629,8 @@ def updateClient(request, slug):
         return render(request, 'projects/updateClient.html', context)
         
     return render(request, 'projects/updateClient.html', context)
-    
+
+@login_required  
 def updateProject(request, slug):
     context = {}
     project = Project.objects.get(slug=slug)
@@ -701,8 +702,9 @@ def deletePo(request, slug):
         messages.error(request, 'Something went wrong')
         return redirect('purchase-orders')
 
-    return redirect('purchase-orders')    
-     
+    return redirect('purchase-orders')   
+
+@login_required   
 def rating(request):
     context = {}
     ratings = Rating.objects.all()    
@@ -739,6 +741,7 @@ def addRating(request):
         }
         return render(request,'projects/addRating.html', context)
 
+@login_required
 def companySettings(request):
     company = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
     context = {'company': company}

@@ -377,7 +377,7 @@
                                     </div>
                                     <ul class="list-group list-group-flush">
                                         {% for project in last_seven_days_projects %}
-                                        <li class="list-group-item">{{project.projectName}}</li>
+                                        <li class="list-group-item text-success font-weight-bold">{{project.projectName}}</li>
                                        {% endfor %}
                                     </ul>
                                 </div>
@@ -430,8 +430,8 @@
                                         <h5 class="card-title">Projets revenue and Cost </h5>
                                     </div>
                                     <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">Project Income : {{total_project_value}}</li>
-                                        <li class="list-group-item">Project Budget: {{total_budgeted_cost}}</li>
+                                        <li class="list-group-item text-primary font-weight-bold">Project Income : {{total_project_value}}</li>
+                                        <li class="list-group-item text-danger font-weight-bold">Project Budget: {{total_budgeted_cost}}</li>
                                     </ul>
                                 </div>
                             </div>

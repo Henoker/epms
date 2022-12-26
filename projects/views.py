@@ -122,6 +122,13 @@ def invoices(request):
 
     return render(request, 'invoice/invoices.html', context)
 
+@login_required
+def quotes(request):
+    context = {}
+    quotes = Quotation.objects.all()
+    context['quotes'] = quotes
+
+    return render(request, 'invoice/invoices.html', context)
 
 @login_required
 def orders(request):

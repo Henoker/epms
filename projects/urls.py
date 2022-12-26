@@ -12,6 +12,7 @@ urlpatterns = [
     path('purchaseOrders',views.purchaseOrders, name='purchase-orders'),
     path('jobs', views.jobs, name='jobs'),
     path('rating', views.rating, name='rating'),
+    path('quotes',views.quotes, name='quotes'),
 
     # Invoice create paths
     path('invoices/create',views.createInvoice, name='create-invoice'),

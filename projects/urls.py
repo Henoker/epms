@@ -51,6 +51,10 @@ urlpatterns = [
     path('invoices/view-po/<slug:slug>',views.viewDocumentPO, name='view-document-po'),
     path('invoices/view-POpdf/<slug:slug>',views.viewPDFPO, name='view-pdf-po'),
 
+     # Quote create paths
+    path('quotes/create',views.createQuote, name='create-quote'),
+    path('quotes/create-build/<slug:slug>',views.createBuildQuote, name='create-build-quote'),
+
 
     path('addRating',views.addRating, name='add-rating'),
 

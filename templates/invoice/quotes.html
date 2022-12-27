@@ -17,8 +17,8 @@
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
         
-        <a href="#"><button type="button" class="btn btn-primary">Add New Ouote</button></a>
-        {% comment %} <a href="{% url 'create-invoice' %}"><button type="button" class="btn btn-primary">Add New Ouote</button></a> {% endcomment %}
+        <a href="{% url 'create-quote' %}"><button type="button" class="btn btn-primary">Add New Ouote</button></a>
+       
       </div>
     </div>
   </div>
@@ -36,8 +36,8 @@
           <th>Phone Number</th>
           <th>Due Date</th>
           <th>Quote Status</th>
-          {% comment %} <th>Delete</th>
-          <th>View</th> {% endcomment %}
+          {% comment %} <th>Delete</th> {% endcomment %}
+          <th>View</th> 
         </tr>
       </thead>
       <tbody>
@@ -80,11 +80,11 @@
                         </div>
                       </div>
 
-        </td>
-        <td>
-          <a href="{% url 'create-build-invoice' invoice.slug %}"><button class="btn btn-primary"> VIEW </button></a>
-        </td>
-      </tr> {% endcomment %}
+        </td> {% endcomment %}
+         <td>
+          <a href="{% url 'create-build-quote' quote.slug %}"><button class="btn btn-primary"> VIEW </button></a>
+        </td> 
+      </tr> 
         {% endfor %}
 
       </tbody>

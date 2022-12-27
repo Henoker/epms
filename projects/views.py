@@ -560,73 +560,73 @@ def viewPDFPO(request, slug):
 
 # ###--------------------------- Create Quote Views Start here --------------------------------------------- ###
 
-# @login_required
-# def createQuote(request):
-#     #create a blank invoice ....
-#     number = 'Quote-'+str(uuid4()).split('-')[1]
-#     newQuote = Quotation.objects.create(number=number)
-#     newQuote.save()
+@login_required
+def createQuote(request):
+    #create a blank invoice ....
+    number = 'Quote-'+str(uuid4()).split('-')[1]
+    newQuote = Quotation.objects.create(number=number)
+    newQuote.save()
 
-#     quote = Quotation.objects.get(number=number)
-#     return redirect('create-build-quote', slug=quote.slug)
+    quote = Quotation.objects.get(number=number)
+    return redirect('create-build-quote', slug=quote.slug)
 
-# def createBuildQuote(request, slug):
-#     #fetch that Quote
-#     try:
-#         quote = Quotation.objects.get(slug=slug)
-#         pass
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('quotes')
+def createBuildQuote(request, slug):
+    #fetch that Quote
+    try:
+        quote = Quotation.objects.get(slug=slug)
+        pass
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('quotes')
 
-#     # #fetch all the products - related to this invoice
-#     # orders = Order.objects.filter(invoice=invoice)
-
-
-#     context = {}
-#     context['quote'] = quote
-#     # context['orders'] = orders
-
-#     if request.method == 'GET':
-#         # order_form  = OrderForm()
-#         quote_form = QuoteForm(instance=quote)
-#         client_form = ClientSelectForm(initial_client=quote.client)
-#         # context['order_form'] = order_form
-#         context['quote_form'] = quote_form
-#         context['client_form'] = client_form
-#         return render(request, 'invoice/create-quote.html', context)
-
-#     if request.method == 'POST':
-#         order_form  = OrderForm(request.POST)
-#         inv_form = InvoiceForm(request.POST, instance=invoice)
-#         client_form = ClientSelectForm(request.POST, initial_client=invoice.client, instance=invoice)
-
-#         if order_form.is_valid():
-#             obj = order_form.save(commit=False)
-#             obj.invoice = invoice
-#             obj.save()
-
-#             messages.success(request, "Invoice product added succesfully")
-#             return redirect('create-build-invoice', slug=slug)
-#         elif inv_form.is_valid and 'paymentTerms' in request.POST:
-#             inv_form.save()
-
-#             messages.success(request, "Invoice updated succesfully")
-#             return redirect('create-build-invoice', slug=slug)
-#         elif client_form.is_valid() and 'client' in request.POST:
-
-#             client_form.save()
-#             messages.success(request, "Client added to invoice succesfully")
-#             return redirect('create-build-invoice', slug=slug)
-#         else:
-#             context['order_form'] = order_form
-#             context['inv_form'] = inv_form
-#             context['client_form'] = client_form
-#             messages.error(request,"Problem processing your request")
-#             return render(request, 'invoice/create-invoice.html', context)
+    # #fetch all the requests- related to this quote
+    requests = Request.objects.filter(quote=quote)
 
 
-#     return render(request, 'invoice/create-invoice.html', context)
+    context = {}
+    context['quote'] = quote
+    context['requests'] = requests
+
+    if request.method == 'GET':
+        request_form  = RequestForm()
+        quote_form = QuoteForm(instance=quote)
+        client_form = ClientSelectForm(initial_client=quote.client)
+        context['request_form'] = request_form
+        context['quote_form'] = quote_form
+        context['client_form'] = client_form
+        return render(request, 'invoice/create-quote.html', context)
+
+    if request.method == 'POST':
+        request_form  = RequestForm(request.POST)
+        quote_form = QuoteForm(request.POST, instance=quote)
+        client_form = ClientSelectForm(request.POST, initial_client=quote.client, instance=quote)
+
+        if request_form.is_valid():
+            obj = request_form.save(commit=False)
+            obj.quote = quote
+            obj.save()
+
+            messages.success(request, "Quote added succesfully")
+            return redirect('create-build-quote', slug=slug)
+        elif quote_form.is_valid and 'paymentTerms' in request.POST:
+            quote_form.save()
+
+            messages.success(request, "Quote updated succesfully")
+            return redirect('create-build-quote', slug=slug)
+        elif client_form.is_valid() and 'client' in request.POST:
+
+            client_form.save()
+            messages.success(request, "Client added to quote succesfully")
+            return redirect('create-build-quote', slug=slug)
+        else:
+            context['request_form'] = request_form
+            context['quote_form'] = quote_form
+            context['client_form'] = client_form
+            messages.error(request,"Problem processing your request")
+            return render(request, 'invoice/create-quote.html', context)
+
+
+    return render(request, 'invoice/create-quote.html', context)
 
 
 # def viewPDFInvoice(request, slug):
@@ -818,7 +818,20 @@ def updateOrder(request, slug):
         messages.error(request, 'Problem processing your request')
         return render(request, 'invoice/updateOrder.html', context)
 
-    return render(request, 'invoice/updateProduct.html', context)
+# @login_required
+# def updateQuote(request, slug):
+#     context = {}
+#     request = Request.objects.get(slug=slug)
+#     context['request'] = request
+#     form = RequestForm(request.POST or None, instance=request)
+#     context['form'] = form
+#     if form.is_valid():
+#         form.save()
+#         messages.success(request, 'Request updated')
+#         return redirect('quotes')
+#     else:
+#         messages.error(request, 'Problem processing your request')
+#         return render(request, 'invoice/updateQuote.html', context)  
 
 
 @login_required

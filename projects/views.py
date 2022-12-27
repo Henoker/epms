@@ -128,7 +128,7 @@ def quotes(request):
     quotes = Quotation.objects.all()
     context['quotes'] = quotes
 
-    return render(request, 'invoice/invoices.html', context)
+    return render(request, 'invoice/quotes.html', context)
 
 @login_required
 def orders(request):
@@ -557,7 +557,157 @@ def viewPDFPO(request, slug):
         response.write(output.read())
 
     return response
+
+# ###--------------------------- Create Quote Views Start here --------------------------------------------- ###
+
+# @login_required
+# def createQuote(request):
+#     #create a blank invoice ....
+#     number = 'Quote-'+str(uuid4()).split('-')[1]
+#     newQuote = Quotation.objects.create(number=number)
+#     newQuote.save()
+
+#     quote = Quotation.objects.get(number=number)
+#     return redirect('create-build-quote', slug=quote.slug)
+
+# def createBuildQuote(request, slug):
+#     #fetch that Quote
+#     try:
+#         quote = Quotation.objects.get(slug=slug)
+#         pass
+#     except:
+#         messages.error(request, 'Something went wrong')
+#         return redirect('quotes')
+
+#     # #fetch all the products - related to this invoice
+#     # orders = Order.objects.filter(invoice=invoice)
+
+
+#     context = {}
+#     context['quote'] = quote
+#     # context['orders'] = orders
+
+#     if request.method == 'GET':
+#         # order_form  = OrderForm()
+#         quote_form = QuoteForm(instance=quote)
+#         client_form = ClientSelectForm(initial_client=quote.client)
+#         # context['order_form'] = order_form
+#         context['quote_form'] = quote_form
+#         context['client_form'] = client_form
+#         return render(request, 'invoice/create-quote.html', context)
+
+#     if request.method == 'POST':
+#         order_form  = OrderForm(request.POST)
+#         inv_form = InvoiceForm(request.POST, instance=invoice)
+#         client_form = ClientSelectForm(request.POST, initial_client=invoice.client, instance=invoice)
+
+#         if order_form.is_valid():
+#             obj = order_form.save(commit=False)
+#             obj.invoice = invoice
+#             obj.save()
+
+#             messages.success(request, "Invoice product added succesfully")
+#             return redirect('create-build-invoice', slug=slug)
+#         elif inv_form.is_valid and 'paymentTerms' in request.POST:
+#             inv_form.save()
+
+#             messages.success(request, "Invoice updated succesfully")
+#             return redirect('create-build-invoice', slug=slug)
+#         elif client_form.is_valid() and 'client' in request.POST:
+
+#             client_form.save()
+#             messages.success(request, "Client added to invoice succesfully")
+#             return redirect('create-build-invoice', slug=slug)
+#         else:
+#             context['order_form'] = order_form
+#             context['inv_form'] = inv_form
+#             context['client_form'] = client_form
+#             messages.error(request,"Problem processing your request")
+#             return render(request, 'invoice/create-invoice.html', context)
+
+
+#     return render(request, 'invoice/create-invoice.html', context)
+
+
+# def viewPDFInvoice(request, slug):
+#     #fetch that invoice
+#     try:
+#         invoice = Invoice.objects.get(slug=slug)
+#         pass
+#     except:
+#         messages.error(request, 'Something went wrong')
+#         return redirect('invoices')
+
+#     #fetch all the products - related to this invoice
+#     orders = Order.objects.filter(invoice=invoice)
+
+#     #Get Client Settings
+#     p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
+
+#     #Calculate the Invoice Total
+#     invoiceCurrency = ''
+#     invoiceTotal = 0.0
+#     if len(orders) > 0:
+#         for x in orders:
+#             y = float(x.quantity) * float(x.price)
+#             invoiceTotal += y
+#             invoiceCurrency = x.currency
+
+#     context = {}
+#     context['invoice'] = invoice
+#     context['orders'] = orders
+#     context['p_settings'] = p_settings
+#     context['invoiceTotal'] = "{:.2f}".format(invoiceTotal)
+#     context['invoiceCurrency'] = invoiceCurrency
+
+#     return render(request, 'invoice/invoice-view.html', context)
+
+
+# def viewDocumentInvoice(request, slug):
+#     try:
+#         invoice = Invoice.objects.get(slug=slug)
+#         pass
+#     except:
+#         messages.error(request, 'Something went wrong')
+#         return redirect('invoices')
+
+#     orders = Order.objects.filter(invoice=invoice)
+
+#     #Get Client Settings
+#     p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
+
+#     #Calculate the Invoice Total
+#     invoiceTotal = 0.0
+#     if len(orders) > 0:
+#         for x in orders:
+#             y = float(x.quantity) * float(x.price)
+#             invoiceTotal += y
     
+#     context = {}
+#     context['invoice'] = invoice
+#     context['orders'] = orders
+#     context['p_settings'] = p_settings
+#     context['invoiceTotal'] = "{:.2f}".format(invoiceTotal)
+
+#     html_string = render_to_string(
+#         'invoice/pdf-template.html',context)
+#     html = HTML(string=html_string)
+#     result = html.write_pdf()
+
+#     # http response
+#     response = HttpResponse(content_type='application/pdf;')
+#     response['Content-Disposition'] = 'inline; filename=problem_list.pdf'
+#     response['Content-Transfer-Encoding'] = 'binary'
+#     with tempfile.NamedTemporaryFile(delete=True) as output:
+#         output.write(result)
+#         output.flush()
+#         output = open(output.name, 'rb')
+#         response.write(output.read())
+
+#     return response
+    
+
+   
 
 @login_required
 def deleteInvoice(request, slug):

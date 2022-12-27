@@ -68,7 +68,28 @@ class OrderForm(forms.ModelForm):
             'project_manager': 'Project Manager',
         }
 
+class RequestForm(forms.ModelForm):
+    class Meta:
+        model = Request
+        fields = [
+            'RequestDate', 'clientDeadline', 'source_languages', 'target_languages',
+            'description', 'quantity', 'price', 'currency', 
+        ]
 
+        widgets = {
+            'description': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
+                'placeholder': 'Describe the request'}),
+            'RequestDate': DateInput(attrs={'label': 'Start Date'}),
+            'clientDeadline': DateInput(attrs={"class": "form-group col-6"}),
+        }
+
+        labels = {
+            'RequestDate': 'Request Date',
+            'clientDeadline' : 'client Deadline Date',
+            'source_languages': 'Source language(s)',
+            'target_languages': 'Target language(s)',
+            'project_manager': 'Project Manager',
+        }
 class InvoiceForm(forms.ModelForm):
     THE_OPTIONS = [
     ('30 days', '30 days'),
@@ -185,6 +206,66 @@ class PurchaseOrderForm(forms.ModelForm):
 
     class Meta:
         model = PurchaseOrder
+        fields = ['title', 'dueDate', 'paymentTerms', 'status', 'notes']
+
+
+class QuoteForm(forms.ModelForm):
+    THE_OPTIONS = [
+    ('30 days', '30 days'),
+    ('45 days', '45 days'),
+    ('60 days', '60 days'),
+    ('Contract', 'Contract'),
+    ]
+    STATUS_OPTIONS = [
+    ('CURRENT', 'CURRENT'),
+    ('EMAIL_SENT', 'EMAIL_SENT'),
+    ('EXPIRED', 'EXPIRED'),
+    ('ACCEPTED', 'ACCEPTED'),
+    ]
+
+    title = forms.CharField(
+                    required = True,
+                    label='Quote Name or Title',
+                    widget=forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Enter Quote Title'}),)
+    paymentTerms = forms.ChoiceField(
+                    choices = THE_OPTIONS,
+                    required = True,
+                    label='Select Payment Terms',
+                    widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
+    status = forms.ChoiceField(
+                    choices = STATUS_OPTIONS,
+                    required = True,
+                    label='Change Quote Status',
+                    widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
+    notes = forms.CharField(
+                    required = True,
+                    label='Enter any notes for the client',
+                    widget=forms.Textarea(attrs={'class': 'form-control mb-3'}),)
+
+    dueDate = forms.DateField(
+                        required = True,
+                        label='Quote Expiry Date',
+                        widget=DateInput(attrs={'class': 'form-control mb-3'}),)
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('title', css_class='form-group col-md-6'),
+                Column('dueDate', css_class='form-group col-md-6'),
+                css_class='form-row'),
+            Row(
+                Column('paymentTerms', css_class='form-group col-md-6'),
+                Column('status', css_class='form-group col-md-6'),
+                css_class='form-row'),
+            'notes',
+
+            Submit('submit', ' SAVE '))
+
+    class Meta:
+        model = Invoice
         fields = ['title', 'dueDate', 'paymentTerms', 'status', 'notes']
 
 class JobForm(forms.ModelForm):

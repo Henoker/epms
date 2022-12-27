@@ -13,17 +13,19 @@
 {% block main %}
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Invoices</h1>
+    <h1 class="h2">Quotes</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
-        <a href="{% url 'create-invoice' %}"><button type="button" class="btn btn-primary">Add New Invoice</button></a>
+        
+        <a href="#"><button type="button" class="btn btn-primary">Add New Ouote</button></a>
+        {% comment %} <a href="{% url 'create-invoice' %}"><button type="button" class="btn btn-primary">Add New Ouote</button></a> {% endcomment %}
       </div>
     </div>
   </div>
 
   <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
 
-  {% if invoices|length > 0 %}
+  {% if quotes|length > 0 %}
   <div class="table-responsive p-4" style="background-color: #fff;">
     <table id="example" class="table table-sm">
       <thead>

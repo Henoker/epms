@@ -492,3 +492,55 @@ class Quotation(models.Model):
         self.last_updated = timezone.localtime(timezone.now())
 
         super(Quotation, self).save(*args, **kwargs)
+
+class Request(models.Model):
+    CURRENCY = [
+        ('ETB', 'BIRR'),
+        ('$', 'USD'),
+    ]
+    title = models.CharField(null=True, blank=True, max_length=100)
+    RequestDate = models.DateField(null=True, blank=True)
+    clientDeadline = models.DateField(null=True, blank=True)
+    source_languages = models.CharField(null=True, blank=True, max_length=300)
+    target_languages = models.CharField(null=True, blank=True, max_length=300)
+    description = models.TextField(null=True, blank=True)
+    quantity = models.FloatField(null=True, blank=True)
+    price = models.FloatField(null=True, blank=True)
+    currency = models.CharField(choices=CURRENCY, default='ETB', max_length=100)
+
+    # #Related Fields
+    quote = models.ForeignKey(Quotation, blank=True, null=True, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, blank=True, null=True, on_delete=models.SET_NULL)
+    
+
+    #Utility fields
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+
+    def __str__(self):
+        return '{} {}'.format(self.title, self.uniqueId)
+
+
+    def get_absolute_url(self):
+        return reverse('request-detail', kwargs={'slug': self.slug})
+
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+            self.slug = slugify('{} {}'.format(self.title, self.uniqueId))
+
+        self.slug = slugify('{} {}'.format(self.title, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+
+        super(Request, self).save(*args, **kwargs)
+
+
+    def total_price(self):
+        return self.quantity * self.price
+       

@@ -72,7 +72,7 @@ class RequestForm(forms.ModelForm):
     class Meta:
         model = Request
         fields = [
-            'RequestDate', 'clientDeadline', 'source_languages', 'target_languages',
+            'RequestDate', 'proposedStartDate', 'clientDeadline', 'source_languages', 'target_languages',
             'description', 'quantity', 'price', 'currency', 
         ]
 
@@ -81,11 +81,13 @@ class RequestForm(forms.ModelForm):
                 'placeholder': 'Describe the request'}),
             'RequestDate': DateInput(attrs={'label': 'Start Date'}),
             'clientDeadline': DateInput(attrs={"class": "form-group col-6"}),
+            'proposedStartDate': DateInput (attrs={"class": "form-group col-6"}),
         }
 
         labels = {
             'RequestDate': 'Request Date',
-            'clientDeadline' : 'client Deadline Date',
+            'proposedStartDate': 'Proposed Start Date',
+            'clientDeadline' : 'Proposed Deadline Date',
             'source_languages': 'Source language(s)',
             'target_languages': 'Target language(s)',
             'project_manager': 'Project Manager',

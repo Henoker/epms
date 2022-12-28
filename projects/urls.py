@@ -47,6 +47,7 @@ urlpatterns = [
     #PDF and EMAIL Paths
     path('invoices/view-pdf/<slug:slug>',views.viewPDFInvoice, name='view-pdf-invoice'),
     path('invoices/view-document/<slug:slug>',views.viewDocumentInvoice, name='view-document-invoice'),
+    path('quotes/view-pdf/<slug:slug>',views.viewPDFQuote, name='view-pdf-quote'),
     # path('invoices/email-document/<slug:slug>',views.emailDocumentInvoice, name='email-document-invoice'),
     path('invoices/view-po/<slug:slug>',views.viewDocumentPO, name='view-document-po'),
     path('invoices/view-POpdf/<slug:slug>',views.viewPDFPO, name='view-pdf-po'),
@@ -54,6 +55,7 @@ urlpatterns = [
      # Quote create paths
     path('quotes/create',views.createQuote, name='create-quote'),
     path('quotes/create-build/<slug:slug>',views.createBuildQuote, name='create-build-quote'),
+    path('quotes/delete/<slug:slug>',views.deleteQuote, name='delete-quote'),
 
 
     path('addRating',views.addRating, name='add-rating'),

@@ -629,38 +629,38 @@ def createBuildQuote(request, slug):
     return render(request, 'invoice/create-quote.html', context)
 
 
-# def viewPDFInvoice(request, slug):
-#     #fetch that invoice
-#     try:
-#         invoice = Invoice.objects.get(slug=slug)
-#         pass
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
+def viewPDFQuote(request, slug):
+    #fetch that invoice
+    try:
+        quote = Quotation.objects.get(slug=slug)
+        pass
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('quotes')
 
-#     #fetch all the products - related to this invoice
-#     orders = Order.objects.filter(invoice=invoice)
+    #fetch all the products - related to this invoice
+    requests = Request.objects.filter(quote=quote)
 
-#     #Get Client Settings
-#     p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
+    #Get Client Settings
+    p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
 
-#     #Calculate the Invoice Total
-#     invoiceCurrency = ''
-#     invoiceTotal = 0.0
-#     if len(orders) > 0:
-#         for x in orders:
-#             y = float(x.quantity) * float(x.price)
-#             invoiceTotal += y
-#             invoiceCurrency = x.currency
+    #Calculate the Invoice Total
+    quoteCurrency = ''
+    quoteTotal = 0.0
+    if len(requests) > 0:
+        for x in requests:
+            y = float(x.quantity) * float(x.price)
+            quoteTotal += y
+            quoteCurrency = x.currency
 
-#     context = {}
-#     context['invoice'] = invoice
-#     context['orders'] = orders
-#     context['p_settings'] = p_settings
-#     context['invoiceTotal'] = "{:.2f}".format(invoiceTotal)
-#     context['invoiceCurrency'] = invoiceCurrency
+    context = {}
+    context['quote'] = quote
+    context['requests'] = requests
+    context['p_settings'] = p_settings
+    context['quoteTotal'] = "{:.2f}".format(quoteTotal)
+    context['quoteCurrency'] = quoteCurrency
 
-#     return render(request, 'invoice/invoice-view.html', context)
+    return render(request, 'invoice/quote-view.html', context)
 
 
 # def viewDocumentInvoice(request, slug):
@@ -718,6 +718,16 @@ def deleteInvoice(request, slug):
         return redirect('invoices')
 
     return redirect('invoices')
+
+@login_required
+def deleteQuote(request, slug):
+    try:
+        Quotation.objects.get(slug=slug).delete()
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('quotes')
+
+    return redirect('quotes')
 
 @login_required
 def deleteClient(request, slug):

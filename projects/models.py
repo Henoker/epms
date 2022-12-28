@@ -500,6 +500,7 @@ class Request(models.Model):
     ]
     title = models.CharField(null=True, blank=True, max_length=100)
     RequestDate = models.DateField(null=True, blank=True)
+    proposedStartDate = models.DateField(null=True, blank=True)
     clientDeadline = models.DateField(null=True, blank=True)
     source_languages = models.CharField(null=True, blank=True, max_length=300)
     target_languages = models.CharField(null=True, blank=True, max_length=300)

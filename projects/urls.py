@@ -11,6 +11,7 @@ urlpatterns = [
     path('orders', views.orders, name='orders'),
     path('purchaseOrders',views.purchaseOrders, name='purchase-orders'),
     path('jobs', views.jobs, name='jobs'),
+    path('requests', views.requests, name='requests'),
     path('rating', views.rating, name='rating'),
     path('quotes',views.quotes, name='quotes'),
 
@@ -56,8 +57,13 @@ urlpatterns = [
     path('quotes/create',views.createQuote, name='create-quote'),
     path('quotes/create-build/<slug:slug>',views.createBuildQuote, name='create-build-quote'),
     path('quotes/delete/<slug:slug>',views.deleteQuote, name='delete-quote'),
+    
 
+     # Path for Requests
+    path('updateRequest/<slug:slug>',views.updateRequest, name='update-request'),
+    path('requests/delete/<slug:slug>',views.deleteRequest, name='delete-request'),
 
+    # Rating Path
     path('addRating',views.addRating, name='add-rating'),
 
 ]

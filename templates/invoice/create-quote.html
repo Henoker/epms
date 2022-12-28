@@ -51,6 +51,7 @@
                     <th>Price</th>
                     <th>subtotal</th>
                     <th>Related Quote</th>
+                    <th></th>
                     
 
                   </tr>
@@ -59,12 +60,13 @@
 
                   {% for request in requests %}
                 <tr>
-                  <td>{{request.OrderDate}}</td>
+                  <td>{{request.RequestDate}}</td>
                   <td>{{request.description}}</td>
                   <td>{{request.quantity}}</td>
                   <td>{{request.currency}} {{request.price}}</td>
                   <td>{{request.total_price|floatformat:"0"}}</td>
                   <td>{{request.quote.number}}</td>
+                 
                   
                 </tr>
                   {% endfor %}

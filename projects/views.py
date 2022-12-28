@@ -139,6 +139,14 @@ def orders(request):
     return render(request, 'invoice/orders.html', context)
 
 @login_required
+def requests(request):
+    context = {}
+    requests = Request.objects.all().order_by('-date_created')
+    context['requests'] = requests
+
+    return render(request, 'invoice/requests.html', context)
+
+@login_required
 def jobs(request):
     context = {}
     jobs = Job.objects.all().order_by('-date_created')
@@ -771,6 +779,16 @@ def deleteJob(request, slug):
     return redirect('jobs')
 
 @login_required
+def deleteRequest(request, slug):
+    try:
+        Request.objects.get(slug=slug).delete()
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('requests')
+
+    return redirect('requests')
+
+@login_required
 def deleteProject(request, slug):
     try:
         Project.objects.get(slug=slug).delete()
@@ -795,7 +813,7 @@ def updateClient(request, slug):
         messages.error(request, 'Problem processing your request')
         return render(request, 'projects/updateClient.html', context)
         
-    return render(request, 'projects/updateClient.html', context)
+    
 
 @login_required  
 def updateProject(request, slug):
@@ -828,20 +846,20 @@ def updateOrder(request, slug):
         messages.error(request, 'Problem processing your request')
         return render(request, 'invoice/updateOrder.html', context)
 
-# @login_required
-# def updateQuote(request, slug):
-#     context = {}
-#     request = Request.objects.get(slug=slug)
-#     context['request'] = request
-#     form = RequestForm(request.POST or None, instance=request)
-#     context['form'] = form
-#     if form.is_valid():
-#         form.save()
-#         messages.success(request, 'Request updated')
-#         return redirect('quotes')
-#     else:
-#         messages.error(request, 'Problem processing your request')
-#         return render(request, 'invoice/updateQuote.html', context)  
+@login_required
+def updateRequest(request, slug):
+    context = {}
+    requests = Request.objects.get(slug=slug)
+    context['requests'] = requests
+    form = RequestForm(request.POST or None, instance=requests)
+    context['form'] = form
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Request updated')
+        return redirect('requests')
+    else:
+        messages.error(request, 'Problem processing your request')
+        return render(request, 'invoice/updateRequest.html', context)
 
 
 @login_required

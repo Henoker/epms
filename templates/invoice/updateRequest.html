@@ -1,0 +1,34 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block css %}
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+
+
+{% block main %}
+
+  <div class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">Update Quote Particulars</h1>
+    <div class="btn-toolbar mb-2 mb-md-0"> 
+    </div>
+  </div>
+
+  <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
+<form class="justify-content-center mb-4" style="background-color: #fff;" action="#" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+  <div class="mx-auto col-sm-6 col-8  pt-3 mb-3 row justify-content-center">
+   {{ form|crispy }}
+  </div>
+  <div class="mx-auto col-sm-3 col-5 pb-3 pt-1 mb-6 row justify-content-center border-top-0">
+    <button type="submit" class="btn btn-lg btn-primary w-20 mx-0 mb-2">Save changes</button>
+  </div>
+</form>
+
+
+
+{% endblock %}

@@ -638,7 +638,7 @@ def createBuildQuote(request, slug):
 
 
 def viewPDFQuote(request, slug):
-    #fetch that invoice
+    #fetch that Quote
     try:
         quote = Quotation.objects.get(slug=slug)
         pass
@@ -671,48 +671,53 @@ def viewPDFQuote(request, slug):
     return render(request, 'invoice/quote-view.html', context)
 
 
-# def viewDocumentInvoice(request, slug):
-#     try:
-#         invoice = Invoice.objects.get(slug=slug)
-#         pass
-#     except:
-#         messages.error(request, 'Something went wrong')
-#         return redirect('invoices')
+def viewDocumentQuote(request, slug):
+     #fetch that Quote
+    try:
+        quote = Quotation.objects.get(slug=slug)
+        pass
+    except:
+        messages.error(request, 'Something went wrong')
+        return redirect('quotes')
 
-#     orders = Order.objects.filter(invoice=invoice)
+    #fetch all the products - related to this invoice
+    requests = Request.objects.filter(quote=quote)
 
-#     #Get Client Settings
-#     p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
+    #Get Client Settings
+    p_settings = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')
 
-#     #Calculate the Invoice Total
-#     invoiceTotal = 0.0
-#     if len(orders) > 0:
-#         for x in orders:
-#             y = float(x.quantity) * float(x.price)
-#             invoiceTotal += y
+    #Calculate the Invoice Total
     
-#     context = {}
-#     context['invoice'] = invoice
-#     context['orders'] = orders
-#     context['p_settings'] = p_settings
-#     context['invoiceTotal'] = "{:.2f}".format(invoiceTotal)
+    quoteTotal = 0.0
+    if len(requests) > 0:
+        for x in requests:
+            y = float(x.quantity) * float(x.price)
+            quoteTotal += y
+           
 
-#     html_string = render_to_string(
-#         'invoice/pdf-template.html',context)
-#     html = HTML(string=html_string)
-#     result = html.write_pdf()
+    context = {}
+    context['quote'] = quote
+    context['requests'] = requests
+    context['p_settings'] = p_settings
+    context['quoteTotal'] = "{:.2f}".format(quoteTotal)
 
-#     # http response
-#     response = HttpResponse(content_type='application/pdf;')
-#     response['Content-Disposition'] = 'inline; filename=problem_list.pdf'
-#     response['Content-Transfer-Encoding'] = 'binary'
-#     with tempfile.NamedTemporaryFile(delete=True) as output:
-#         output.write(result)
-#         output.flush()
-#         output = open(output.name, 'rb')
-#         response.write(output.read())
 
-#     return response
+    html_string = render_to_string(
+        'invoice/pdf-quote-template.html',context)
+    html = HTML(string=html_string)
+    result = html.write_pdf()
+
+    # http response
+    response = HttpResponse(content_type='application/pdf;')
+    response['Content-Disposition'] = 'inline; filename=problem_list.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read())
+
+    return response
     
 
    

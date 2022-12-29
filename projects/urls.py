@@ -49,6 +49,7 @@ urlpatterns = [
     path('invoices/view-pdf/<slug:slug>',views.viewPDFInvoice, name='view-pdf-invoice'),
     path('invoices/view-document/<slug:slug>',views.viewDocumentInvoice, name='view-document-invoice'),
     path('quotes/view-pdf/<slug:slug>',views.viewPDFQuote, name='view-pdf-quote'),
+    path('quotes/view-document/<slug:slug>',views.viewDocumentQuote, name='view-document-quote'),
     # path('invoices/email-document/<slug:slug>',views.emailDocumentInvoice, name='email-document-invoice'),
     path('invoices/view-po/<slug:slug>',views.viewDocumentPO, name='view-document-po'),
     path('invoices/view-POpdf/<slug:slug>',views.viewPDFPO, name='view-pdf-po'),

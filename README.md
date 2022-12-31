@@ -15,19 +15,19 @@ More screenshots
 </details>
 ## About the app
 
-This app is an end-to-end project management tool built with translators in mind. It helps to manage and automate translation and localization workflows with ease. It is designed for the my current comapny in mind and the basic aim is to manage our client requirements, our company’s internal processes,
+This app is an end-to-end project management tool built with translators in mind. It helps to manage and automate translation and localization workflows with ease. It is designed for my current employers in mind and the basic aim is to manage our client requirements, our company’s internal processes,
 and vendor management in one seamless online environment using a dockerized django app.
 The EPMS Translation Project Management System has the following features and app components:
 
-* Translation and Localization Project Manaement capability with full CRUD functionality.
+* Translation and Localization Project Management capability with full CRUD functionality.
 * Client Management app with full CRUD capability. 
 * Vendor(Translators) Management app with full CRUD capability  
-* A Dashboard analtics using CHART js, and django query capability. 
+* A Dashboard analytics using CHART js, and django query capability. 
 * Client PDF Invoice generation capability by using weasyprint from docker. 
 * Vendor PDF PO generation capability by using weasyprint from docker. 
 * Vendor Job Management app with crud functionality.
 * Client Order Management app with CRUD capability.
-* A system of rating mechanism for vendors task based industry specific criteria's.
+* A system of rating vendors job based industry specific criteria.
 
 ## Built using:
 - Python with Django framework and Jinja templating language
@@ -53,7 +53,7 @@ The EPMS Translation Project Management System has the following features and ap
 Distributed under the [MIT](https://github.com/Henoker/bookstore/blob/master/LICENSE) License. See [`LICENSE`](https://github.com/Henoker/epms/blob/master/LICENSE) for more information.
 
 ## Contact
-- Henock Beyene Testfatsion - [hennybany@gmail.com](mailto:hennybany@gmail.com)
+- Henock Beyene Tesfatsion - [hennybany@gmail.com](mailto:hennybany@gmail.com)
 - Project link: https://github.com/Henoker/epms
 
 ## Love my effort?

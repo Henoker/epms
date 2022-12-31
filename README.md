@@ -1,14 +1,14 @@
 # EPMS Project Management System
 
-![EPMS First Page Look!](static/images/Dahboard view.png) 
+![EPMS First Page Look!](static/images/DashboardView.png) 
 
 <details>
 <summary>
 More screenshots
 </summary>
 
-![Invoice demo](static/images/invoice View.png)
-![translators rating app!](static/images/Translators Rating APP.png)
+![Invoice demo](static/images/invoiceView.png)
+![translators rating app!](static/images/TranslatorsRatingAPP.png)
 
 
 
@@ -35,6 +35,7 @@ The EPMS Translation Project Management System has the following features and ap
 - Chart Js
 - weasyprint
 - Django all auth
+- Bootstrap
 
 ## Getting started:
 - Clone this repository or fork it

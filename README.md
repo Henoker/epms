@@ -7,8 +7,8 @@
 More screenshots
 </summary>
 
-![Invoice demo](static/images/invoiceView.png)
-![translators rating app!](static/images/TranslatorsRatingAPP.png)
+![Invoice demo](static/images/InvoiceView.png)
+![translators rating app!](static/images/TranslatorsRatingApp.png)
 
 
 

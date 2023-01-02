@@ -206,6 +206,21 @@ class Order(models.Model):
         print(Order.objects.all()[0].total_price)
 
 class Vendor(models.Model):
+    LINGUISTIC_LEVEL = [
+        ('NOVICE', 'NOVICE'),
+        ('B1', 'B1'),
+        ('B2', 'B2'),
+        ('C1', 'C1'),
+        ('C2', 'C2'),
+
+    ]
+    EDUCATION_LEVEL = [
+        ('CERTIFICATE', 'CERTIFICATE'),
+        ('DIPLOMA', 'DIPLOMA'),
+        ('UNIVERSITY DEGREE', 'UNIVERSITY DEGREE'),
+        ('GRADUATE DEGREE', 'GRADUATE DEGREE'),
+        ('DOCTORIAL LEVEL', 'DOCTORIAL LEVEL'),
+    ]
 
     #Basic Fields.
     vendorName = models.CharField(null=True, blank=True, max_length=200)
@@ -216,6 +231,9 @@ class Vendor(models.Model):
     emailAddress = models.CharField(null=True, blank=True, max_length=100)
     taxNumber = models.CharField(null=True, blank=True, max_length=100)
     mother_language = models.CharField(blank=True, choices=LANGUAGE_CHOICES, max_length=300)
+    language_skills = models.CharField(blank=True, null=True, max_length=300)
+    lingustic_level = models.CharField(blank=True, choices=LINGUISTIC_LEVEL, max_length=100)
+    education_level = models.CharField(blank=True, choices=EDUCATION_LEVEL, max_length=100)
 
 
     #Utility fields

@@ -43,7 +43,9 @@ class ProjectForm(ModelForm):
 class VendorForm(forms.ModelForm):
     class Meta:
         model = Vendor
-        fields = ['vendorName', 'addressLine1', 'country', 'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber', 'mother_language']
+        fields = [
+            'vendorName', 'addressLine1', 'country', 'postalCode', 'phoneNumber', 
+            'emailAddress', 'taxNumber', 'mother_language', 'language_skills', 'lingustic_level', 'education_level', ]
 
 class OrderForm(forms.ModelForm):
     class Meta:

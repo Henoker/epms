@@ -57,7 +57,7 @@
         {% elif project.status == "Approved" %}
             <td><span class="badge text-bg-success">Approved</span></td>
         {% endif %}
-        
+        {% if user == project.project_manager %}
         <td>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{project.slug}}">
                           DELETE
@@ -93,6 +93,10 @@
             <a href="{% url 'update-project' project.slug %}"><button class="btn btn-primary" > EDIT </button></a>
           </td>
       </tr> 
+        {% else %}
+        <td></td>
+        <td></td>
+        {% endif %}
         {% endfor %}
 
       </tbody>

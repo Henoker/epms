@@ -124,6 +124,7 @@ class Invoice(models.Model):
 
     #RELATED fields
     client = models.ForeignKey(Client, blank=True, null=True, on_delete=models.SET_NULL)
+    
 
     #Utility fields
     uniqueId = models.CharField(null=True, blank=True, max_length=100)

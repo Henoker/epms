@@ -1,4 +1,3 @@
-lines (54 sloc) 1.64 KB
 {% extends '_base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -52,6 +51,7 @@ lines (54 sloc) 1.64 KB
         <td>{{order.currency}} {{order.price}}</td>
         <td>{{order.currency}} {{order.total_price|floatformat:"0"}}</td>
         <td>{{order.invoice.number}}</td>
+        {% if user == order.project.project_manager %}
         <td>
           <a href="{% url 'update-order' order.slug %}"><button class="btn btn-success"> EDIT </button></a>
         </td>
@@ -87,6 +87,10 @@ lines (54 sloc) 1.64 KB
 
         </td> 
      </tr>
+        {% else %}
+         <td></td>
+         <td></td>
+        {% endif %}
         {% endfor %}
 
       </tbody>

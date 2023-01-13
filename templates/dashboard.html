@@ -361,9 +361,72 @@
                     </div> {% endcomment %}
 
                 </div>
+                <!-- Pie Chart -->
+                <div class="col-xl-5 col-lg-6">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div
+                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary"># of Vendor by Grades Level</h6>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <div class="doughnut pt-4 pb-2">
+                                <canvas id="doughnut"></canvas>
+                                <script>
+                                //doughnut chart
+                                var doughnut = document.getElementById('doughnut');
+                                var doughnutConfig = new Chart(doughnut, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ["Novice","B1","B2", "C1", "C2"],
+                                        datasets: [{
+                                            label: '# of vendors by grade',
+                                            data: [{{novice}}, {{b1}}, {{b2}}, {{c1}}, {{c2}}],
+                                            backgroundColor: [
+                                                'rgba(68, 255, 7,1.0)',
+                                                'rgba(254, 214, 10,1.0)',
+                                                'rgba(,251, 0, 7,1.0)',
+                                                'rgba(55, 0, 255, 1)',
+                                                'rgba(251, 19, 243, 1)'],
+                                             
+                                            borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            tooltips: {
+                                                enabled: true
+                                            },
+                                            pieceLabel: {
+                                                mode: 'value'
+                                            },
+                                            responsive: true,
+                                            legend: {
+                                                position: 'bottom',
+                                            },
+                                            title: {
+                                                display: true,
+                                                text: 'Idades',
+                                                fontSize: 20
+                                            },
+                                            animation: {
+                                                animateScale: true,
+                                                animateRotate: true
+                                            }
+                                        }
 
+                                    });
+                                    
+                                </script> 
+
+                            </div>
+                          
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="col-lg-6 mb-4">
-
+                    
                     <!-- Illustrations -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">

@@ -70,6 +70,11 @@ def dashboard(request):
     green_rated = Rating.objects.filter(rate='3').count()
     yellow_rated = Rating.objects.filter(rate='2').count()
     red_rated = Rating.objects.filter(rate='1').count()
+    novice = Vendor.objects.filter(lingustic_level='NOVICE').count()
+    b1 = Vendor.objects.filter(lingustic_level='B1').count()
+    b2 = Vendor.objects.filter(lingustic_level='B2').count()
+    c1 = Vendor.objects.filter(lingustic_level='C1').count()
+    c2 = Vendor.objects.filter(lingustic_level='C2').count()
     category_list = Rating.objects.values('rate').annotate(category_count=Count('rate'))
     pending_proj_percentage = (completedProjects / projects) * 100
     paidInv_percentages = (paidInvoices / invoices) * 100
@@ -107,6 +112,11 @@ def dashboard(request):
     context['paidPos_percentages'] = paidPos_percentages
     context['pending_jobs_percentage'] = pending_jobs_percentage
     context['rated_jobs_percentage'] =  rated_jobs_percentage
+    context['novice'] = novice
+    context['b1'] = b1
+    context['b2'] = b2
+    context['c1'] = c1
+    context['c2'] = c2
 
 
     return render(request, 'dashboard.html', context)

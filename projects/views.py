@@ -117,7 +117,7 @@ def dashboard(request):
 @login_required
 def invoices(request):
     context = {}
-    invoices = Invoice.objects.all()
+    invoices = Invoice.objects.all().order_by('-date_created')
     context['invoices'] = invoices
 
     return render(request, 'invoice/invoices.html', context)
@@ -125,7 +125,7 @@ def invoices(request):
 @login_required
 def quotes(request):
     context = {}
-    quotes = Quotation.objects.all()
+    quotes = Quotation.objects.all().order_by('-date_created')
     context['quotes'] = quotes
 
     return render(request, 'invoice/quotes.html', context)

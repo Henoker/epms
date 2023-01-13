@@ -27,6 +27,11 @@
       <button type="submit" class="btn btn-primary">Create Project</button>
     </div>
 </form>
+{% for message in messages %}
+      <div class="toast-body bg-success text-light position-fixed top-0 end-0 p-3" style="z-index: 11; border-radius: 4px;" >
+        {{ message }}
+      </div>
+{% endfor %}
   
  
 

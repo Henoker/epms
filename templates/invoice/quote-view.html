@@ -253,7 +253,8 @@ footer p {
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <td>Date</td>
+                            <td>Propsed Start Date</td>
+                            <td>Propsed End Date</td>
                             <td>Description</td>
                             <td>Quantity</td>
                             <td>Price</td>
@@ -263,7 +264,8 @@ footer p {
                     {% for request in requests %}
                     <tbody>
                         <tr>
-                            <td>{{request.RequestDate}}</td>
+                            <td>{{request.proposedStartDate}}</td>
+                            <td>{{request.clientDeadline}}</td>
                             <td>
                                 <div class="media">
                                     <div class="media-body">

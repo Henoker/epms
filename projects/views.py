@@ -76,11 +76,26 @@ def dashboard(request):
     c1 = Vendor.objects.filter(lingustic_level='C1').count()
     c2 = Vendor.objects.filter(lingustic_level='C2').count()
     category_list = Rating.objects.values('rate').annotate(category_count=Count('rate'))
-    pending_proj_percentage = (completedProjects / projects) * 100
-    paidInv_percentages = (paidInvoices / invoices) * 100
-    paidPos_percentages = (paidPos / purchase_orders) * 100
-    pending_jobs_percentage = (completedJobs / jobs) * 100
-    rated_jobs_percentage = (rated_jobs / jobs) * 100
+    if projects == 0:
+        pending_proj_percentage = 0
+    else:
+        pending_proj_percentage = (completedProjects / projects) * 100
+    if invoices == 0:
+        paidInv_percentages = 0
+    else:
+        paidInv_percentages = (paidInvoices / invoices) * 100
+    if purchase_orders == 0:
+        paidPos_percentages = 0
+    else:
+        paidPos_percentages = (paidPos / purchase_orders) * 100
+    if jobs == 0:
+        pending_jobs_percentage = 0
+    else:
+        pending_jobs_percentage = (completedJobs / jobs) * 100
+    if jobs == 0:
+        rated_jobs_percentage = 0
+    else:
+        rated_jobs_percentage = (rated_jobs / jobs) * 100
     
 
 

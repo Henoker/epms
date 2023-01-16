@@ -9,5 +9,6 @@ crispy-bootstrap5==0.6
 environs[django]==9.5.0
 Pillow==9.3.0
 django-debug-toolbar==3.4.0
+whitenoise==6.1.0
 
 

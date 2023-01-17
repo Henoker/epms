@@ -125,7 +125,7 @@ class InvoiceForm(forms.ModelForm):
     notes = forms.CharField(
                     required = True,
                     label='Enter any notes for the client',
-                    widget=forms.Textarea(attrs={'class': 'form-control mb-3'}),)
+                    widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows':3,}),)
 
     dueDate = forms.DateField(
                         required = True,
@@ -184,7 +184,7 @@ class PurchaseOrderForm(forms.ModelForm):
     notes = forms.CharField(
                     required = True,
                     label='Enter any notes for the Vendor',
-                    widget=forms.Textarea(attrs={'class': 'form-control mb-3'}),)
+                    widget=forms.Textarea(attrs={'class': 'form-control mb-3','rows':3,}),)
 
     dueDate = forms.DateField(
                         required = True,
@@ -244,12 +244,12 @@ class QuoteForm(forms.ModelForm):
     notes = forms.CharField(
                     required = True,
                     label='Enter any notes for the client',
-                    widget=forms.Textarea(attrs={'class': 'form-control mb-3'}),)
+                    widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows':3,}),)
 
     dueDate = forms.DateField(
                         required = True,
                         label='Quote Expiry Date',
-                        widget=DateInput(attrs={'class': 'form-control mb-3'}),)
+                        widget=DateInput(attrs={'class': 'form-control mb-3', }),)
 
 
     def __init__(self, *args, **kwargs):

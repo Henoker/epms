@@ -130,10 +130,10 @@ AUTHENTICATION_BACKENDS = (
 "allauth.account.auth_backends.AuthenticationBackend", # new
 )
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = '89fdc410750e4a'
-EMAIL_HOST_PASSWORD = '57c86ffe726b54'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = '2525'
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

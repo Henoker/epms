@@ -1,4 +1,5 @@
 {% load static %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -19,15 +20,7 @@
     <title>{% block head_title %}{% endblock %}</title>
     {% block extra_head %}
     {% endblock %}
-    <style>
-        body {
-               background-color: #f0f4f8;
-               margin: 20px;
-               padding: 30px;
-              
- 
-             }
-     </style>
+    
   </head>
   <body>
     {% block body %}

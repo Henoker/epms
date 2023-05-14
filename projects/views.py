@@ -391,6 +391,17 @@ def viewPDFInvoice(request, slug):
     context['invoiceCurrency'] = invoiceCurrency
 
     return render(request, 'invoice/invoice-view.html', context)
+    # # Open the view in a new tab
+    # response = HttpResponse(render(request, 'invoice/invoice-view.html', context))
+    # response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+    # response['Content-Type'] = 'application/pdf'
+    # response['X-Content-Type-Options'] = 'nosniff'
+    # response['Cache-Control'] = 'private, no-cache, no-store, must-revalidate'
+    # response['Expires'] = '-1'
+    # response['Pragma'] = 'no-cache'
+    # response['Content-Security-Policy'] = "frame-ancestors 'none'"
+
+    # return response
 
 
 def viewDocumentInvoice(request, slug):
@@ -424,10 +435,29 @@ def viewDocumentInvoice(request, slug):
     html = HTML(string=html_string)
     result = html.write_pdf()
 
+    # # http response
+    # response = HttpResponse(content_type='application/pdf;')
+    # response['Content-Disposition'] = 'inline; filename=problem_list.pdf'
+    # response['Content-Transfer-Encoding'] = 'binary'
+    # with tempfile.NamedTemporaryFile(delete=True) as output:
+    #     output.write(result)
+    #     output.flush()
+    #     output = open(output.name, 'rb')
+    #     response.write(output.read())
+
+    # return response
     # http response
     response = HttpResponse(content_type='application/pdf;')
-    response['Content-Disposition'] = 'inline; filename=problem_list.pdf'
+    response['Content-Disposition'] = 'inline; filename=invoice.pdf'
     response['Content-Transfer-Encoding'] = 'binary'
+    response['Content-Security-Policy'] = "frame-ancestors 'none'"
+    response['Cache-Control'] = 'private, no-cache, no-store, must-revalidate'
+    response['Expires'] = '-1'
+    response['Pragma'] = 'no-cache'
+
+    # Set the headers to open the view in a new tab
+    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+
     with tempfile.NamedTemporaryFile(delete=True) as output:
         output.write(result)
         output.flush()
@@ -435,6 +465,14 @@ def viewDocumentInvoice(request, slug):
         response.write(output.read())
 
     return response
+
+
+
+
+
+
+
+
     
 
 

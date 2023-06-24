@@ -5,6 +5,8 @@ from uuid import uuid4
 from .country_names import COUNTRY_CHOICES
 from .languages import LANGUAGE_CHOICES
 from accounts.models import CustomUser
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 # from django.db.models.signals import post_save
 # from django.dispatch import receiver
 
@@ -74,7 +76,7 @@ class Project(models.Model):
     project_manager = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="project", default = CustomUser)
     status = models.CharField(choices=STATUS, default='In Preparation', max_length=100)
     budgetedamount = models.PositiveIntegerField()
-    # due_date = models.DateField(null=True, blank=True)
+    due_date = models.DateField(null=True, blank=True)
 
 
     #RELATED fields
@@ -103,15 +105,14 @@ class Project(models.Model):
 
         super(Project, self).save(*args, **kwargs)
 
-    # def update_status(self):
-    #     if self.due_date and self.due_date < timezone.now().date():
-    #         self.status = 'Overdue'
-    #         self.save()
-    
-    # @property
-    # def project_due_date(self):
-    #     return self.due_date.strftime('%Y-%m-%d') if self.due_date else None
+    def check_overdue_status(self):
+        if self.due_date is not None and self.due_date < timezone.now().date():
+            self.status = 'Overdue'
 
+    @receiver(pre_save, sender='projects.Project')
+    def update_project_status(sender, instance, **kwargs):
+        if instance.due_date is not None and instance.due_date < timezone.now().date():
+            instance.status = 'Overdue'
 
 class Invoice(models.Model):
     TERMS = [
@@ -248,7 +249,7 @@ class Vendor(models.Model):
     phoneNumber = models.CharField(null=True, blank=True, max_length=100)
     emailAddress = models.CharField(null=True, blank=True, max_length=100)
     taxNumber = models.CharField(null=True, blank=True, max_length=100)
-    mother_language = models.CharField(blank=True, choices=LANGUAGE_CHOICES, max_length=30)
+    mother_language = models.CharField(blank=True, choices=LANGUAGE_CHOICES, max_length=300)
     language_skills = models.CharField(blank=True, null=True, max_length=300)
     lingustic_level = models.CharField(blank=True, choices=LINGUISTIC_LEVEL, max_length=100)
     education_level = models.CharField(blank=True, choices=EDUCATION_LEVEL, max_length=100)

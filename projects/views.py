@@ -15,12 +15,13 @@ from django.http import HttpResponse
 
 from django.template.loader import render_to_string
 import os
-
+from django.utils import timezone
 from django.template.loader import get_template
 import weasyprint
 from weasyprint import HTML, CSS
 import tempfile
 from datetime import timedelta, datetime
+
 
 
 # #Anonymous required
@@ -63,9 +64,11 @@ def dashboard(request):
     total_project_value = total_order['total_value']
     total_budget = Project.objects.aggregate(total_cost=Sum(F('budgetedamount')))
     total_budgeted_cost = total_budget['total_cost']
-    last_seven_days_projects = Project.objects.filter(date_created__gte=datetime.now()-timedelta(days=7))
-    order_due_today = Order.objects.filter(clientDeadline=datetime.now()+timedelta(days=0))
-    invoice_due_today = Invoice.objects.filter(dueDate=datetime.now()+timedelta(days=0))
+    last_seven_days_projects = Project.objects.filter(date_created__gte=timezone.now() - timedelta(days=7))
+    order_due_today = Order.objects.filter(clientDeadline=timezone.now()+timedelta(days=0))
+    overdue_orders = Project.objects.filter(due_date__lt=timezone.now())
+    overdue_project_orders = Project.objects.filter(status='Overdue')
+    invoice_due_today = Invoice.objects.filter(dueDate=timezone.now()+timedelta(days=0))
     rated_jobs = Rating.objects.all().count()
     green_rated = Rating.objects.filter(rate='3').count()
     yellow_rated = Rating.objects.filter(rate='2').count()
@@ -132,6 +135,8 @@ def dashboard(request):
     context['b2'] = b2
     context['c1'] = c1
     context['c2'] = c2
+    context['overdue_orders'] = overdue_orders
+    context['overdue_project_orders'] = overdue_project_orders
 
 
     return render(request, 'dashboard.html', context)

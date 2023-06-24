@@ -462,6 +462,24 @@
                             </div>  
                         </div>
                         {% endif %}
+                        {% if overdue_project_orders %}
+                        <div class=" col col-lg-2">
+                            <div class="p-3">
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Projects Overdue</h5>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        {% for project in  overdue_project_orders %}
+                                        <li class="list-group-item">{{project.projectName}}</li>
+                                       {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>  
+                        </div>
+                        {% else %}
+                        <p class="p-3">No overdue orders.</p>
+                        {% endif %}
                         {% if invoice_due_today|length > 0 %}
                         <div class=" col col-lg-2">
                             <div class="p-3">

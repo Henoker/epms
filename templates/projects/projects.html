@@ -30,6 +30,7 @@
       <thead>
         <tr>
           <th scope="col">Project Name</th>
+          <th scope="col">Deadline Date</th>
           <th scope="col">Project Manager</th>
           <th scope="col">Project Budget</th>
           <th scope="col">Status</th>
@@ -42,6 +43,7 @@
         {% for project in projects %}
       <tr>
         <td>{{project.projectName}}</td>
+        <td>{{project.due_date}}</td>
         <td>{{project.project_manager}}</td>
         <td>{{project.budgetedamount}}</td>
         {% if project.status == "In Preparation" %}

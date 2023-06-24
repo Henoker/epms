@@ -26,11 +26,12 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         fields = [
-            'projectName', 'description', 'status', 'budgetedamount', 'project_manager', 'client'
+            'projectName', 'description', 'due_date','status', 'budgetedamount', 'project_manager', 'client'
             ] 
         widgets = {
             'description': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
                 'placeholder': 'Describe the project'}),
+            'due_date': DateInput(attrs={"class": "form-control", "type": "date"}),
            
         }
 

@@ -106,12 +106,20 @@ class Project(models.Model):
         super(Project, self).save(*args, **kwargs)
 
     def check_overdue_status(self):
-        if self.due_date is not None and self.due_date < timezone.now().date():
+        if (
+            self.due_date is not None
+            and self.due_date < timezone.now().date()
+            and self.status not in ['Delivered', 'Complained', 'Approved']
+        ):
             self.status = 'Overdue'
 
     @receiver(pre_save, sender='projects.Project')
     def update_project_status(sender, instance, **kwargs):
-        if instance.due_date is not None and instance.due_date < timezone.now().date():
+        if (
+            instance.due_date is not None
+            and instance.due_date < timezone.now().date()
+            and instance.status not in ['Delivered', 'Complained', 'Approved']
+        ):
             instance.status = 'Overdue'
 
 class Invoice(models.Model):
@@ -415,6 +423,25 @@ class Job(models.Model):
 
     def total_price(self):
         return self.quantity * self.rate
+    
+    def check_overdue_status(self):
+       if (
+            self.deadlineDate is not None
+            and self.deadlineDate < timezone.now().date()
+            and self.status not in ['Delivered', 'Complained', 'Approved']
+        ):
+            self.status = 'Overdue'
+
+    @receiver(pre_save, sender='projects.Job')
+    def update_project_status(sender, instance, **kwargs):
+        if (
+            instance.deadlineDate is not None
+            and instance.deadlineDate < timezone.now().date()
+            and instance.status not in ['Delivered', 'Complained', 'Approved']
+        ):
+            instance.status = 'Overdue'
+
+
        
 
 

@@ -58,7 +58,7 @@
         <td>
           <a href="{% url 'update-request' request.slug %}"><button class="btn btn-success"> EDIT </button></a>
         </td>
-         <td>
+         {% comment %} <td>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{request.slug}}">
                         DELETE
           </button> 
@@ -88,7 +88,7 @@
                         </div>
                       </div> 
 
-        </td> 
+        </td>  {% endcomment %}
      </tr>
         {% endfor %}
 

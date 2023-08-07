@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Client, Project, Order, Invoice, Job, PurchaseOrder, Rating, Settings
+from .models import Client, Project, Order, Invoice, Job, PurchaseOrder, Rating, Settings, Quotation, Request
 
 # Register your models here.
 class ClientAdmin(admin.ModelAdmin):
@@ -16,3 +16,5 @@ admin.site.register(Job)
 admin.site.register(PurchaseOrder)
 admin.site.register(Rating)
 admin.site.register(Settings)
+admin.site.register(Quotation)
+admin.site.register(Request)

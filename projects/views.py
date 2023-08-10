@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
+from django.urls import reverse
 from .forms import *
 from .models import *
 # from .functions import *
@@ -12,6 +13,7 @@ from random import randint
 from uuid import uuid4
 from django.db.models import Avg, Sum, F, Count
 from django.http import HttpResponse
+import openpyxl
 
 from django.template.loader import render_to_string
 import os
@@ -219,8 +221,31 @@ def projects(request):
     if request.method == 'GET':
         form = ProjectForm()
         context['form'] = form
+        context['export_link'] = reverse('export_projects_to_excel')
         return render(request, 'projects/projects.html', context)
     return render(request, 'projects/projects.html', context)
+
+@login_required
+def export_projects_to_excel(request):
+    # Fetch your tabular data (projects) from the database
+    projects = Project.objects.all().order_by('-date_created')
+    
+    # Create a new Excel workbook and add data
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = 'Projects'
+    sheet.append(['Project Name', 'Description', 'Project Manager', 'Budgeted Amount'])
+    for project in projects:
+        sheet.append([project.projectName, project.description, project.project_manager.username, project.budgetedamount])
+    
+    # Create a response object with the appropriate content type for Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=projects.xlsx'
+    
+    # Save the workbook to the response
+    workbook.save(response)
+    
+    return response
 
 @login_required
 def addProject(request):

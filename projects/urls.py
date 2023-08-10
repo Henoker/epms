@@ -67,5 +67,6 @@ urlpatterns = [
     # Rating Path
     path('addRating',views.addRating, name='add-rating'),
     path('export-projects-to-excel/', views.export_projects_to_excel, name='export_projects_to_excel'),
+    path('export-invoices-to-excel/', views.export_invoices_to_excel, name='export_invoices_to_excel'),
 
 ]

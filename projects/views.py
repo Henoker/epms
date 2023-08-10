@@ -153,8 +153,10 @@ def invoices(request):
     for invoice in invoices:
         invoice.total_amount = sum(order.total_price() for order in invoice.order_set.all())
     context['invoices'] = invoices
+    context['export_link'] = reverse('export_invoices_to_excel')
 
     return render(request, 'invoice/invoices.html', context)
+
 @login_required
 def export_invoices_to_excel(request):
     # Fetch your tabular data (projects) from the database
@@ -164,13 +166,16 @@ def export_invoices_to_excel(request):
     workbook = openpyxl.Workbook()
     sheet = workbook.active
     sheet.title = 'Invoices'
-    sheet.append(['Project Name', 'Description', 'Project Manager', 'Budgeted Amount'])
-    for project in projects:
-        sheet.append([project.projectName, project.description, project.project_manager.username, project.budgetedamount])
+    sheet.append(['Invoice Number', 'Title', 'Total Amount', 'Client Name', 'Invoice Status'])
+    for invoice in invoices:
+        # Calculate the total amount for each invoice
+        total_amount = sum(order.total_price() for order in invoice.order_set.all())
+        # Append invoice details including the calculated total amount
+        sheet.append([invoice.number, invoice.title, total_amount, invoice.client.clientName, invoice.status])
     
     # Create a response object with the appropriate content type for Excel
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=projects.xlsx'
+    response['Content-Disposition'] = 'attachment; filename=invoices.xlsx'
     
     # Save the workbook to the response
     workbook.save(response)

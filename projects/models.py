@@ -1,5 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 from django.utils import timezone
 from uuid import uuid4
 from .country_names import COUNTRY_CHOICES
@@ -153,6 +154,9 @@ class Invoice(models.Model):
     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
     date_created = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(blank=True, null=True)
+    
+    def total_amount(self):
+        return sum(order.total_price() for order in self.orders.all())
 
 
     def __str__(self):

@@ -33,6 +33,7 @@
           <th>Client name</th>
           <th>Phone Number</th>
           <th>Due Date</th>
+          <th>Total Amount</th>
           <th>Invoice Status</th>
           <th>Delete</th>
           <th>View</th>
@@ -47,6 +48,17 @@
         <td>{{invoice.client.clientName}}</td>
         <td>{{invoice.client.phoneNumber}}</td>
         <td>{{invoice.dueDate}}</td>
+          {% comment %} {% with total_amount=0 %}
+                        {% for order in invoice.order_set.all %}
+                            {% with order_amount=order.total_price %}
+                                {% with total_amount=total_amount|add:order_amount %}
+                                {{ order.quantity }} * {{ order.price }} = {{ order_amount }}<br>
+                                {% endwith %}
+                            {% endwith %}
+                        {% endfor %}
+                        {{ total_amount }}
+          {% endwith %} {% endcomment %}
+        <td>{{ invoice.total_amount }}</td>
         <td>{{invoice.status}}</td>
         <td>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{invoice.slug}}">

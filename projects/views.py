@@ -226,6 +226,7 @@ def projects(request):
 def addProject(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
+        client_form = ClientSelectForm(request.POST, initial_client=None)
         context = {'form': form}
         if form.is_valid():
             form.save()
@@ -238,13 +239,20 @@ def addProject(request):
             messages.success(request, 'New Project Added')
             # return render(request, 'projects/addProject.html', context)
             return redirect('projects')
+        elif client_form.is_valid() and 'client' in request.POST:
+            client_form.save()
+            messages.success(request, "Client added to invoice succesfully")
+            return redirect('projects')
         else:
             messages.error(request, 'Problem processing your request')
             return render(request, 'projects/addProject.html', context)
     else:
         form = ProjectForm()
+        client_form = ClientSelectForm(initial_client=None)
+
         context = {
             'form': form,
+            'client_form': client_form,
         }
         return render(request,'projects/addProject.html', context)
     
@@ -888,21 +896,57 @@ def updateClient(request, slug):
         
     
 
-@login_required  
+# @login_required  
+# def updateProject(request, slug):
+#     context = {}
+#     project = Project.objects.get(slug=slug)
+#     context['project'] = project
+#     form = ProjectForm(request.POST or None, instance=project)
+#     client_form = ClientSelectForm(request.POST or None, initial_client=project.client, instance=project)
+   
+#     if form.is_valid():
+#         form.save()
+#         messages.success(request, 'Project updated')
+#         return redirect('projects')
+#     elif client_form.is_valid() and 'client' in request.POST:
+#             client_form.save()
+#             messages.success(request, "Client updated for the project")
+#             return redirect('projects')
+#     else:
+#         messages.error(request, 'Problem processing your request')
+
+#     return render(request, 'projects/updateProject.html', context)
+
+@login_required
 def updateProject(request, slug):
     context = {}
     project = Project.objects.get(slug=slug)
-    context['project'] = project
-    form = ProjectForm(request.POST or None, instance=project)
-    context['form'] = form
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Project updated')
-        return redirect('projects')
-    else:
-        messages.error(request, 'Problem processing your request')
-    return render(request, 'projects/updateProject.html', context)
+    
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, instance=project)
+        client_form = ClientSelectForm(request.POST, initial_client=project.client)
         
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Project updated')
+            return redirect('projects')
+        elif client_form.is_valid() and 'client' in request.POST:
+            client_form.save()
+            messages.success(request, "Client updated for the project")
+            return redirect('projects')
+        else:
+            messages.error(request, 'Problem processing your request')
+    else:
+        form = ProjectForm(instance=project)
+        client_form = ClientSelectForm(initial_client=project.client)
+    
+    context.update({
+        'form': form,
+        'client_form': client_form,
+        'project': project,
+    })
+    
+    return render(request, 'projects/updateProject.html', context)
     
 @login_required
 def updateOrder(request, slug):

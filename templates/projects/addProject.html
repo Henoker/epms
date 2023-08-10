@@ -22,7 +22,11 @@
     {% csrf_token %}
   <div class="mx-auto col-sm-6 col-8  pt-3 mb-3 row justify-content-center">
    {{ form|crispy }}
-  </div>    
+  </div> 
+  <div class="mx-auto col-sm-6 col-8 pt-3 mb-3 row justify-content-center">
+    <!-- Render the client selection form within this div -->
+    {{ client_form|crispy }}
+</div>   
     <div class="mx-auto col-sm-3 col-5 pb-3 pt-1 mb-6 row justify-content-center">
       <button type="submit" class="btn btn-primary">Create Project</button>
     </div>

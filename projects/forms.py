@@ -26,7 +26,7 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         fields = [
-            'projectName', 'description', 'due_date','status', 'budgetedamount', 'project_manager', 'client'
+            'projectName', 'description', 'due_date','status', 'budgetedamount', 'project_manager'
             ] 
         widgets = {
             'description': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',

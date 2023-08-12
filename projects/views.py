@@ -364,9 +364,9 @@ def export_pos_to_excel(request):
     sheet.append(['PO Number', 'Title', 'Total Amount', 'Vendor Name', 'PO Status'])
     for pos in purchase_orders:
         # Calculate the total amount for each invoice
-        total_amount = sum(job.total_price() for job in purchase_orders.job_set.all())
+        total_amount = sum(job.total_price() for job in pos.job_set.all())
         # Append invoice details including the calculated total amount
-        sheet.append([pos.number, pos.title, total_amount, pos.client.clientName, pos.status])
+        sheet.append([pos.number, pos.title, total_amount, pos.vendor.vendorName, pos.status])
     
     # Create a response object with the appropriate content type for Excel
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

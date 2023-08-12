@@ -335,7 +335,7 @@ class PurchaseOrder(models.Model):
         return reverse('invoice-detail', kwargs={'slug': self.slug})
     
     def total_price(self):
-        return sum(job.rate() for job in self.jobs.all())
+        return sum(job.rate() for job in self.job.all())
 
 
     def save(self, *args, **kwargs):

@@ -333,6 +333,9 @@ class PurchaseOrder(models.Model):
 
     def get_absolute_url(self):
         return reverse('invoice-detail', kwargs={'slug': self.slug})
+    
+    def total_price(self):
+        return sum(job.rate() for job in self.jobs.all())
 
 
     def save(self, *args, **kwargs):

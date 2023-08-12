@@ -343,15 +343,39 @@ def vendors(request):
 def purchaseOrders(request):
     context = {}
     purchase_orders = PurchaseOrder.objects.all().order_by('-date_created')
+    for pos in purchase_orders:
+        pos.total_amount = sum(job.total_price() for job in pos.job_set.all())
+    
     context['purchase_orders'] = purchase_orders
+    context['export_link'] = reverse('export_pos_to_excel')
 
     return render(request, 'invoice/purchase-orders.html', context)
 
-# @login_required
-# def logout(request):
-#     auth.logout(request)
-#     return redirect('login')
 
+@login_required
+def export_pos_to_excel(request):
+    # Fetch your tabular data (projects) from the database
+    purchase_orders = PurchaseOrder.objects.all().order_by('-date_created')
+    
+    # Create a new Excel workbook and add data
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = 'purchaseOrders'
+    sheet.append(['PO Number', 'Title', 'Total Amount', 'Vendor Name', 'PO Status'])
+    for pos in purchase_orders:
+        # Calculate the total amount for each invoice
+        total_amount = sum(job.total_price() for job in purchase_orders.job_set.all())
+        # Append invoice details including the calculated total amount
+        sheet.append([pos.number, pos.title, total_amount, pos.client.clientName, pos.status])
+    
+    # Create a response object with the appropriate content type for Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=pos.xlsx'
+    
+    # Save the workbook to the response
+    workbook.save(response)
+    
+    return response
 
 # ###--------------------------- Create Invoice Views Start here --------------------------------------------- ###
 

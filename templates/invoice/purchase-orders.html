@@ -17,6 +17,7 @@
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
         <a href="{% url 'create-po' %}"><button type="button" class="btn btn-primary">Add New PO</button></a>
+        <a href="{% url 'export_pos_to_excel' %}" class=" ml-2 btn btn-secondary">Export to Excel</a>
       </div> 
     </div>
   </div>
@@ -33,6 +34,7 @@
           <th>Vendor name</th>
           <th>Phone Number</th>
           <th>Due Date</th>
+          <th>Total Amount</th>
           <th>PO Status</th>
           <th>Delete</th>
           <th>View</th>
@@ -47,6 +49,7 @@
         <td>{{po.vendor.vendorName}}</td>
         <td>{{po.vendor.phoneNumber}}</td>
         <td>{{po.dueDate}}</td>
+        <td>{{ po.total_amount| floatformat:"2" }}</td>
         <td>{{po.status}}</td>
         <td>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{po.slug}}">

@@ -429,6 +429,8 @@ class Job(models.Model):
 
 
     def total_price(self):
+        if self.quantity is None or self.rate is None:
+            return 0  # Return a default value, such as 0, when either quantity or rate is None
         return self.quantity * self.rate
     
     def check_overdue_status(self):

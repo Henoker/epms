@@ -364,7 +364,7 @@ def export_pos_to_excel(request):
     sheet.append(['PO Number', 'Title', 'Total Amount', 'Vendor Name', 'PO Status'])
     for pos in purchase_orders:
         # Calculate the total amount for each invoice
-        total_amount = sum(job.total_price() for job in pos.job_set.all())
+        total_amount = sum(job.total_price() if job is not None else 0 for job in pos.job_set.all())
         # Append invoice details including the calculated total amount
         sheet.append([pos.number, pos.title, total_amount, pos.vendor.vendorName, pos.status])
     

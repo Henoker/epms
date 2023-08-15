@@ -616,5 +616,7 @@ class Request(models.Model):
 
 
     def total_price(self):
+        if self.quantity is None or self.price is None:
+            return 0  # Return a default value, such as 0, when either quantity or rate is None
         return self.quantity * self.price
        

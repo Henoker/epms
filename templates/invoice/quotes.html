@@ -35,6 +35,7 @@
           <th>Client name</th>
           <th>Phone Number</th>
           <th>Expiry Date</th>
+          <th>Total Amount </th>
           <th>Quote Status</th>
           <th>Delete</th>
           <th>View</th> 
@@ -49,6 +50,7 @@
         <td>{{quote.client.clientName}}</td>
         <td>{{quote.client.phoneNumber}}</td>
         <td>{{quote.dueDate}}</td>
+        <td>{{quote.total_amount| floatformat:"2" }}</td>
         <td>{{quote.status}}</td>
        <td>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{quote.slug}}">

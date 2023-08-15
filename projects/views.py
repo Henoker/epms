@@ -185,6 +185,8 @@ def export_invoices_to_excel(request):
 def quotes(request):
     context = {}
     quotes = Quotation.objects.all().order_by('-date_created')
+    for quote in quotes:
+        quote.total_amount = sum(request.total_price() for request in quote.request_set.all())
     context['quotes'] = quotes
 
     return render(request, 'invoice/quotes.html', context)

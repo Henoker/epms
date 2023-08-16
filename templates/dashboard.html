@@ -431,9 +431,9 @@
                 </div>
             </div> 
                 {% comment %} <div class="col-lg-6 mb-4"> {% endcomment %}
+
             <div class="row">
                 <div class="col-xl-8 col-lg-7">
-                    
                     <!-- Illustrations -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -453,8 +453,33 @@
                                 </div>
                             </div>  
                         </div>
-                        {% if order_due_today|length > 0 %}
-                        <div class=" col col-lg-2">
+                    </div>
+                </div>
+                    <!-- Approach -->
+                <div class="col-xl-4 col-lg-5">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Income and Cost Analysis</h6>
+                        </div>
+                        <div class="card-body mr-8">
+                            <div class="p-10">
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Projets revenue and Cost </h5>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item text-primary font-weight-bold">Project Income : {{total_project_value}}</li>
+                                        <li class="list-group-item text-danger font-weight-bold">Project Budget: {{total_budgeted_cost}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+            <div class="row"> 
+                {% if order_due_today|length > 0 %}
+                        <div class=" col-xl-8 col-lg-7">
                             <div class="p-3">
                                 <div class="card" style="width: 18rem;">
                                     <div class="card-header">
@@ -488,7 +513,7 @@
                         <p class="p-3">No overdue orders.</p>
                         {% endif %}
                         {% if invoice_due_today|length > 0 %}
-                        <div class=" col col-lg-2">
+                        <div class=" col-xl-4 col-lg-5">
                             <div class="p-3">
                                 <div class="card" style="width: 18rem;">
                                     <div class="card-header">
@@ -503,31 +528,7 @@
                             </div>  
                         </div>
                         {% endif %}
-
-                    </div>
-                </div>
-                    <!-- Approach -->
-                <div class="col-xl-4 col-lg-5">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Income and Cost Analysis</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="p-3">
-                                <div class="card" style="width: 18rem;">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Projets revenue and Cost </h5>
-                                    </div>
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item text-primary font-weight-bold">Project Income : {{total_project_value}}</li>
-                                        <li class="list-group-item text-danger font-weight-bold">Project Budget: {{total_budgeted_cost}}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>   
+            </div>
            
 
         </div>

@@ -147,11 +147,23 @@ def dashboard(request):
 
 
 @login_required
+# def invoices(request):
+#     context = {}
+#     invoices = Invoice.objects.all().order_by('-date_created')
+#     for invoice in invoices:
+#         invoice.total_amount = sum(order.total_price() for order in invoice.order_set.all())
+#     context['invoices'] = invoices
+#     context['export_link'] = reverse('export_invoices_to_excel')
+
+#     return render(request, 'invoice/invoices.html', context)
 def invoices(request):
     context = {}
     invoices = Invoice.objects.all().order_by('-date_created')
+
     for invoice in invoices:
-        invoice.total_amount = sum(order.total_price() for order in invoice.order_set.all())
+        total_amount = invoice.order_set.aggregate(Sum('total_price'))['total_price__sum']
+        invoice.total_amount = total_amount if total_amount is not None else 0
+
     context['invoices'] = invoices
     context['export_link'] = reverse('export_invoices_to_excel')
 

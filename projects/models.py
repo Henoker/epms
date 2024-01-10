@@ -231,6 +231,10 @@ class Order(models.Model):
     def total_price(self):
         return self.quantity * self.price
         print(Order.objects.all()[0].total_price)
+    def total_price(self):
+        if self.quantity is None or self.price is None:
+            return None  # or any default value or an error message, depending on your requirements
+        return self.quantity * self.price
 
     # @receiver(post_save, sender=Order)
     # def update_project_status(sender, instance, **kwargs):

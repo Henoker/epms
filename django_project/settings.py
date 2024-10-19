@@ -15,10 +15,8 @@ from pathlib import Path
 from pathlib import Path
 from environs import Env
 from django.contrib.messages import constants as messages
-env = Env() # new
+env = Env()  # new
 env.read_env()
-
-
 
 
 MESSAGES_TAGS = {
@@ -58,13 +56,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     # Third Party apps
-    'allauth', 
+    'allauth',
     'allauth.account',
     'crispy_forms',
     'crispy_bootstrap5',
     'debug_toolbar',
-   
-  
+
+
     # Local
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
@@ -105,13 +103,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
+# settings.py
+ACCOUNT_FORMS = {
+    'reset_password': 'accounts.forms.MyCustomResetPasswordForm',
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
     "default": env.dj_db_url("DATABASE_URL",
-    default="postgres://postgres@db/postgres")
+                             default="postgres://postgres@db/postgres")
 }
 
 AUTH_USER_MODEL = "accounts.CustomUser"
@@ -119,15 +121,15 @@ LOGIN_REDIRECT_URL = "/projects/dashboard"
 ACCOUNT_LOGOUT_REDIRECT = "/pages/home"
 ACCOUNT_SESSION_REMEMBER = True
 SITE_ID = 1
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False 
-ACCOUNT_USERNAME_REQUIRED = False 
-ACCOUNT_AUTHENTICATION_METHOD = "email" 
-ACCOUNT_EMAIL_REQUIRED = True 
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 DEFAULT_FROM_EMAIL = "admin@ethiostarlocalization.com"
 AUTHENTICATION_BACKENDS = (
-"django.contrib.auth.backends.ModelBackend",
-"allauth.account.auth_backends.AuthenticationBackend", # new
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",  # new
 )
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env('EMAIL_HOST')
@@ -178,7 +180,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR/"uploads/")
 
 MEDIA_URL = '/uploads/'
 
-CSS_LOCATION = os.path.join(BASE_DIR,'static')
+CSS_LOCATION = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -198,9 +200,10 @@ INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
 
 SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 
-SECURE_HSTS_SECONDS = env.int("DJANGO_SECURE_HSTS_SECONDS", default=2592000) # 30 days
+SECURE_HSTS_SECONDS = env.int(
+    "DJANGO_SECURE_HSTS_SECONDS", default=2592000)  # 30 days
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS",
-default=True)
+                                          default=True)
 SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
 
 SESSION_COOKIE_SECURE = env.bool("DJANGO_SESSION_COOKIE_SECURE", default=True)

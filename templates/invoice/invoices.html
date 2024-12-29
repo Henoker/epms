@@ -17,7 +17,7 @@
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
         <a href="{% url 'create-invoice' %}"><button type="button" class="btn btn-primary">Add New Invoice</button></a>
-        <a href="{% url 'export_invoices_to_excel' %}" class=" ml-2 btn btn-secondary">Export to Excel</a>
+         <a href="{% url 'export_invoices_to_excel' %}" class=" ml-2 btn btn-secondary">Export to Excel</a>
       </div>
     </div>
   </div>
@@ -32,11 +32,10 @@
           <th>#</th>
           <th>Title</th>
           <th>Client name</th>
-          <th>Phone Number</th>
+          <th>Date Created</th>
           <th>Due Date</th>
           <th>Total Amount</th>
           <th>Invoice Status</th>
-          <th>Delete</th>
           <th>View</th>
         </tr>
       </thead>
@@ -47,25 +46,15 @@
         <td>{{invoice.number}}</td>
         <td>{{invoice.title}}</td>
         <td>{{invoice.client.clientName}}</td>
-        <td>{{invoice.client.phoneNumber}}</td>
+        <td>{{invoice.date_created}}</td>
         <td>{{invoice.dueDate}}</td>
-          {% comment %} {% with total_amount=0 %}
-                        {% for order in invoice.order_set.all %}
-                            {% with order_amount=order.total_price %}
-                                {% with total_amount=total_amount|add:order_amount %}
-                                {{ order.quantity }} * {{ order.price }} = {{ order_amount }}<br>
-                                {% endwith %}
-                            {% endwith %}
-                        {% endfor %}
-                        {{ total_amount }}
-          {% endwith %} {% endcomment %}
-        <td>{{ invoice.total_amount| floatformat:"2" }}</td>
+        <td>{{ invoice.total_amount|floatformat:"2" }}</td>
         <td>{{invoice.status}}</td>
-        <td>
+        <!--<td>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{invoice.slug}}">
                         DELETE
           </button>
-           <!-- Modal - Delete Invoice -->
+           
                       <div class="modal" id="delete{{invoice.slug}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
@@ -91,7 +80,7 @@
                         </div>
                       </div>
 
-        </td>
+        </td>-->
         <td>
           <a href="{% url 'create-build-invoice' invoice.slug %}"><button class="btn btn-primary"> VIEW </button></a>
         </td>

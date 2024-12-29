@@ -39,10 +39,8 @@
             <th>Status</th>
             <th>Quantity</th>
             <th>Rate</th>
-            <th>subtotal</th>
+            <th>Total</th>
             <th>Update</th>
-            <th>Delete</th>
-
         </tr>
       </thead>
       <tbody>
@@ -70,19 +68,18 @@
                 {% elif job.status == "Approved" %}
                   <td><span class="badge text-bg-success">Approved</span></td>
                 {% endif %}
-                  <td>{{job.quantity}}</td>
-                  <td>{{job.currency}} {{job.rate}}</td>
+                  <td>{{job.quantity|floatformat:"0"}}</td>
+                  <td>{{job.currency}} {{job.rate|floatformat:"2"}}</td>
                   <td>{{job.total_price|floatformat:"0"}}</td>
         {% if user == job.project_manager %}
         <td>
           <a href="{% url 'update-job' job.slug %}"><button class="btn btn-success"> EDIT </button></a>
         </td>
-         <td>
+      <!--   <td>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{job.slug}}">
                         DELETE
           </button> 
-           <!-- Modal - Delete Student -->
-                      <div class="modal" id="delete{{job.slug}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                <div class="modal" id="delete{{job.slug}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -106,13 +103,12 @@
                           </div>
                         </div>
                       </div> 
-        </td> 
+        </td> --> 
      </tr>
      {% else %}
      <td></td>
-     <td></td>
      {% endif %}
-        {% endfor %}
+     {% endfor %}
 
       </tbody>
     </table>

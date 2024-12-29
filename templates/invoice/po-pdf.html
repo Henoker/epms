@@ -220,18 +220,18 @@ footer p {
                 <div class="col-12">
                     <div class="row bb pb-3">
                         <div class="col-6" id="from">
-                            <p>Client</p>
+                            <p>Client,</p>
                             <h3>{{p_settings.clientName}}</h3>
                             <p class="address"> {{p_settings.addressLine1}}, {{p_settings.country}}, <br>P.O. Box: {{p_settings.postalCode}}, <br> {{p_settings.emailAddress}}, </p>
-                            <div class="txn mt-2">{{p_settings.phoneNumber}}</div>
+                            <div class="address">Tel.:{{p_settings.phoneNumber}}</div>
                         </div>
                         <div class="col-6">
-                            <p>Vendor</p>
+                            <p>Vendor,</p>
                             <h3>{{purchaseOrder.vendor.vendorName}}</h3>
 
 
                             <p class="address"> {{purchaseOrder.vendor.addressLine1}}, {{purchaseOrder.vendor.country}}, <br>Postal code: {{invoice.client.postalCode}}, <br> {{invoice.client.emailAddress}}  </p>
-                            <div class="txn mt-2">{{purchaseOrder.vendor.phoneNumber}}</div>
+                            <div class="address">Tel.: {{purchaseOrder.vendor.phoneNumber}}</div>
                         </div>
                     </div>
                     <div class="row extra-info pt-3">

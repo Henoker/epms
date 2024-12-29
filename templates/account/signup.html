@@ -90,7 +90,8 @@
                                 </div>
                             </div>
                         </div>
-                    </form> {% endcomment %}
+                    </form> 
+                      
                     <form class="form-horizontal m-t-20" method="post">
                         {% csrf_token %}
                         {{ form|crispy }}
@@ -98,6 +99,7 @@
                             <button class="btn btn-block btn-lg btn-info" type="submit">Sign Up</button>
                         </div>
                         </form>
+                        {% endcomment %}
                 </div>
             </div>
         </div>

@@ -33,7 +33,6 @@
           <th scope="col">Phone Number</th>
           <th scope="col">Address Line</th>
           <th scope="col">Country</th>
-          <th scope="col">Delete</th>
           <th scope="col">View</th>
         </tr>
       </thead>
@@ -46,11 +45,10 @@
         <td>{{client.phoneNumber}}</td>
         <td>{{client.addressLine1}}</td>
         <td>{{client.country}}</td>
-        <td>
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{client.slug}}">
+         <!--  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{client.slug}}">
                         DELETE
           </button>
-           <!-- Modal - Delete Student -->
+        
                       <div class="modal" id="delete{{client.slug}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
@@ -76,11 +74,12 @@
                         </div>
                       </div>
 
-        </td>
+        </td> -->
         <td>
           <a href="{% url 'update-client' client.slug %}"><button class="btn btn-primary" > EDIT </button></a>
         </td>
       </tr>
+        
         {% endfor %}
 
       </tbody>

@@ -17,8 +17,7 @@
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
         {% comment %} <button href="#addProjectModal" type="button" class="btn btn-primary" data-bs-toggle="modal">Add New Project</button> {% endcomment %}
-        <a href="{% url 'add-project' %}"> <button type="button" class="btn btn-primary" > Add New Project </button></a>
-        <a href="{% url 'export_projects_to_excel' %}" class=" ml-2 btn btn-secondary">Export to Excel</a>
+        <a href="{% url 'add-project' %}"><button type="button" class="btn btn-primary" > Add New Project </button></a>
       </div>
     </div>
   </div>
@@ -31,11 +30,11 @@
       <thead>
         <tr>
           <th scope="col">Project Name</th>
+          <th scope="col">Date Created</th>
           <th scope="col">Deadline Date</th>
           <th scope="col">Project Manager</th>
           <th scope="col">Project Budget</th>
           <th scope="col">Status</th>
-          <th scope="col">Delete</th>
           <th scope="col">View</th>
         </tr>
       </thead>
@@ -44,28 +43,29 @@
         {% for project in projects %}
       <tr>
         <td>{{project.projectName}}</td>
+         <td>{{project.date_created}}</td>
         <td>{{project.due_date}}</td>
         <td>{{project.project_manager}}</td>
         <td>{{project.budgetedamount}}</td>
         {% if project.status == "In Preparation" %}
-        <td><span class="badge text-bg-primary">In Preparation</span></td>
+        <td><span class="badge text-bg-dark">In Preparation</span></td>
         {% elif project.status == "In Progress" %}
-            <td><span class="badge text-bg-secondary">In Progress</span></td>
+            <td><span class="badge text-bg-warning">In Progress</span></td>
         {% elif project.status == "Overdue" %}
-            <td><span class="badge text-bg-warning">Overdue</span></td>
+            <td><span class="badge text-bg-secondary">Overdue</span></td>
         {% elif project.status == "Delivered" %}
-            <td><span class="badge text-bg-dark">Delivered</span></td>
+            <td><span class="badge text-bg-success">Delivered</span></td>
         {% elif project.status == "Complained" %}
             <td><span class="badge text-bg-danger">Complained</span></td>
         {% elif project.status == "Approved" %}
-            <td><span class="badge text-bg-success">Approved</span></td>
+            <td><span class="badge text-bg-primary">Approved</span></td>
         {% endif %}
         {% if user == project.project_manager %}
-        <td>
+  <!--      <td>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{project.slug}}">
                           DELETE
             </button>
-             <!-- Modal - Delete Student -->
+         
                         <div class="modal" id="delete{{project.slug}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -91,13 +91,12 @@
                           </div>
                         </div>
   
-          </td>
+          </td> -->
           <td>
             <a href="{% url 'update-project' project.slug %}"><button class="btn btn-primary" > EDIT </button></a>
           </td>
       </tr> 
         {% else %}
-        <td></td>
         <td></td>
         {% endif %}
         {% endfor %}

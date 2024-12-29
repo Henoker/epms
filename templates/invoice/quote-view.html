@@ -224,18 +224,18 @@ footer p {
                 <div class="col-12">
                     <div class="row bb pb-3">
                         <div class="col-6">
-                            <p>Vendor,</p>
+                            <p>Vendor</p>
                             <h3>{{p_settings.clientName}}</h3>
-                            <p class="address"> {{p_settings.addressLine1}}, {{p_settings.country}}, <br>P.O. Box: {{p_settings.postalCode}}, <br> {{p_settings.emailAddress}}, </p>
-                            <div class="txn mt-2">{{p_settings.phoneNumber}}</div>
+                            <p class="address"> {{p_settings.addressLine1}}, {{p_settings.country}}, <br>P.O. Box: {{p_settings.postalCode}}, <br> {{p_settings.emailAddress}}, <br> Tin No.:{{p_settings.taxNumber}} </p>
+                            <div class="address">Tel.: {{p_settings.phoneNumber}}</div>
                         </div>
                         <div class="col-6">
-                            <p>Client,</p>
+                            <p>Client</p>
                             <h3>{{quote.client.clientName}}</h3>
 
 
                             <p class="address"> {{quote.client.addressLine1}}, {{quote.client.country}}, <br>Postal code: {{invoice.client.postalCode}}, <br> {{invoice.client.emailAddress}}  </p>
-                            <div class="txn mt-2">{{quote.client.phoneNumber}}</div>
+                            <div class="address">Tel.: {{quote.client.phoneNumber}}</div>
                         </div>
                     </div>
                     <div class="row extra-info pt-3">
@@ -294,7 +294,7 @@ footer p {
                             <tfoot>
                                 <tr>
                                     <td>Total:</td>
-                                    <td>{{quoteCurrency}}{{quoteTotal}}</td>
+                                    <td>{{quoteCurrency}} {{quoteTotal}}</td>
                                 </tr>
                             </tfoot>
                         </table>

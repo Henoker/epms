@@ -31,13 +31,14 @@
         <tr>
 
           <th>Date</th>
-          <th>Description</th>
+          <th>Project Name</th>
           <th>Quantity</th>
           <th>Price</th>
-          <th>subtotal</th>
+          <th>Project Income</th>
+          <th>Project Budget</th>
           <th>Related Invoice</th>
           <th>Update</th>
-          <th>Delete</th>
+
 
         </tr>
       </thead>
@@ -46,20 +47,21 @@
         {% for order in orders %}
       <tr>
         <td>{{order.OrderDate}}</td>
-        <td>{{order.description}}</td>
-        <td>{{order.quantity}}</td>
-        <td>{{order.currency}} {{order.price}}</td>
-        <td>{{order.currency}} {{order.total_price|floatformat:"0"}}</td>
+        <td>{{order.project.projectName}}</td>
+        <td>{{order.quantity|floatformat:"0"}}</td>
+        <td>{{order.price|floatformat:"2"}}</td>
+        <td>{{order.total_price|floatformat:"0"}}</td>
+        <td>{{order.project.budgetedamount|floatformat:"2"}}
         <td>{{order.invoice.number}}</td>
         {% if user == order.project.project_manager %}
         <td>
           <a href="{% url 'update-order' order.slug %}"><button class="btn btn-success"> EDIT </button></a>
         </td>
-         <td>
+<!--         <td>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{order.slug}}">
                         DELETE
           </button> 
-           <!-- Modal - Delete Student -->
+  
                       <div class="modal" id="delete{{order.slug}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
@@ -85,11 +87,11 @@
                         </div>
                       </div> 
 
-        </td> 
+        </td> -->
+
      </tr>
         {% else %}
-         <td></td>
-         <td></td>
+        <td></td>
         {% endif %}
         {% endfor %}
 
@@ -97,7 +99,7 @@
     </table>
   </div>
   {% else %}
-  <div class="row">
+  <div class="row"
     <div class="col-lg-2">
 
     </div>

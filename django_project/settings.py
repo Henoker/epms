@@ -15,8 +15,10 @@ from pathlib import Path
 from pathlib import Path
 from environs import Env
 from django.contrib.messages import constants as messages
-env = Env()  # new
+env = Env() # new
 env.read_env()
+
+
 
 
 MESSAGES_TAGS = {
@@ -41,7 +43,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
 
-ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [ "localhost", "127.0.0.1", "206.81.24.98", "www.epmsplatform.org", "epmsplatform.org"]
 
 
 # Application definition
@@ -56,13 +58,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     # Third Party apps
-    'allauth',
+    'allauth', 
     'allauth.account',
     'crispy_forms',
     'crispy_bootstrap5',
-    'debug_toolbar',
-
-
+    'easyaudit',
+    
+   
+  
     # Local
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
@@ -72,15 +75,16 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'easyaudit.middleware.easyaudit.EasyAuditMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
+    'accounts.middleware.BlockInvalidPasswordResetMiddleware',  
 ]
 
 ROOT_URLCONF = 'django_project.urls'
@@ -103,40 +107,40 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
-# settings.py
-ACCOUNT_FORMS = {
-    'reset_password': 'accounts.forms.MyCustomResetPasswordForm',
-}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
     "default": env.dj_db_url("DATABASE_URL",
-                             default="postgres://postgres@db/postgres")
+    default="postgres://postgres@db/postgres")
 }
 
 AUTH_USER_MODEL = "accounts.CustomUser"
+ACCOUNT_FORMS = {
+    'reset_password': 'accounts.forms.MyCustomResetPasswordForm',
+}
 LOGIN_REDIRECT_URL = "/projects/dashboard"
 ACCOUNT_LOGOUT_REDIRECT = "/pages/home"
 ACCOUNT_SESSION_REMEMBER = True
 SITE_ID = 1
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False 
+ACCOUNT_USERNAME_REQUIRED = False 
+ACCOUNT_AUTHENTICATION_METHOD = "email" 
+ACCOUNT_EMAIL_REQUIRED = True 
 ACCOUNT_UNIQUE_EMAIL = True
 DEFAULT_FROM_EMAIL = "admin@ethiostarlocalization.com"
 AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",  # new
+"django.contrib.auth.backends.ModelBackend",
+"allauth.account.auth_backends.AuthenticationBackend", # new
 )
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = '2525'
+EMAIL_PORT = '587'
+DEFAULT_FROM_EMAIL = 'Epmsplatform Team <noreply@epmsplatform.org>'
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -174,13 +178,14 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+# STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_ROOT = os.path.join(BASE_DIR/"uploads/")
 
 MEDIA_URL = '/uploads/'
 
-CSS_LOCATION = os.path.join(BASE_DIR, 'static')
+CSS_LOCATION = os.path.join(BASE_DIR,'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -200,13 +205,40 @@ INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
 
 SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 
-SECURE_HSTS_SECONDS = env.int(
-    "DJANGO_SECURE_HSTS_SECONDS", default=2592000)  # 30 days
+SECURE_HSTS_SECONDS = env.int("DJANGO_SECURE_HSTS_SECONDS", default=2592000) # 30 days
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS",
-                                          default=True)
+default=True)
 SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
 
 SESSION_COOKIE_SECURE = env.bool("DJANGO_SESSION_COOKIE_SECURE", default=True)
 CSRF_COOKIE_SECURE = env.bool("DJANGO_CSRF_COOKIE_SECURE", default=True)
+CSRF_TRUSTED_ORIGINS = ['https://epmsplatform.org', 'https://www.epmsplatform.org']
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django_errors.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}

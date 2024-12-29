@@ -33,10 +33,10 @@
           <th>Title</th>
           <th>Vendor name</th>
           <th>Phone Number</th>
+          <th>Date Created</th>
           <th>Due Date</th>
           <th>Total Amount</th>
           <th>PO Status</th>
-          <th>Delete</th>
           <th>View</th>
         </tr>
       </thead>
@@ -48,14 +48,15 @@
         <td>{{po.title}}</td>
         <td>{{po.vendor.vendorName}}</td>
         <td>{{po.vendor.phoneNumber}}</td>
+        <td>{{po.date_created}}</td>
         <td>{{po.dueDate}}</td>
         <td>{{ po.total_amount| floatformat:"2" }}</td>
         <td>{{po.status}}</td>
-        <td>
+       <!--  <td>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{po.slug}}">
                         DELETE
           </button>
-           <!-- Modal - Delete Invoice -->
+         
                       <div class="modal" id="delete{{po.slug}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
@@ -81,7 +82,7 @@
                         </div>
                       </div>
 
-        </td>
+        </td>-->
         <td>
           <a href="{% url 'create-build-po' po.slug %}"><button class="btn btn-primary"> VIEW </button></a>
         </td>

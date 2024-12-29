@@ -222,8 +222,8 @@ footer p {
                         <div class="col-6" id="from">
                             <p>Vendor</p>
                             <h3>{{p_settings.clientName}}</h3>
-                            <p class="address"> {{p_settings.addressLine1}}, {{p_settings.country}}, <br>P.O. Box: {{p_settings.postalCode}}, <br> {{p_settings.emailAddress}}, </p>
-                            <div class="txn mt-2">{{p_settings.phoneNumber}}</div>
+                            <p class="address"> {{p_settings.addressLine1}}, {{p_settings.country}}, <br>P.O. Box: {{p_settings.postalCode}}, <br> {{p_settings.emailAddress}}, <br> Tin No: {{p_settings.taxNumber}} </p>
+                            <div class="address">Tel.: {{p_settings.phoneNumber}}</div>
                         </div>
                         <div class="col-6" id="to">
                             <p>Client</p>
@@ -231,7 +231,7 @@ footer p {
 
 
                             <p class="address"> {{invoice.client.addressLine1}}, {{invoice.client.country}}, <br>Postal code: {{invoice.client.postalCode}}, <br> {{invoice.client.emailAddress}}  </p>
-                            <div class="txn mt-2">{{invoice.client.phoneNumber}}</div>
+                            <div class="address">Tel.: {{invoice.client.phoneNumber}}</div>
                         </div>
                     </div>
                     <div class="row extra-info pt-3">
@@ -247,7 +247,7 @@ footer p {
 
             <section class="product-area mt-4">
                 <table class="table table-hover">
-                    <thead>
+                    <thead class="graphic-path">
                         <tr>
                             <td>Date</td>
                             <td>Description</td>
@@ -269,7 +269,7 @@ footer p {
                             </td>
                             <td>{{order.quantity}}</td>
                             <td>{{order.currency}} {{order.price}}</td>
-                            <td>{{order.total_price|floatformat:"0"}}</td>
+                            <td>{{order.currency}} {{order.total_price|floatformat:"0"}}</td>
                         </tr>
                        
                     </tbody>
@@ -288,12 +288,11 @@ footer p {
                             <tfoot>
                                 <tr>
                                     <td>Total:</td>
-                                    <td>{{invoiceCurrency}} {{invoiceTotal}}</td>
+                                    <td>{{invoiceCurrency}}{{invoiceTotal}}</td>
                                 </tr>
                             </tfoot>
                         </table>
-
-                        <!-- Signature -->
+                                    <!-- Signature -->
                         <div class="col-12">
                             <img class="mr-3 img-fluid" src="signiture.png" alt="">
                         </div>

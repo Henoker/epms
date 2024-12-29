@@ -12,7 +12,7 @@
     <!-- Custom Style -->
     <link rel="stylesheet" href="style.css">
 
-    <title>Invoice..!</title>
+    <title>Quote!</title>
     <style>
     :root {
     --body-bg: rgb(204, 204, 204);
@@ -222,8 +222,8 @@ footer p {
                         <div class="col-6" id="from">
                             <p>Vendor,</p>
                             <h3>{{p_settings.clientName}}</h3>
-                            <p class="address"> {{p_settings.addressLine1}}, {{p_settings.country}}, <br>P.O. Box: {{p_settings.postalCode}}, <br> {{p_settings.emailAddress}}, </p>
-                            <div class="txn mt-2">{{p_settings.phoneNumber}}</div>
+                            <p class="address"> {{p_settings.addressLine1}}, {{p_settings.country}}, <br>P.O. Box: {{p_settings.postalCode}}, <br> {{p_settings.emailAddress}}, <br>Tin No: {{p_settings.taxNumber}} </p>
+                            <div class="address">Tel.: {{p_settings.phoneNumber}}</div>
                         </div>
                         <div class="col-6" id="to">
                             <p>Client,</p>
@@ -231,7 +231,7 @@ footer p {
 
 
                             <p class="address"> {{quote.client.addressLine1}}, {{quote.client.country}}, <br>Postal code: {{quote.client.postalCode}}, <br> {{quote.client.emailAddress}}  </p>
-                            <div class="txn mt-2">{{quote.client.phoneNumber}}</div>
+                            <div class="address">Tel.: {{quote.client.phoneNumber}}</div>
                         </div>
                     </div>
                     <div class="row extra-info pt-3">
@@ -250,12 +250,12 @@ footer p {
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <td>Propsed Start Date</td>
-                            <td>Propsed End Date</td>
+                            <td>Proposed Start Date</td>
+                            <td>Proposed End Date</td>
                             <td>Description</td>
                             <td>Quantity</td>
                             <td>Price</td>
-                            <td>SUBTOTAL</td>
+                            <td>TOTAL</td>
                         </tr>
                     </thead>
                     {% for request in requests %}
@@ -272,11 +272,11 @@ footer p {
                             </td>
                             <td>{{request.quantity}}</td>
                             <td>{{request.currency}} {{request.price}}</td>
-                            <td>{{request.total_price|floatformat:"0"}}</td>
+                            <td>{{request.currency}} {{request.total_price|floatformat:"0"}}</td>
                         </tr>
                        
                     </tbody>
-                    {% endfor %}
+                   {% endfor %}
                 </table>
             </section>
 
@@ -288,10 +288,10 @@ footer p {
                     </div>
                     <div class="col-4">
                         <table class="table border-0 table-hover">
-                            <tfoot>
+                           <tfoot>
                                 <tr>
                                     <td>Total:</td>
-                                    <td>ETB:{{quoteTotal}}</td>
+                                    <td>{{quoteCurrency}}{{quoteTotal}}</td>
                                 </tr>
                             </tfoot>
                         </table>

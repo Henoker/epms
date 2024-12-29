@@ -40,6 +40,7 @@
             <th>price</th>
             <th>Total</th>
             <th>Update</th>
+          
 
         </tr>
       </thead>
@@ -47,21 +48,21 @@
 
         {% for request in requests %}
       <tr>
-                  <td>{{request.title}}</td>
+                  <td>{{request.quote.title}}</td>
                   <td>{{request.RequestDate}}</td>
                   <td>{{request.proposedStartDate}}</td>
                   <td>{{request.clientDeadline}}</td>
-                  <td>{{request.quantity}}</td>
-                  <td>{{request.currency}} {{request.price}}</td>
-                  <td>{{request.total_price|floatformat:"0"}}</td>
+                  <td>{{request.quantity|floatformat:"0"}}</td>
+                  <td>{{request.currency}}{{request.price|floatformat:"0"}}</td>
+                  <td>{{request.currency}}{{request.total_price|floatformat:"0"}}</td>
         <td>
           <a href="{% url 'update-request' request.slug %}"><button class="btn btn-success"> EDIT </button></a>
         </td>
-         {% comment %} <td>
+      <!--   <td>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{request.slug}}">
                         DELETE
           </button> 
-           <!-- Modal - Delete Student -->
+          
                       <div class="modal" id="delete{{request.slug}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
@@ -87,7 +88,7 @@
                         </div>
                       </div> 
 
-        </td>  {% endcomment %}
+        </td> --> 
      </tr>
         {% endfor %}
 

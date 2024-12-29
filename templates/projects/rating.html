@@ -17,6 +17,7 @@
       <div class="btn-group me-2">
         {% comment %} <button href="#addProjectModal" type="button" class="btn btn-primary" data-bs-toggle="modal">Add New Project</button> {% endcomment %}
         <a href="{% url 'add-rating' %}"><button type="button" class="btn btn-primary" > Rate Job </button></a>
+        <a href="{% url 'export_ratings_to_excel' %}" class=" ml-2 btn btn-secondary">Export to Excel</a>
       </div>
     </div>
   </div>

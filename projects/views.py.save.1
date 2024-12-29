@@ -48,49 +48,8 @@ from django.utils import timezone
 
 
 
-from datetime import datetime, timedelta
-from django.db.models import Sum, F, Count
-from django.utils import timezone
-from django.contrib.auth.decorators import login_required
-
 @login_required
 def dashboard(request):
-    # Get current date
-    today = timezone.now().date()
-    
-    # Determine the start and end dates for the current accounting period
-    if today >= datetime(today.year, 7, 8).date():
-        current_year_start = datetime(today.year, 7, 8).date()
-        current_year_end = datetime(today.year + 1, 7, 7).date()
-    else:
-        current_year_start = datetime(today.year - 1, 7, 8).date()
-        current_year_end = datetime(today.year, 7, 7).date()
-    
-    # Determine the start and end dates for the previous accounting period
-    previous_year_start = datetime(current_year_start.year - 1, 7, 8).date()
-    previous_year_end = datetime(current_year_start.year, 7, 7).date()
-
-    # Filter and aggregate orders for the current accounting period
-    current_orders = Order.objects.filter(OrderDate__gte=current_year_start, OrderDate__lte=current_year_end)
-    total_current_order = current_orders.aggregate(total_value=Sum(F('price') * F('quantity')))
-    total_current_project_value = total_current_order['total_value'] if total_current_order['total_value'] else 0
-
-    # Filter and aggregate orders for the previous accounting period
-    previous_orders = Order.objects.filter(OrderDate__gte=previous_year_start, OrderDate__lte=previous_year_end)
-    total_previous_order = previous_orders.aggregate(total_value=Sum(F('price') * F('quantity')))
-    total_previous_project_value = total_previous_order['total_value'] if total_previous_order['total_value'] else 0
-
-    # Filter and aggregate budgeted amounts for the current accounting period
-    current_projects = Project.objects.filter(date_created__gte=current_year_start, date_created__lte=current_year_end)
-    total_current_budget = current_projects.aggregate(total_cost=Sum('budgetedamount'))
-    total_current_budgeted_cost = total_current_budget['total_cost'] if total_current_budget['total_cost'] else 0
-
-    # Filter and aggregate budgeted amounts for the previous accounting period
-    previous_projects = Project.objects.filter(date_created__gte=previous_year_start, date_created__lte=previous_year_end)
-    total_previous_budget = previous_projects.aggregate(total_cost=Sum('budgetedamount'))
-    total_previous_budgeted_cost = total_previous_budget['total_cost'] if total_previous_budget['total_cost'] else 0
-
-    # Other existing code
     all_orders = Order.objects.order_by('-OrderDate')[:10]
     clients = Client.objects.all().count()
     vendors = Vendor.objects.all().count()
@@ -101,15 +60,17 @@ def dashboard(request):
     paidInvoices = Invoice.objects.filter(status='PAID').count()
     paidPos = PurchaseOrder.objects.filter(status='PAID').count()
     completedProjects = Project.objects.filter(status='Approved').count()
-    pendingProjects = projects - completedProjects
+    pendingProjects = projects-completedProjects
     completedJobs = Job.objects.filter(status='Approved').count()
     total_order = Order.objects.aggregate(total_value=Sum(F('price') * F('quantity')))
     total_project_value = total_order['total_value']
+    total_budget = Project.objects.aggregate(total_cost=Sum(F('budgetedamount')))
+    total_budgeted_cost = total_budget['total_cost']
     last_seven_days_projects = Project.objects.filter(date_created__gte=timezone.now() - timedelta(days=7))
-    order_due_today = Order.objects.filter(clientDeadline=timezone.now() + timedelta(days=0))
+    order_due_today = Order.objects.filter(clientDeadline=timezone.now()+timedelta(days=0))
     overdue_orders = Project.objects.filter(due_date__lt=timezone.now())
     overdue_project_orders = Project.objects.filter(status='Overdue')
-    invoice_due_today = Invoice.objects.filter(dueDate=datetime.now() + timedelta(days=0))
+    invoice_due_today = Invoice.objects.filter(dueDate=datetime.now()+timedelta(days=0))
     rated_jobs = Rating.objects.all().count()
     green_rated = Rating.objects.filter(rate='3').count()
     yellow_rated = Rating.objects.filter(rate='2').count()
@@ -140,6 +101,8 @@ def dashboard(request):
         rated_jobs_percentage = 0
     else:
         rated_jobs_percentage = (rated_jobs / jobs) * 100
+    
+
 
     context = {}
     context['clients'] = clients
@@ -152,18 +115,14 @@ def dashboard(request):
     context['paidPos'] = paidPos
     context['completedProjects'] = completedProjects
     context['completedJobs'] = completedJobs
-    context['total_project_value'] = total_project_value
-    context['total_current_project_value'] = total_current_project_value
-    context['total_previous_project_value'] = total_previous_project_value
-    context['total_budgeted_cost'] = total_current_budgeted_cost  # Renamed for clarity
-    context['total_current_budgeted_cost'] = total_current_budgeted_cost
-    context['total_previous_budgeted_cost'] = total_previous_budgeted_cost
+    context['total_project_value'] = total_project_value 
+    context['total_budgeted_cost'] = total_budgeted_cost
     context['pendingProjects'] = pendingProjects
     context['last_seven_days_projects'] = last_seven_days_projects
     context['rated_jobs'] = rated_jobs
     context['green_rated'] = green_rated
     context['yellow_rated'] = yellow_rated
-    context['red_rated'] = red_rated
+    context['red_rated'] =  red_rated
     context['order_due_today'] = order_due_today
     context['invoice_due_today'] = invoice_due_today
     context['all_orders'] = all_orders
@@ -172,7 +131,7 @@ def dashboard(request):
     context['paidInv_percentages'] = paidInv_percentages
     context['paidPos_percentages'] = paidPos_percentages
     context['pending_jobs_percentage'] = pending_jobs_percentage
-    context['rated_jobs_percentage'] = rated_jobs_percentage
+    context['rated_jobs_percentage'] =  rated_jobs_percentage
     context['novice'] = novice
     context['b1'] = b1
     context['b2'] = b2
@@ -181,8 +140,8 @@ def dashboard(request):
     context['overdue_orders'] = overdue_orders
     context['overdue_project_orders'] = overdue_project_orders
 
-    return render(request, 'dashboard.html', context)
 
+    return render(request, 'dashboard.html', context)
 
 
 
@@ -191,11 +150,8 @@ def dashboard(request):
 def invoices(request):
     context = {}
     invoices = Invoice.objects.all().order_by('-date_created')
-
     for invoice in invoices:
-        total_amount = sum(order.total_price() or 0 for order in invoice.order_set.all())
-        invoice.total_amount = total_amount
-
+        invoice.total_amount = sum(order.total_price() for order in invoice.order_set.all())
     context['invoices'] = invoices
     context['export_link'] = reverse('export_invoices_to_excel')
 
@@ -212,8 +168,8 @@ def export_invoices_to_excel(request):
     sheet.title = 'Invoices'
     sheet.append(['Invoice Number', 'Title', 'Total Amount', 'Client Name', 'Invoice Status'])
     for invoice in invoices:
-        total_amount = sum(order.total_price() or 0 for order in invoice.order_set.all())
-        invoice.total_amount = total_amount
+        # Calculate the total amount for each invoice
+        total_amount = sum(order.total_price() for order in invoice.order_set.all())
         # Append invoice details including the calculated total amount
         sheet.append([invoice.number, invoice.title, total_amount, invoice.client.clientName, invoice.status])
     
@@ -230,8 +186,6 @@ def export_invoices_to_excel(request):
 def quotes(request):
     context = {}
     quotes = Quotation.objects.all().order_by('-date_created')
-    for quote in quotes:
-        quote.total_amount = sum(request.total_price() for request in quote.request_set.all())
     context['quotes'] = quotes
 
     return render(request, 'invoice/quotes.html', context)
@@ -360,13 +314,13 @@ def purchaseOrders(request):
     context = {}
     purchase_orders = PurchaseOrder.objects.all().order_by('-date_created')
     for pos in purchase_orders:
-        pos.total_amount = sum(job.total_price() for job in pos.job_set.all())
+        total_amount = sum(job.total_price() for job in pos.job_set.all() if job.total_price() is not None)
+        pos.total_amount = total_amount if total_amount is not None else 0
     
     context['purchase_orders'] = purchase_orders
     context['export_link'] = reverse('export_pos_to_excel')
 
     return render(request, 'invoice/purchase-orders.html', context)
-
 @login_required
 def export_pos_to_excel(request):
     # Fetch your tabular data (projects) from the database
@@ -379,7 +333,7 @@ def export_pos_to_excel(request):
     sheet.append(['PO Number', 'Title', 'Total Amount', 'Vendor Name', 'PO Status'])
     for pos in purchase_orders:
         # Calculate the total amount for each invoice
-        total_amount = sum(job.total_price() if job is not None else 0 for job in pos.job_set.all())
+        total_amount = sum(job.total_price() for job in pos.job_set.all())
         # Append invoice details including the calculated total amount
         sheet.append([pos.number, pos.title, total_amount, pos.vendor.vendorName, pos.status])
     
@@ -447,7 +401,7 @@ def createBuildInvoice(request, slug):
 
             messages.success(request, "Invoice product added succesfully")
             return redirect('create-build-invoice', slug=slug)
-        elif inv_form.is_valid() and 'paymentTerms' in request.POST:
+        elif inv_form.is_valid and 'paymentTerms' in request.POST:
             inv_form.save()
 
             messages.success(request, "Invoice updated succesfully")
@@ -640,7 +594,7 @@ def createBuildPo(request, slug):
 
             messages.success(request, "PO and Job added succesfully")
             return redirect('create-build-po', slug=slug)
-        elif po_form.is_valid() and 'paymentTerms' in request.POST:
+        elif po_form.is_valid and 'paymentTerms' in request.POST:
             po_form.save()
 
             messages.success(request, "PO updated succesfully")
@@ -791,7 +745,7 @@ def createBuildQuote(request, slug):
 
             messages.success(request, "Quote added succesfully")
             return redirect('create-build-quote', slug=slug)
-        elif quote_form.is_valid() and 'paymentTerms' in request.POST:
+        elif quote_form.is_valid and 'paymentTerms' in request.POST:
             quote_form.save()
 
             messages.success(request, "Quote updated succesfully")
@@ -1086,7 +1040,7 @@ def deletePo(request, slug):
 @login_required   
 def rating(request):
     context = {}
-    ratings = Rating.objects.all().order_by('-date')    
+    ratings = Rating.objects.all()    
     context['ratings'] = ratings
 
     if request.method == 'GET':
@@ -1119,30 +1073,7 @@ def addRating(request):
             'form': form,
         }
         return render(request,'projects/addRating.html', context)
-        
-@login_required
-def export_ratings_to_excel(request):
-    # Fetch your tabular data (projects) from the database
-    ratings = Rating.objects.all().order_by('-date')
-    
-    # Create a new Excel workbook and add data
-    workbook = openpyxl.Workbook()
-    sheet = workbook.active
-    sheet.title = 'Ratings'
-    sheet.append(['Reviewer', 'reviewee', 'Job', 'Date', 'Text', 'Rate'])
-    for rate in ratings:
-        # Append rate details 
-        sheet.append([rate.reviewer.username, rate.reviewee.vendorName, rate.job.title, rate.date.replace(tzinfo=None), rate.text, rate.rate])
-    
-    # Create a response object with the appropriate content type for Excel
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=ratings.xlsx'
-    
-    # Save the workbook to the response
-    workbook.save(response)
-    
-    return response
-    
+
 @login_required
 def companySettings(request):
     company = Settings.objects.get(clientName='Ethiostar Translation and Localization PLC')

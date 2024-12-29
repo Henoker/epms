@@ -1,6 +1,5 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-from django.urls import reverse
 from django.utils import timezone
 from uuid import uuid4
 from .country_names import COUNTRY_CHOICES
@@ -8,9 +7,6 @@ from .languages import LANGUAGE_CHOICES
 from accounts.models import CustomUser
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
-
 
 
 
@@ -33,6 +29,9 @@ class Client(models.Model):
     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
     date_created = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(blank=True, null=True)
+    
+    def total_amount(self):
+        return sum(order.total_price() for order in self.orders.all())
 
 
     def __str__(self):
@@ -105,9 +104,9 @@ class Project(models.Model):
         self.last_updated = timezone.localtime(timezone.now())
 
         super(Project, self).save(*args, **kwargs)
-
+        
     def check_overdue_status(self):
-        if (
+       if (
             self.due_date is not None
             and self.due_date < timezone.now().date()
             and self.status not in ['Delivered', 'Complained', 'Approved']
@@ -122,6 +121,7 @@ class Project(models.Model):
             and instance.status not in ['Delivered', 'Complained', 'Approved']
         ):
             instance.status = 'Overdue'
+
 
 class Invoice(models.Model):
     TERMS = [
@@ -141,7 +141,7 @@ class Invoice(models.Model):
     title = models.CharField(null=True, blank=True, max_length=100)
     number = models.CharField(null=True, blank=True, max_length=100)
     dueDate = models.DateField(null=True, blank=True)
-    paymentTerms = models.CharField(choices=TERMS, default='30 days', max_length=100)
+    paymentTerms = models.CharField(choices=TERMS, default='14 days', max_length=100)
     status = models.CharField(choices=STATUS, default='CURRENT', max_length=100)
     notes = models.TextField(null=True, blank=True)
 
@@ -154,9 +154,6 @@ class Invoice(models.Model):
     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
     date_created = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(blank=True, null=True)
-    
-    def total_amount(self):
-        return sum(order.total_price() for order in self.orders.all())
 
 
     def __str__(self):
@@ -229,16 +226,9 @@ class Order(models.Model):
 
 
     def total_price(self):
-        return self.quantity * self.price
-        print(Order.objects.all()[0].total_price)
-    def total_price(self):
         if self.quantity is None or self.price is None:
             return None  # or any default value or an error message, depending on your requirements
         return self.quantity * self.price
-
-    # @receiver(post_save, sender=Order)
-    # def update_project_status(sender, instance, **kwargs):
-    #     instance.project.update_status()
 
 class Vendor(models.Model):
     LINGUISTIC_LEVEL = [
@@ -330,17 +320,12 @@ class PurchaseOrder(models.Model):
     date_created = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(blank=True, null=True)
 
-
     def __str__(self):
         return '{} {}'.format(self.number, self.uniqueId)
 
 
     def get_absolute_url(self):
         return reverse('invoice-detail', kwargs={'slug': self.slug})
-    
-    def total_price(self):
-        return sum(job.rate() for job in self.job.all())
-
 
     def save(self, *args, **kwargs):
         if self.date_created is None:
@@ -361,12 +346,15 @@ class Job(models.Model):
     ('REVISION', 'REVISION'),
     ('EDITING', 'EDITING'),
     ('TRANSCREATION', 'TRANSCREATION'),
+    ('TRANSCRIPTION', 'TRANSCRIPTION'),
     ('COPY WRITING', 'COPY WRITING'),
     ('PROOFREADING', 'PROOFREADING'),
     ('DTP', 'DTP'),
     ('SUBTITLING', 'SUBTITLING'),
     ('INTREPRETATION', 'INTREPRETATION'),
     ('VOICEOVER', 'VOICEOVER'),
+    ('PRINTING', 'PRINTING'),
+    ('Equipment Rent', 'Equipment Rent'),
     ]
 
     STATUS = [
@@ -432,11 +420,11 @@ class Job(models.Model):
         super(Job, self).save(*args, **kwargs)
 
 
+  
     def total_price(self):
         if self.quantity is None or self.rate is None:
             return 0  # Return a default value, such as 0, when either quantity or rate is None
-        return self.quantity * self.rate
-    
+        return self.quantity * self.rate   
     def check_overdue_status(self):
        if (
             self.deadlineDate is not None
@@ -453,10 +441,6 @@ class Job(models.Model):
             and instance.status not in ['Delivered', 'Complained', 'Approved']
         ):
             instance.status = 'Overdue'
-
-
-       
-
 
 class Rating(models.Model):
     RATE_CHOICES = [
@@ -622,5 +606,4 @@ class Request(models.Model):
     def total_price(self):
         if self.quantity is None or self.price is None:
             return 0  # Return a default value, such as 0, when either quantity or rate is None
-        return self.quantity * self.price
-       
+        return self.quantity * self.price 

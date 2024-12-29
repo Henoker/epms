@@ -26,7 +26,7 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         fields = [
-            'projectName', 'description', 'due_date','status', 'budgetedamount', 'project_manager'
+            'projectName', 'description', 'due_date', 'status', 'budgetedamount', 'project_manager', 'client'
             ] 
         widgets = {
             'description': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
@@ -302,22 +302,25 @@ class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
         fields = [
-            'reviewer', 'reviewee', 'job','text', 'rate', 
+            'reviewer', 'reviewee', 'job', 'text', 'rate',
         ]
 
         widgets = {
-            'text': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
-                'placeholder': 'Describe the rating'}),
+            'text': forms.Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
+                                          'placeholder': 'Describe the rating'}),
         }
 
         labels = {
             'reviewer': 'Approved by',
-            'reviewee' : 'Reviewed Vendor Name',
+            'reviewee': 'Reviewed Vendor Name',
             'job': 'Rated Job',
             'text': 'Comment',
             'rate': 'Rate',
-            
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['job'].queryset = Job.objects.filter(evaluated=False).order_by('-date_created')
 # class SettingsForm(forms.ModelForm):
 #     class Meta:
 #         model = Settings

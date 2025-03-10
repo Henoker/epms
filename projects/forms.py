@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import ModelForm, Textarea
+from django.core.exceptions import ValidationError
 
 # from accounts.models import CustomUser
 
@@ -20,19 +21,21 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         # fields = ['clientName', 'clientLogo', 'addressLine1', 'country', 'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber']
-        fields = ['clientName',  'addressLine1', 'country', 'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber']
-       
+        fields = ['clientName',  'addressLine1', 'country',
+                  'postalCode', 'phoneNumber', 'emailAddress', 'taxNumber']
+
+
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
         fields = [
             'projectName', 'description', 'due_date', 'status', 'budgetedamount', 'project_manager', 'client'
-            ] 
+        ]
         widgets = {
             'description': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
-                'placeholder': 'Describe the project'}),
+                                           'placeholder': 'Describe the project'}),
             'due_date': DateInput(attrs={"class": "form-control", "type": "date"}),
-           
+
         }
 
         labels = {
@@ -40,99 +43,103 @@ class ProjectForm(ModelForm):
             'budgetedamount': 'Project Budget',
             'project_manager': 'Project Manager',
         }
-   
+
+
 class VendorForm(forms.ModelForm):
     class Meta:
         model = Vendor
         fields = [
-            'vendorName', 'addressLine1', 'country', 'postalCode', 'phoneNumber', 
+            'vendorName', 'addressLine1', 'country', 'postalCode', 'phoneNumber',
             'emailAddress', 'taxNumber', 'mother_language', 'language_skills', 'lingustic_level', 'education_level', ]
+
 
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = [
             'project', 'OrderDate', 'clientDeadline', 'source_languages', 'target_languages',
-            'description', 'quantity', 'price', 'currency', 
+            'description', 'quantity', 'price', 'currency',
         ]
 
         widgets = {
             'description': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
-                'placeholder': 'Describe the order'}),
+                                           'placeholder': 'Describe the order'}),
             'OrderDate': DateInput(attrs={'label': 'Start Date'}),
             'clientDeadline': DateInput(attrs={"class": "form-group col-6"}),
         }
 
         labels = {
             'OrderDate': 'Order Date',
-            'clientDeadline' : 'client Deadline Date',
+            'clientDeadline': 'client Deadline Date',
             'source_languages': 'Source language(s)',
             'target_languages': 'Target language(s)',
             'project_manager': 'Project Manager',
         }
+
 
 class RequestForm(forms.ModelForm):
     class Meta:
         model = Request
         fields = [
             'RequestDate', 'proposedStartDate', 'clientDeadline', 'source_languages', 'target_languages',
-            'description', 'quantity', 'price', 'currency', 
+            'description', 'quantity', 'price', 'currency',
         ]
 
         widgets = {
             'description': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
-                'placeholder': 'Describe the request'}),
+                                           'placeholder': 'Describe the request'}),
             'RequestDate': DateInput(attrs={'label': 'Start Date'}),
             'clientDeadline': DateInput(attrs={"class": "form-group col-6"}),
-            'proposedStartDate': DateInput (attrs={"class": "form-group col-6"}),
+            'proposedStartDate': DateInput(attrs={"class": "form-group col-6"}),
         }
 
         labels = {
             'RequestDate': 'Request Date',
             'proposedStartDate': 'Proposed Start Date',
-            'clientDeadline' : 'Proposed Deadline Date',
+            'clientDeadline': 'Proposed Deadline Date',
             'source_languages': 'Source language(s)',
             'target_languages': 'Target language(s)',
             'project_manager': 'Project Manager',
         }
+
+
 class InvoiceForm(forms.ModelForm):
     THE_OPTIONS = [
-    ('30 days', '30 days'),
-    ('45 days', '45 days'),
-    ('60 days', '60 days'),
-    ('Contract', 'Contract'),
+        ('30 days', '30 days'),
+        ('45 days', '45 days'),
+        ('60 days', '60 days'),
+        ('Contract', 'Contract'),
     ]
     STATUS_OPTIONS = [
-    ('CURRENT', 'CURRENT'),
-    ('EMAIL_SENT', 'EMAIL_SENT'),
-    ('OVERDUE', 'OVERDUE'),
-    ('PAID', 'PAID'),
+        ('CURRENT', 'CURRENT'),
+        ('EMAIL_SENT', 'EMAIL_SENT'),
+        ('OVERDUE', 'OVERDUE'),
+        ('PAID', 'PAID'),
     ]
 
     title = forms.CharField(
-                    required = True,
-                    label='Invoice Name or Title',
-                    widget=forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Enter Invoice Title'}),)
+        required=True,
+        label='Invoice Name or Title',
+        widget=forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Enter Invoice Title'}),)
     paymentTerms = forms.ChoiceField(
-                    choices = THE_OPTIONS,
-                    required = True,
-                    label='Select Payment Terms',
-                    widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
+        choices=THE_OPTIONS,
+        required=True,
+        label='Select Payment Terms',
+        widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
     status = forms.ChoiceField(
-                    choices = STATUS_OPTIONS,
-                    required = True,
-                    label='Change Invoice Status',
-                    widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
+        choices=STATUS_OPTIONS,
+        required=True,
+        label='Change Invoice Status',
+        widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
     notes = forms.CharField(
-                    required = True,
-                    label='Enter any notes for the client',
-                    widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows':3,}),)
+        required=True,
+        label='Enter any notes for the client',
+        widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows': 3, }),)
 
     dueDate = forms.DateField(
-                        required = True,
-                        label='Invoice Due',
-                        widget=DateInput(attrs={'class': 'form-control mb-3'}),)
-
+        required=True,
+        label='Invoice Due',
+        widget=DateInput(attrs={'class': 'form-control mb-3'}),)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -154,44 +161,44 @@ class InvoiceForm(forms.ModelForm):
         model = Invoice
         fields = ['title', 'dueDate', 'paymentTerms', 'status', 'notes']
 
+
 class PurchaseOrderForm(forms.ModelForm):
     THE_OPTIONS = [
-    ('30 days', '30 days'),
-    ('45 days', '45 days'),
-    ('60 days', '60 days'),
-    ('Contract', 'Contract'),
+        ('30 days', '30 days'),
+        ('45 days', '45 days'),
+        ('60 days', '60 days'),
+        ('Contract', 'Contract'),
     ]
     STATUS_OPTIONS = [
-    ('CURRENT', 'CURRENT'),
-    ('EMAIL_SENT', 'EMAIL_SENT'),
-    ('OVERDUE', 'OVERDUE'),
-    ('PAID', 'PAID'),
+        ('CURRENT', 'CURRENT'),
+        ('EMAIL_SENT', 'EMAIL_SENT'),
+        ('OVERDUE', 'OVERDUE'),
+        ('PAID', 'PAID'),
     ]
 
     title = forms.CharField(
-                    required = True,
-                    label='PO Name or Title',
-                    widget=forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Enter PO Title'}),)
+        required=True,
+        label='PO Name or Title',
+        widget=forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Enter PO Title'}),)
     paymentTerms = forms.ChoiceField(
-                    choices = THE_OPTIONS,
-                    required = True,
-                    label='Select Payment Terms',
-                    widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
+        choices=THE_OPTIONS,
+        required=True,
+        label='Select Payment Terms',
+        widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
     status = forms.ChoiceField(
-                    choices = STATUS_OPTIONS,
-                    required = True,
-                    label='Change PO Status',
-                    widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
+        choices=STATUS_OPTIONS,
+        required=True,
+        label='Change PO Status',
+        widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
     notes = forms.CharField(
-                    required = True,
-                    label='Enter any notes for the Vendor',
-                    widget=forms.Textarea(attrs={'class': 'form-control mb-3','rows':3,}),)
+        required=True,
+        label='Enter any notes for the Vendor',
+        widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows': 3, }),)
 
     dueDate = forms.DateField(
-                        required = True,
-                        label='PO Due',
-                        widget=DateInput(attrs={'class': 'form-control mb-3'}),)
-
+        required=True,
+        label='PO Due',
+        widget=DateInput(attrs={'class': 'form-control mb-3'}),)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -216,42 +223,41 @@ class PurchaseOrderForm(forms.ModelForm):
 
 class QuoteForm(forms.ModelForm):
     THE_OPTIONS = [
-    ('30 days', '30 days'),
-    ('45 days', '45 days'),
-    ('60 days', '60 days'),
-    ('Contract', 'Contract'),
+        ('30 days', '30 days'),
+        ('45 days', '45 days'),
+        ('60 days', '60 days'),
+        ('Contract', 'Contract'),
     ]
     STATUS_OPTIONS = [
-    ('CURRENT', 'CURRENT'),
-    ('EMAIL_SENT', 'EMAIL_SENT'),
-    ('EXPIRED', 'EXPIRED'),
-    ('ACCEPTED', 'ACCEPTED'),
+        ('CURRENT', 'CURRENT'),
+        ('EMAIL_SENT', 'EMAIL_SENT'),
+        ('EXPIRED', 'EXPIRED'),
+        ('ACCEPTED', 'ACCEPTED'),
     ]
 
     title = forms.CharField(
-                    required = True,
-                    label='Quote Name or Title',
-                    widget=forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Enter Quote Title'}),)
+        required=True,
+        label='Quote Name or Title',
+        widget=forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Enter Quote Title'}),)
     paymentTerms = forms.ChoiceField(
-                    choices = THE_OPTIONS,
-                    required = True,
-                    label='Select Payment Terms',
-                    widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
+        choices=THE_OPTIONS,
+        required=True,
+        label='Select Payment Terms',
+        widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
     status = forms.ChoiceField(
-                    choices = STATUS_OPTIONS,
-                    required = True,
-                    label='Change Quote Status',
-                    widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
+        choices=STATUS_OPTIONS,
+        required=True,
+        label='Change Quote Status',
+        widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
     notes = forms.CharField(
-                    required = True,
-                    label='Enter any notes for the client',
-                    widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows':3,}),)
+        required=True,
+        label='Enter any notes for the client',
+        widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows': 3, }),)
 
     dueDate = forms.DateField(
-                        required = True,
-                        label='Quote Expiry Date',
-                        widget=DateInput(attrs={'class': 'form-control mb-3', }),)
-
+        required=True,
+        label='Quote Expiry Date',
+        widget=DateInput(attrs={'class': 'form-control mb-3', }),)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -273,6 +279,7 @@ class QuoteForm(forms.ModelForm):
         model = Invoice
         fields = ['title', 'dueDate', 'paymentTerms', 'status', 'notes']
 
+
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job
@@ -284,19 +291,20 @@ class JobForm(forms.ModelForm):
 
         widgets = {
             'description': Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
-                'placeholder': 'Describe the Job here'}),
+                                           'placeholder': 'Describe the Job here'}),
             'startDate': DateInput(attrs={'label': 'Start Date'}),
             'deadlineDate': DateInput(attrs={"class": "form-group col-6"}),
         }
 
         labels = {
             'startDate': 'Start Date',
-            'deadlineDate' : 'Deadline Date',
+            'deadlineDate': 'Deadline Date',
             'source_languages': 'Source language',
             'target_languages': 'Target language',
             'project_manager': 'Project Manager',
             'assigned_to': 'Assigned To',
         }
+
 
 class RatingForm(forms.ModelForm):
     class Meta:
@@ -306,8 +314,11 @@ class RatingForm(forms.ModelForm):
         ]
 
         widgets = {
-            'text': forms.Textarea(attrs={"class": "form-control", 'style': 'max-height: 50px;',
-                                          'placeholder': 'Describe the rating'}),
+            'text': forms.Textarea(attrs={
+                "class": "form-control",
+                'style': 'max-height: 50px;',
+                'placeholder': 'Describe the rating'
+            }),
         }
 
         labels = {
@@ -320,7 +331,24 @@ class RatingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['job'].queryset = Job.objects.filter(evaluated=False).order_by('-date_created')
+        self.fields['job'].queryset = Job.objects.filter(
+            evaluated=False).order_by('-date_created')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        reviewer = cleaned_data.get('reviewer')
+        reviewee = cleaned_data.get('reviewee')
+
+        if not reviewer:
+            raise ValidationError(
+                {"reviewer": "Reviewer is required and cannot be empty."})
+
+        if not reviewee:
+            raise ValidationError(
+                {"reviewee": "Reviewee is required and cannot be empty."})
+
+        return cleaned_data
+
 # class SettingsForm(forms.ModelForm):
 #     class Meta:
 #         model = Settings
@@ -329,28 +357,25 @@ class RatingForm(forms.ModelForm):
 
 class ClientSelectForm(forms.ModelForm):
 
-    def __init__(self,*args,**kwargs):
+    def __init__(self, *args, **kwargs):
         self.initial_client = kwargs.pop('initial_client')
         self.CLIENT_LIST = Client.objects.all()
         self.CLIENT_CHOICES = [('-----', '--Select a Client--')]
-
 
         for client in self.CLIENT_LIST:
             d_t = (client.uniqueId, client.clientName)
             self.CLIENT_CHOICES.append(d_t)
 
-
-        super(ClientSelectForm,self).__init__(*args,**kwargs)
+        super(ClientSelectForm, self).__init__(*args, **kwargs)
 
         self.fields['client'] = forms.ChoiceField(
-                                        label='Choose a related client',
-                                        choices = self.CLIENT_CHOICES,
-                                        widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
+            label='Choose a related client',
+            choices=self.CLIENT_CHOICES,
+            widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
 
     class Meta:
         model = Invoice
         fields = ['client']
-
 
     def clean_client(self):
         c_client = self.cleaned_data['client']
@@ -359,30 +384,28 @@ class ClientSelectForm(forms.ModelForm):
         else:
             return Client.objects.get(uniqueId=c_client)
 
+
 class VendorSelectForm(forms.ModelForm):
 
-    def __init__(self,*args,**kwargs):
+    def __init__(self, *args, **kwargs):
         self.initial_vendor = kwargs.pop('initial_vendor')
         self.VENDOR_LIST = Vendor.objects.all()
         self.VENDOR_CHOICES = [('-----', '--Select a Vendor--')]
-
 
         for vendor in self.VENDOR_LIST:
             d_t = (vendor.uniqueId, vendor.vendorName)
             self.VENDOR_CHOICES.append(d_t)
 
-
-        super(VendorSelectForm,self).__init__(*args,**kwargs)
+        super(VendorSelectForm, self).__init__(*args, **kwargs)
 
         self.fields['vendor'] = forms.ChoiceField(
-                                        label='Choose a related vendor',
-                                        choices = self.VENDOR_CHOICES,
-                                        widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
+            label='Choose a related vendor',
+            choices=self.VENDOR_CHOICES,
+            widget=forms.Select(attrs={'class': 'form-control mb-3'}),)
 
     class Meta:
         model = PurchaseOrder
         fields = ['vendor']
-
 
     def clean_vendor(self):
         c_vendor = self.cleaned_data['vendor']
